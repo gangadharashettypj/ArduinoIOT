@@ -125,7 +125,7 @@ class _CarControllerState extends State<CarController> {
                   setState(() {
                     this.direction = val;
                   });
-                  HttpREST.instance.get(
+                  HttpREST().get(
                     R.api.carController,
                     params: {'direction': '$val'},
                   );
@@ -143,16 +143,14 @@ class _CarControllerState extends State<CarController> {
   }
 
   void startListening() async {
-    Server.instance.listen((HttpRequest request) {
-      if (request.uri.queryParameters['type'] == R.api.carController) {
-        setState(() {
-          direction = int.parse(request.uri.queryParameters['code']);
-        });
-        request.response
-          ..headers.contentType = ContentType("text", "plain", charset: "utf-8")
-          ..write({'status': 'success', 'status code': '200'})
-          ..close();
-      }
+    Server().registerService(R.api.carController, (HttpRequest request) {
+      setState(() {
+        direction = int.parse(request.uri.queryParameters['code']);
+      });
+      request.response
+        ..headers.contentType = ContentType("text", "plain", charset: "utf-8")
+        ..write({'status': 'success', 'status code': '200'})
+        ..close();
     });
   }
 }

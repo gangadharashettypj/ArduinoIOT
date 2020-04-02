@@ -9,8 +9,10 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var ser = Server.inst;
-    Future.delayed(Duration(seconds: 2),
-        () => Navigator.pushReplacementNamed(context, '/home'));
+    Future.delayed(
+      Duration(seconds: 2),
+      () => Navigator.pushReplacementNamed(context, '/home'),
+    );
     return Scaffold(
       body: Container(
         child: Center(

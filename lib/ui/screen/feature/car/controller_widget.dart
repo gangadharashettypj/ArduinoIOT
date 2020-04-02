@@ -1,6 +1,7 @@
 /*
  * @Author GS
  */
+import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:flutter/material.dart';
 
 class ControllerWidget extends StatefulWidget {
@@ -22,11 +23,22 @@ class _ControllerWidgetState extends State<ControllerWidget> {
           SizedBox(
             height: 30,
           ),
-          Container(
-            child: RaisedButton(
-              child: Text("Front"),
-              onPressed: () => onchanged(1),
-              onLongPress: () => onchanged(1),
+          Card(
+            color: R.color.primary,
+            child: InkWell(
+              onTap: () => onchanged(1),
+              child: Container(
+                margin:
+                    EdgeInsets.only(left: 60, right: 60, top: 40, bottom: 40),
+                child: Text(
+                  "Front",
+                  style: TextStyle(
+                    color: R.color.opposite,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
             ),
           ),
           SizedBox(
@@ -35,18 +47,40 @@ class _ControllerWidgetState extends State<ControllerWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Container(
-                child: RaisedButton(
-                  child: Text("Left"),
-                  onPressed: () => onchanged(2),
-                  onLongPress: () => onchanged(2),
+              Card(
+                color: R.color.primary,
+                child: InkWell(
+                  onTap: () => onchanged(2),
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        left: 60, right: 60, top: 40, bottom: 40),
+                    child: Text(
+                      "Left",
+                      style: TextStyle(
+                        color: R.color.opposite,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              Container(
-                child: RaisedButton(
-                  child: Text("Right"),
-                  onPressed: () => onchanged(3),
-                  onLongPress: () => onchanged(3),
+              Card(
+                color: R.color.primary,
+                child: InkWell(
+                  onTap: () => onchanged(3),
+                  child: Container(
+                    margin: EdgeInsets.only(
+                        left: 60, right: 60, top: 40, bottom: 40),
+                    child: Text(
+                      "Right",
+                      style: TextStyle(
+                        color: R.color.opposite,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -54,11 +88,22 @@ class _ControllerWidgetState extends State<ControllerWidget> {
           SizedBox(
             height: 30,
           ),
-          Container(
-            child: RaisedButton(
-              child: Text("Back"),
-              onPressed: () => onchanged(4),
-              onLongPress: () => onchanged(4),
+          Card(
+            color: R.color.primary,
+            child: InkWell(
+              onTap: () => onchanged(4),
+              child: Container(
+                margin:
+                    EdgeInsets.only(left: 60, right: 60, top: 40, bottom: 40),
+                child: Text(
+                  "Back",
+                  style: TextStyle(
+                    color: R.color.opposite,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
             ),
           ),
         ],
