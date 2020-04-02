@@ -1,0 +1,4 @@
+/*
+ * @Author GS
+ */
+class MyString {}
