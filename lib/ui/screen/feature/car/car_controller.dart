@@ -1,10 +1,8 @@
 /*
  * @Author GS
  */
-import 'dart:io';
-
 import 'package:arduinoiot/resources/nestbees_resources.dart';
-import 'package:arduinoiot/service/rest/HTTPRest.dart';
+import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/server/server.dart';
 import 'package:arduinoiot/ui/screen/feature/car/controller_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -125,7 +123,7 @@ class _CarControllerState extends State<CarController> {
                   setState(() {
                     this.direction = val;
                   });
-                  HttpREST().get(
+                  DeviceManager().sendData(
                     R.api.carController,
                     params: {'direction': '$val'},
                   );
@@ -143,14 +141,11 @@ class _CarControllerState extends State<CarController> {
   }
 
   void startListening() async {
-    Server().registerService(R.api.carController, (HttpRequest request) {
+    Server().registerService(R.api.carController,
+        (Map<String, String> response) {
       setState(() {
-        direction = int.parse(request.uri.queryParameters['code']);
+        direction = int.parse(response['code']);
       });
-      request.response
-        ..headers.contentType = ContentType("text", "plain", charset: "utf-8")
-        ..write({'status': 'success', 'status code': '200'})
-        ..close();
     });
   }
 }

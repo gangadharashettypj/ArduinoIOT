@@ -5,12 +5,12 @@
 import 'dart:io';
 
 import 'package:arduinoiot/resources/nestbees_resources.dart';
-import 'package:arduinoiot/service/rest/HTTPRest.dart';
+import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:get_ip/get_ip.dart';
 
 class Server {
   static var _instance;
-  static Map<String, Function(HttpRequest)> maps = {};
+  static Map<String, Function(Map<String, String>)> maps = {};
   static Future<HttpServer> get inst async {
     if (_instance == null) {
       _instance = await HttpServer.bind('0.0.0.0', 2345);
@@ -31,23 +31,29 @@ class Server {
     return _instance;
   }
 
-  void registerService(String path, Function(HttpRequest) callback) {
+  void registerService(String path, Function(Map<String, String>) callback) {
     maps[path] = callback;
   }
 
   static void _listenToRequests() async {
     Server.instance.listen((HttpRequest request) {
-      _mapRequestToService(request);
+      print(request.uri.queryParameters.toString());
+      if (maps.containsKey(request.uri.queryParameters['type'])) {
+        maps[request.uri.queryParameters['type']](request.uri.queryParameters);
+        request.response
+          ..headers.contentType = ContentType("text", "plain", charset: "utf-8")
+          ..write({'status': 'success', 'status code': '200'})
+          ..close();
+      } else {
+        request.response
+          ..headers.contentType = ContentType("text", "plain", charset: "utf-8")
+          ..write({'status': 'failure', 'status code': '404'})
+          ..close();
+      }
     });
   }
 
   static HttpServer get instance {
     return _instance;
-  }
-
-  static void _mapRequestToService(HttpRequest request) {
-    if (maps.containsKey(request.uri.queryParameters['type'])) {
-      maps[request.uri.queryParameters['type']](request);
-    }
   }
 }

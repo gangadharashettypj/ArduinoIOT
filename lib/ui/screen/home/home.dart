@@ -67,9 +67,27 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ),
-                onTap: () => Navigator.pushNamed(context, '/carController'),
+                onTap: () => Navigator.pushNamed(context, R.routes.car),
               ),
-            )
+            ),
+            Card(
+              elevation: 4,
+              child: InkWell(
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      "Chat",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: R.color.gray,
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.pushNamed(context, R.routes.chat),
+              ),
+            ),
           ],
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

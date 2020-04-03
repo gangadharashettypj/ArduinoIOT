@@ -1,8 +1,7 @@
-import 'dart:io';
-
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/server/server.dart';
 import 'package:arduinoiot/ui/screen/feature/car/car_controller.dart';
+import 'package:arduinoiot/ui/screen/feature/chat/chat.dart';
 import 'package:arduinoiot/ui/screen/home/home.dart';
 import 'package:arduinoiot/ui/screen/splash.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +29,10 @@ class MyApp extends StatelessWidget {
       title: "NestBees",
       home: SplashScreen(),
       routes: <String, WidgetBuilder>{
-        '/splash': (BuildContext context) => SplashScreen(),
-        '/home': (BuildContext context) => Home(),
-        '/carController': (BuildContext context) => CarController(),
+        R.routes.splash: (BuildContext context) => SplashScreen(),
+        R.routes.home: (BuildContext context) => Home(),
+        R.routes.car: (BuildContext context) => CarController(),
+        R.routes.chat: (BuildContext context) => Chat(),
       },
     );
   }
@@ -52,19 +52,10 @@ class MyApp extends StatelessWidget {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onNotificationSelected);
 
-    Server().registerService(R.api.notification, (HttpRequest request) {
-      raiseNotification(
-          request.uri.queryParameters['notificationMessage'],
-          request.uri.queryParameters['notificationBody'],
-          request.uri.queryParameters['notificationTitle']);
-      request.response
-        ..headers.contentType = ContentType("text", "plain", charset: "utf-8")
-        ..write({
-          'status': 'success',
-          'status code': '200',
-          'msg': 'notification raised successfully'
-        })
-        ..close();
+    Server().registerService(R.api.notification,
+        (Map<String, String> response) {
+      raiseNotification(response['notificationMessage'],
+          response['notificationBody'], response['notificationTitle']);
     });
   }
 
