@@ -2,7 +2,10 @@ import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/server/server.dart';
 import 'package:arduinoiot/ui/screen/feature/car/car_controller.dart';
 import 'package:arduinoiot/ui/screen/feature/chat/chat.dart';
+import 'package:arduinoiot/ui/screen/feature/joystick/joystick.dart';
+import 'package:arduinoiot/ui/screen/feature/servo/servo.dart';
 import 'package:arduinoiot/ui/screen/home/home.dart';
+import 'package:arduinoiot/ui/screen/home/trialer.dart';
 import 'package:arduinoiot/ui/screen/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +34,19 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         R.routes.splash: (BuildContext context) => SplashScreen(),
         R.routes.home: (BuildContext context) => Home(),
+        R.routes.trial: (BuildContext context) => Trail(),
         R.routes.car: (BuildContext context) => CarController(),
         R.routes.chat: (BuildContext context) => Chat(),
+        R.routes.joystick: (BuildContext context) => JoyStick(),
+        R.routes.servo: (BuildContext context) => Servo(
+              max: 1000,
+              min: 0,
+              prefix: 's',
+              suffix: '>>',
+              onChange: (val) {
+                print(val);
+              },
+            ),
       },
     );
   }

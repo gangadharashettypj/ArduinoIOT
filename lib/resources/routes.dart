@@ -6,4 +6,7 @@ class Routes {
   get car => '/car';
   get splash => '/splash';
   get home => '/home';
+  get trial => '/tria;';
+  get servo => '/servo';
+  get joystick => '/joystick';
 }

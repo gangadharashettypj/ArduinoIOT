@@ -108,7 +108,6 @@ void setup(void){
 int i = 0;
 void loop(void){
   server.handleClient();
-  
   readBuffer();
   delay(10);
 }

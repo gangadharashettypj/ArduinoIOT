@@ -15,6 +15,8 @@ dependencies:
   get_ip: ^0.4.0
   flutter_local_notifications: ^1.4.0
   chat_list: ^0.0.1+21
+  sleek_circular_slider: ^1.1.0
+  control_pad: ^1.0.1+1
 
 
 dev_dependencies:

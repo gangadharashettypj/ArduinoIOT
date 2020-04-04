@@ -88,6 +88,42 @@ class _HomeState extends State<Home> {
                 onTap: () => Navigator.pushNamed(context, R.routes.chat),
               ),
             ),
+            Card(
+              elevation: 4,
+              child: InkWell(
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      "Servo",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: R.color.gray,
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.pushNamed(context, R.routes.servo),
+              ),
+            ),
+            Card(
+              elevation: 4,
+              child: InkWell(
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      "Joystick",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: R.color.gray,
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.pushNamed(context, R.routes.joystick),
+              ),
+            ),
           ],
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
