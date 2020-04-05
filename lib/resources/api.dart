@@ -8,4 +8,5 @@ class Api {
   get setClientIP => 'setClientIP';
   get notification => 'notification';
   get chat => 'chat';
+  get setStudentsData => '/setStudentsData';
 }

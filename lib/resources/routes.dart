@@ -10,4 +10,5 @@ class Routes {
   get servo => '/servo';
   get joystick => '/joystick';
   get builder => '/builder';
+  get rajashekar => '/rajashekar';
 }

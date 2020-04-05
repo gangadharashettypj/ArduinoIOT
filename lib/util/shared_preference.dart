@@ -6,12 +6,14 @@ class SharedPreferenceUtil {
   //method to read the colors from the shared preference
   static Future<String> read(String key) async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getString(key);
+    String str = prefs.getString(key);
+    return str == null ? '' : str;
   }
 
   static Future<bool> readBool(String key) async {
     final SharedPreferences prefs = await _prefs;
-    return prefs.getBool(key);
+    bool str = prefs.getBool(key);
+    return str == null ? false : str;
   }
 
   static Future<void> write(String key, String val) async {

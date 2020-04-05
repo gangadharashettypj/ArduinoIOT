@@ -3,19 +3,21 @@
  */
 import 'package:arduinoiot/local/local_data.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
+import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:arduinoiot/service/server/server.dart';
+import 'package:arduinoiot/util/shared_preference.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var ser = Server.inst;
-    LocalData();
+    LocalData().getData();
 
     Future.delayed(
       Duration(seconds: 2),
-      () => Navigator.pushReplacementNamed(context, R.routes.builder),
+      () => Navigator.pushReplacementNamed(context, R.routes.rajashekar),
     );
     return Scaffold(
       body: Container(
@@ -42,6 +44,12 @@ class SplashScreen extends StatelessWidget {
           'port': '2345',
         },
       );
+    });
+    DeviceManager().listenForData(R.api.setStudentsData,
+        (Map<String, String> response) async {
+      await SharedPreferenceUtil.write('title', response['title']);
+      await SharedPreferenceUtil.write('description', response['description']);
+      await SharedPreferenceUtil.write('student', response['students']);
     });
   }
 }
