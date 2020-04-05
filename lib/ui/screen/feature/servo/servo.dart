@@ -6,8 +6,8 @@ class Servo extends StatelessWidget {
   String suffix, prefix;
   Function(double) onChange;
   Servo({
-    @required this.min,
-    @required this.max,
+    this.min = 0,
+    this.max = 100,
     this.onChange,
     this.prefix = '',
     this.suffix = '',

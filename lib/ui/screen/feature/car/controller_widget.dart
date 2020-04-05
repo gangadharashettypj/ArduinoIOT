@@ -21,7 +21,7 @@ class _ControllerWidgetState extends State<ControllerWidget> {
       child: Column(
         children: <Widget>[
           SizedBox(
-            height: 30,
+            height: 10,
           ),
           Card(
             color: R.color.primary,
@@ -29,7 +29,7 @@ class _ControllerWidgetState extends State<ControllerWidget> {
               onTap: () => onchanged(1),
               child: Container(
                 margin:
-                    EdgeInsets.only(left: 60, right: 60, top: 40, bottom: 40),
+                    EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 20),
                 child: Text(
                   "Front",
                   style: TextStyle(
@@ -42,7 +42,7 @@ class _ControllerWidgetState extends State<ControllerWidget> {
             ),
           ),
           SizedBox(
-            height: 30,
+            height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -53,7 +53,7 @@ class _ControllerWidgetState extends State<ControllerWidget> {
                   onTap: () => onchanged(2),
                   child: Container(
                     margin: EdgeInsets.only(
-                        left: 60, right: 60, top: 40, bottom: 40),
+                        left: 40, right: 40, top: 20, bottom: 20),
                     child: Text(
                       "Left",
                       style: TextStyle(
@@ -71,7 +71,7 @@ class _ControllerWidgetState extends State<ControllerWidget> {
                   onTap: () => onchanged(3),
                   child: Container(
                     margin: EdgeInsets.only(
-                        left: 60, right: 60, top: 40, bottom: 40),
+                        left: 40, right: 40, top: 20, bottom: 20),
                     child: Text(
                       "Right",
                       style: TextStyle(
@@ -86,7 +86,7 @@ class _ControllerWidgetState extends State<ControllerWidget> {
             ],
           ),
           SizedBox(
-            height: 30,
+            height: 10,
           ),
           Card(
             color: R.color.primary,
@@ -94,7 +94,7 @@ class _ControllerWidgetState extends State<ControllerWidget> {
               onTap: () => onchanged(4),
               child: Container(
                 margin:
-                    EdgeInsets.only(left: 60, right: 60, top: 40, bottom: 40),
+                    EdgeInsets.only(left: 40, right: 40, top: 20, bottom: 20),
                 child: Text(
                   "Back",
                   style: TextStyle(

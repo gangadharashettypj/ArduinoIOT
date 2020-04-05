@@ -30,11 +30,8 @@ class _ChatState extends State<Chat> {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat'),
-      ),
-      body: Column(
+    return Container(
+      child: Column(
         children: <Widget>[
           Expanded(
             child: Container(

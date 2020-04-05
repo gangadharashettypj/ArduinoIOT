@@ -9,4 +9,5 @@ class Routes {
   get trial => '/tria;';
   get servo => '/servo';
   get joystick => '/joystick';
+  get builder => '/builder';
 }

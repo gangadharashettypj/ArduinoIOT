@@ -1,5 +1,6 @@
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/server/server.dart';
+import 'package:arduinoiot/ui/screen/builder/builder.dart';
 import 'package:arduinoiot/ui/screen/feature/car/car_controller.dart';
 import 'package:arduinoiot/ui/screen/feature/chat/chat.dart';
 import 'package:arduinoiot/ui/screen/feature/joystick/joystick.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         R.routes.car: (BuildContext context) => CarController(),
         R.routes.chat: (BuildContext context) => Chat(),
         R.routes.joystick: (BuildContext context) => JoyStick(),
+        R.routes.builder: (BuildContext context) => ScreenBuilder(),
         R.routes.servo: (BuildContext context) => Servo(
               max: 1000,
               min: 0,
