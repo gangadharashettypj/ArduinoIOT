@@ -11,4 +11,5 @@ class Routes {
   get joystick => '/joystick';
   get builder => '/builder';
   get rajashekar => '/rajashekar';
+  get phsensor => '/phsensor';
 }

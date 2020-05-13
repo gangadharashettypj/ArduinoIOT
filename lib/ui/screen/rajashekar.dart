@@ -3,8 +3,10 @@
  */
 import 'package:arduinoiot/local/local_data.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
+import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:arduinoiot/ui/screen/feature/chat/chat.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
 class RajaShekar extends StatefulWidget {
   @override
@@ -20,6 +22,21 @@ class _RajaShekarState extends State<RajaShekar> {
           LocalData.title != '' ? LocalData.title : 'Title',
         ),
         actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "Refresh",
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () async {
+              Response res = await HttpREST().get(
+                R.api.setClientIP,
+                params: {
+                  'ip': 'sd',
+                  'port': '2345',
+                },
+              );
+            },
+          ),
           IconButton(
             icon: Icon(Icons.people),
             onPressed: () {

@@ -7,6 +7,7 @@ import 'package:arduinoiot/ui/screen/feature/joystick/joystick.dart';
 import 'package:arduinoiot/ui/screen/feature/servo/servo.dart';
 import 'package:arduinoiot/ui/screen/home/home.dart';
 import 'package:arduinoiot/ui/screen/home/trialer.dart';
+import 'package:arduinoiot/ui/screen/ph_sensor.dart';
 import 'package:arduinoiot/ui/screen/rajashekar.dart';
 import 'package:arduinoiot/ui/screen/splash.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         R.routes.joystick: (BuildContext context) => JoyStick(),
         R.routes.builder: (BuildContext context) => ScreenBuilder(),
         R.routes.rajashekar: (BuildContext context) => RajaShekar(),
+        R.routes.phsensor: (BuildContext context) => PhSensor(),
         R.routes.servo: (BuildContext context) => Servo(
               max: 1000,
               min: 0,

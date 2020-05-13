@@ -12,4 +12,5 @@ class MyColors {
   get opposite => Colors.white;
   get accent => Colors.teal[200];
   get white => HexColor.fromHex('#FFFFFF');
+  get red => Colors.red;
 }

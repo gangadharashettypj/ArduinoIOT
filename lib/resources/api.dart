@@ -8,5 +8,10 @@ class Api {
   get setClientIP => 'setClientIP';
   get notification => 'notification';
   get chat => 'chat';
+  get ph => 'ph';
+  get moisture => 'moisture';
+  get humi => 'humi';
+  get temp => 'temp';
+  get motor => 'motor';
   get setStudentsData => '/setStudentsData';
 }
