@@ -13,5 +13,9 @@ class Api {
   get humi => 'humi';
   get temp => 'temp';
   get motor => 'motor';
-  get setStudentsData => '/setStudentsData';
+  get setStudentsData => 'setStudentsData';
+  get bikeStatus => 'bikeStatus';
+  get turnOnBike => 'turnOnBike';
+  get turnOffBike => 'turnOffBike';
+  get getBikeStatus => 'getBikeStatus';
 }
