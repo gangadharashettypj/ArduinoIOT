@@ -32,12 +32,15 @@ class Server {
   }
 
   void registerService(String path, Function(Map<String, String>) callback) {
+    print('Path>>$path');
     maps[path] = callback;
   }
 
   static void _listenToRequests() async {
     Server.instance.listen((HttpRequest request) {
-      print(request.uri.queryParameters.toString());
+      // print(request.uri.queryParameters.toString());
+      // print('>>>');
+      // print(maps.keys);
       if (maps.containsKey(request.uri.queryParameters['type'])) {
         maps[request.uri.queryParameters['type']](request.uri.queryParameters);
         request.response

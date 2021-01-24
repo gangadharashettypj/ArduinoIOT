@@ -12,4 +12,5 @@ class Routes {
   get builder => '/builder';
   get rajashekar => '/rajashekar';
   get phsensor => '/phsensor';
+  get bike => '/bike';
 }

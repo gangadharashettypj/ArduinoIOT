@@ -15,6 +15,7 @@ class Api {
   get motor => 'motor';
   get setStudentsData => 'setStudentsData';
   get bikeStatus => 'bikeStatus';
+  get bikeLocation => 'bikeLocation';
   get turnOnBike => 'turnOnBike';
   get turnOffBike => 'turnOffBike';
   get getBikeStatus => 'getBikeStatus';

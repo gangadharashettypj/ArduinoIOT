@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
 
     Future.delayed(
       Duration(seconds: 2),
-      () => Navigator.pushReplacementNamed(context, R.routes.phsensor),
+      () => Navigator.pushReplacementNamed(context, R.routes.bike),
     );
     return Scaffold(
       body: Container(

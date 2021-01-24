@@ -8,13 +8,21 @@ import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
-class PhSensor extends StatefulWidget {
+class BikeScreen extends StatefulWidget {
   @override
-  _PhSensorState createState() => _PhSensorState();
+  _BikeScreenState createState() => _BikeScreenState();
 }
 
-class _PhSensorState extends State<PhSensor> {
+class _BikeScreenState extends State<BikeScreen> {
   int bikeStatus = 0;
+  String lat = 'NA';
+  String lng = 'NA';
+
+  @override
+  void initState() {
+    startListening();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +56,7 @@ class _PhSensorState extends State<PhSensor> {
               Response res = await HttpREST().get(
                 R.api.getBikeStatus,
               );
-              print(res.body);
+              print(res?.body);
             },
           ),
         ],
@@ -60,7 +68,6 @@ class _PhSensorState extends State<PhSensor> {
           children: <Widget>[
             Container(
               width: double.infinity,
-              height: 150,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
@@ -68,26 +75,40 @@ class _PhSensorState extends State<PhSensor> {
                   ),
                 ),
                 elevation: 8,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      'Bike status is ',
-                      style: TextStyle(
-                        color: R.color.primary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 35,
-                      ),
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Bike status is ${bikeStatus == 1 ? 'RUNNING' : bikeStatus == 2 ? "STOPPED" : "UNKNOWN"}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                    Text(
-                      '${bikeStatus == 1 ? 'RUNNING' : bikeStatus == 2 ? "STOPPED" : "UNKNOWN"}',
-                      style: TextStyle(
-                        color: R.color.gray,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 30,
-                      ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Bike location is:\nlatitude: $lat\nlongitude: $lng',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -138,6 +159,13 @@ class _PhSensorState extends State<PhSensor> {
         (Map<String, String> response) {
       setState(() {
         bikeStatus = int.parse(response['bikeStatus']);
+      });
+    });
+    DeviceManager().listenForData(R.api.bikeLocation,
+        (Map<String, String> response) {
+      setState(() {
+        lat = double.parse(response['lat']).toStringAsFixed(6);
+        lng = double.parse(response['lng']).toStringAsFixed(6);
       });
     });
   }

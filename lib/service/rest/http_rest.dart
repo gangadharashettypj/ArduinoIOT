@@ -23,8 +23,9 @@ class HttpREST {
     http.Response response;
     try {
       response = await http.get(R.api.baseUrl + formattedUrl);
-      print(R.api.baseUrl + formattedUrl);
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return response;
   }
 }
