@@ -14,9 +14,10 @@ class Api {
   get temp => 'temp';
   get motor => 'motor';
   get setStudentsData => 'setStudentsData';
-  get bikeStatus => 'bikeStatus';
-  get bikeLocation => 'bikeLocation';
-  get turnOnBike => 'turnOnBike';
-  get turnOffBike => 'turnOffBike';
-  get getBikeStatus => 'getBikeStatus';
+  get numberOfCoins => 'noOfCoins';
+  get getWaterTiming => 'getWaterTiming';
+  get setWaterTiming => 'setWaterTiming';
+  get setWaterLiters => 'setWaterLiters';
+  get getWaterLiters => 'getWaterLiters';
+  get resetCoins => 'resetCoins';
 }

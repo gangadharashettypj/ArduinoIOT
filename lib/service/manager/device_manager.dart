@@ -7,31 +7,35 @@ import 'package:arduinoiot/local/local_data.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:arduinoiot/service/server/server.dart';
 import 'package:arduinoiot/service/udp/udp.dart';
+import 'package:http/http.dart';
 
 class DeviceManager {
-  void sendData(String path, {Map<String, String> params}) {
+  Future<void> sendData(String path, {Map<String, String> params}) async {
     switch (LocalData.connectionType) {
       case ConnectionType.HTTP:
-        sendHttpRequest(path, params: params);
+        await sendHttpRequest(path, params: params);
         break;
       case ConnectionType.UDP:
-        sendUDPRequest(path, params: params);
+        await sendUDPRequest(path, params: params);
         break;
     }
   }
 
-  void sendUDPRequest(String path, {Map<String, String> params}) {
+  Future<void> sendUDPRequest(String path, {Map<String, String> params}) async {
     params['path'] = path;
-    LocalUDP.send(
+    await LocalUDP.send(
       json.encode(params).toString(),
     );
   }
 
-  void sendHttpRequest(String path, {Map<String, String> params}) {
-    HttpREST().get(
+  Future<void> sendHttpRequest(String path,
+      {Map<String, String> params}) async {
+    Response res = await HttpREST().get(
       path,
       params: params,
     );
+    print(res.body);
+    print(res.toString());
   }
 
   void listenForData(String path, Function(Map<String, String>) callback) {

@@ -17,6 +17,7 @@ dependencies:
   chat_list: ^0.0.1+21
   sleek_circular_slider: ^1.1.0
   control_pad: ^1.0.1+1
+  fluttertoast: ^7.1.6
 
 
 dev_dependencies:

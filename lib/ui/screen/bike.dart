@@ -6,6 +6,7 @@ import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 
 class BikeScreen extends StatefulWidget {
@@ -14,9 +15,9 @@ class BikeScreen extends StatefulWidget {
 }
 
 class _BikeScreenState extends State<BikeScreen> {
-  int bikeStatus = 0;
-  String lat = 'NA';
-  String lng = 'NA';
+  int numberOfCoins;
+  int waterTimings;
+  int waterLiters;
 
   @override
   void initState() {
@@ -47,18 +48,6 @@ class _BikeScreenState extends State<BikeScreen> {
               );
             },
           ),
-          FlatButton(
-            child: Text(
-              "Refresh",
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () async {
-              Response res = await HttpREST().get(
-                R.api.getBikeStatus,
-              );
-              print(res?.body);
-            },
-          ),
         ],
       ),
       body: Container(
@@ -78,7 +67,7 @@ class _BikeScreenState extends State<BikeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Bike status is ${bikeStatus == 1 ? 'RUNNING' : bikeStatus == 2 ? "STOPPED" : "UNKNOWN"}',
+                    'Total Coins: ${numberOfCoins == null ? '--' : numberOfCoins}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -102,9 +91,8 @@ class _BikeScreenState extends State<BikeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Bike location is:\nlatitude: $lat\nlongitude: $lng',
+                    'Timings: ${waterTimings == null ? '--' : waterTimings}',
                     style: TextStyle(
-                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
@@ -112,6 +100,30 @@ class _BikeScreenState extends State<BikeScreen> {
                 ),
               ),
             ),
+            // SizedBox(
+            //   height: 30,
+            // ),
+            // Container(
+            //   width: double.infinity,
+            //   child: Card(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.all(
+            //         Radius.circular(20),
+            //       ),
+            //     ),
+            //     elevation: 8,
+            //     child: Container(
+            //       margin: EdgeInsets.all(16),
+            //       child: Text(
+            //         'Liters: ${waterLiters == null ? '--' : waterLiters}',
+            //         style: TextStyle(
+            //           fontWeight: FontWeight.bold,
+            //           fontSize: 20,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 30,
             ),
@@ -121,28 +133,98 @@ class _BikeScreenState extends State<BikeScreen> {
                 RaisedButton(
                   color: R.color.primary,
                   child: Text(
-                    "Start Bike",
+                    "Update Timings",
                     style: TextStyle(
                       color: R.color.opposite,
                     ),
                   ),
-                  onPressed: () {
-                    DeviceManager().sendData(
-                      R.api.turnOnBike,
+                  onPressed: () async {
+                    String timing = '';
+                    await showDialog<String>(
+                      context: context,
+                      child: Container(
+                        child: AlertDialog(
+                          contentPadding: const EdgeInsets.all(16.0),
+                          content: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: TextField(
+                                  autofocus: true,
+                                  decoration: InputDecoration(
+                                    labelText: 'Time in seconds',
+                                  ),
+                                  onChanged: (val) {
+                                    timing = val;
+                                  },
+                                  maxLength: 2,
+                                  keyboardType: TextInputType.number,
+                                ),
+                              )
+                            ],
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                                child: const Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                            FlatButton(
+                                child: const Text('Update'),
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  if (timing.isEmpty) {
+                                    Fluttertoast.showToast(
+                                        msg: 'enter a valid timings');
+                                    return;
+                                  }
+                                  await DeviceManager()
+                                      .sendData(R.api.setWaterTiming, params: {
+                                    "time": timing,
+                                  });
+                                })
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),
                 RaisedButton(
                   color: R.color.red,
                   child: Text(
-                    "Stop Bike",
+                    "Reset Coins",
                     style: TextStyle(
                       color: R.color.opposite,
                     ),
                   ),
-                  onPressed: () {
-                    DeviceManager().sendData(
-                      R.api.turnOffBike,
+                  onPressed: () async {
+                    await showDialog<String>(
+                      context: context,
+                      child: Container(
+                        child: AlertDialog(
+                          contentPadding: const EdgeInsets.all(16.0),
+                          content: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text('Reset coins to 0'),
+                              )
+                            ],
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                                child: const Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                            FlatButton(
+                                child: const Text('Reset'),
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  await DeviceManager()
+                                      .sendData(R.api.resetCoins);
+                                })
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -155,17 +237,22 @@ class _BikeScreenState extends State<BikeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.bikeStatus,
+    DeviceManager().listenForData(R.api.numberOfCoins,
         (Map<String, String> response) {
       setState(() {
-        bikeStatus = int.parse(response['bikeStatus']);
+        numberOfCoins = int.parse(response['noOfCoins']);
       });
     });
-    DeviceManager().listenForData(R.api.bikeLocation,
+    DeviceManager().listenForData(R.api.getWaterTiming,
         (Map<String, String> response) {
       setState(() {
-        lat = double.parse(response['lat']).toStringAsFixed(6);
-        lng = double.parse(response['lng']).toStringAsFixed(6);
+        waterTimings = int.parse(response['getWaterTiming']);
+      });
+    });
+    DeviceManager().listenForData(R.api.getWaterLiters,
+        (Map<String, String> response) {
+      setState(() {
+        waterLiters = int.parse(response['getWaterLiters']);
       });
     });
   }
