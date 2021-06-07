@@ -6,18 +6,18 @@ import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/ui/screen/feature/chat/chat.dart';
 import 'package:flutter/material.dart';
 
-class RajaShekar extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _RajaShekarState createState() => _RajaShekarState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _RajaShekarState extends State<RajaShekar> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          LocalData.title != '' ? LocalData.title : 'Title',
+          'Smart Jacket',
         ),
         actions: <Widget>[
           IconButton(
@@ -40,7 +40,7 @@ class _RajaShekarState extends State<RajaShekar> {
                                   child: Text(
                                     LocalData.title != ''
                                         ? LocalData.title
-                                        : 'Title',
+                                        : 'Smart Jacket',
                                     style: TextStyle(
                                       color: R.color.primary,
                                       fontWeight: FontWeight.bold,
@@ -67,7 +67,7 @@ class _RajaShekarState extends State<RajaShekar> {
                               Text(
                                 LocalData.description != ''
                                     ? LocalData.description
-                                    : 'Description',
+                                    : 'A smart jacket for a soldier to get several benefits during emergency conditions.',
                                 style: TextStyle(
                                   color: R.color.gray,
                                   fontSize: 15,
@@ -88,9 +88,7 @@ class _RajaShekarState extends State<RajaShekar> {
                                 height: 5,
                               ),
                               Text(
-                                LocalData.students.split('~').length > 0
-                                    ? LocalData.students.split('~')[0]
-                                    : '1. Student 1',
+                                '1. Madhulika',
                                 style: TextStyle(
                                   color: R.color.gray,
                                   fontSize: 15,

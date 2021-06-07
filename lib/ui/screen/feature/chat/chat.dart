@@ -49,13 +49,21 @@ class _ChatState extends State<Chat> {
           Card(
             elevation: 5,
             margin: EdgeInsets.all(20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(32),
+              side: BorderSide(
+                width: 1,
+                color: Colors.grey,
+              ),
+            ),
             child: Container(
               padding: EdgeInsets.only(left: 10, right: 10),
               child: TextFormField(
                 controller: controller,
                 decoration: InputDecoration(
-                  border: InputBorder.none,
                   hintText: 'Enter your message...',
+                  border: InputBorder.none,
+                  alignLabelWithHint: true,
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.send,
