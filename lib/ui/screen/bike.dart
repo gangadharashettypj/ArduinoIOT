@@ -1,7 +1,6 @@
 /*
  * @Author GS
  */
-import 'package:arduinoiot/local/local_data.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
@@ -29,10 +28,10 @@ class _BikeScreenState extends State<BikeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          LocalData.title != '' ? LocalData.title : 'Title',
+          'Accident Monitor',
         ),
         actions: <Widget>[
-          FlatButton(
+          ElevatedButton(
             child: Text(
               "Reconnect",
               style: TextStyle(color: Colors.white),
@@ -47,7 +46,7 @@ class _BikeScreenState extends State<BikeScreen> {
               );
             },
           ),
-          FlatButton(
+          ElevatedButton(
             child: Text(
               "Refresh",
               style: TextStyle(color: Colors.white),
@@ -78,7 +77,7 @@ class _BikeScreenState extends State<BikeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Bike status is ${bikeStatus == 1 ? 'RUNNING' : bikeStatus == 2 ? "STOPPED" : "UNKNOWN"}',
+                    'Vehicle Status: ${bikeStatus == 1 ? 'RUNNING' : (bikeStatus == 2 ? 'ACCIDENT' : (bikeStatus == 3 ? 'PROBLEM' : '--'))}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -89,64 +88,6 @@ class _BikeScreenState extends State<BikeScreen> {
             ),
             SizedBox(
               height: 30,
-            ),
-            Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.all(16),
-                  child: Text(
-                    'Bike location is:\nlatitude: $lat\nlongitude: $lng',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                RaisedButton(
-                  color: R.color.primary,
-                  child: Text(
-                    "Start Bike",
-                    style: TextStyle(
-                      color: R.color.opposite,
-                    ),
-                  ),
-                  onPressed: () {
-                    DeviceManager().sendData(
-                      R.api.turnOnBike,
-                    );
-                  },
-                ),
-                RaisedButton(
-                  color: R.color.red,
-                  child: Text(
-                    "Stop Bike",
-                    style: TextStyle(
-                      color: R.color.opposite,
-                    ),
-                  ),
-                  onPressed: () {
-                    DeviceManager().sendData(
-                      R.api.turnOffBike,
-                    );
-                  },
-                ),
-              ],
             ),
           ],
         ),

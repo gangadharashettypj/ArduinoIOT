@@ -35,14 +35,14 @@ class _RowBuilderState extends State<RowBuilder> {
               ),
               onPressed: () {
                 showDialog(
-                  context: context,
-                  child: Container(
-                    margin: EdgeInsets.all(50),
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: getWidgetLists(),
-                    ),
+                  context: context, builder: (BuildContext context) { return  Container(
+                  margin: EdgeInsets.all(50),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: getWidgetLists(),
                   ),
+                ); },
+
                 );
               },
             )

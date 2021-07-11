@@ -48,136 +48,138 @@ class _PhSensorState extends State<PhSensor> {
             onPressed: () {
               showDialog(
                 context: context,
-                child: Container(
-                  margin: EdgeInsets.all(40),
-                  child: Center(
-                    child: Material(
-                      child: Container(
-                        margin: EdgeInsets.all(10),
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: <Widget>[
-                            Container(
-                              child: Center(
-                                child: Text(
-                                  LocalData.title != ''
-                                      ? LocalData.title
-                                      : 'Title',
-                                  style: TextStyle(
-                                    color: R.color.primary,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25,
+                builder: (BuildContext context) {
+                  return Container(
+                    margin: EdgeInsets.all(40),
+                    child: Center(
+                      child: Material(
+                        child: Container(
+                          margin: EdgeInsets.all(10),
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: <Widget>[
+                              Container(
+                                child: Center(
+                                  child: Text(
+                                    LocalData.title != ''
+                                        ? LocalData.title
+                                        : 'Title',
+                                    style: TextStyle(
+                                      color: R.color.primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                    ),
                                   ),
                                 ),
+                                margin: EdgeInsets.all(10),
                               ),
-                              margin: EdgeInsets.all(10),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Description',
-                              style: TextStyle(
-                                color: R.color.gray,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                              SizedBox(
+                                height: 10,
                               ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              LocalData.description != ''
-                                  ? LocalData.description
-                                  : 'Description',
-                              style: TextStyle(
-                                color: R.color.gray,
-                                fontSize: 15,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              'Project developed by',
-                              style: TextStyle(
-                                color: R.color.gray,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              LocalData.students.split('~').length > 0
-                                  ? LocalData.students.split('~')[0]
-                                  : '1. Student 1',
-                              style: TextStyle(
-                                color: R.color.gray,
-                                fontSize: 15,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              LocalData.students.split('~').length > 1
-                                  ? LocalData.students.split('~')[1]
-                                  : '2. Student 2',
-                              style: TextStyle(
-                                color: R.color.gray,
-                                fontSize: 15,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              LocalData.students.split('~').length > 2
-                                  ? LocalData.students.split('~')[2]
-                                  : '3. Student 3',
-                              style: TextStyle(
-                                color: R.color.gray,
-                                fontSize: 15,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Text(
-                              LocalData.students.split('~').length > 3
-                                  ? LocalData.students.split('~')[3]
-                                  : '4. Student 4',
-                              style: TextStyle(
-                                color: R.color.gray,
-                                fontSize: 15,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              width: 200,
-                              child: RaisedButton(
-                                color: R.color.primary,
-                                child: Text(
-                                  'CLose',
-                                  style: TextStyle(
-                                    color: R.color.opposite,
-                                  ),
+                              Text(
+                                'Description',
+                                style: TextStyle(
+                                  color: R.color.gray,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
                                 ),
-                                onPressed: () {
-                                  Navigator.pop(context, true);
-                                },
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                LocalData.description != ''
+                                    ? LocalData.description
+                                    : 'Description',
+                                style: TextStyle(
+                                  color: R.color.gray,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Project developed by',
+                                style: TextStyle(
+                                  color: R.color.gray,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                LocalData.students.split('~').length > 0
+                                    ? LocalData.students.split('~')[0]
+                                    : '1. Student 1',
+                                style: TextStyle(
+                                  color: R.color.gray,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                LocalData.students.split('~').length > 1
+                                    ? LocalData.students.split('~')[1]
+                                    : '2. Student 2',
+                                style: TextStyle(
+                                  color: R.color.gray,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                LocalData.students.split('~').length > 2
+                                    ? LocalData.students.split('~')[2]
+                                    : '3. Student 3',
+                                style: TextStyle(
+                                  color: R.color.gray,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                LocalData.students.split('~').length > 3
+                                    ? LocalData.students.split('~')[3]
+                                    : '4. Student 4',
+                                style: TextStyle(
+                                  color: R.color.gray,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                width: 200,
+                                child: RaisedButton(
+                                  color: R.color.primary,
+                                  child: Text(
+                                    'CLose',
+                                    style: TextStyle(
+                                      color: R.color.opposite,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context, true);
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               );
             },
           )
@@ -419,63 +421,65 @@ class _PhSensorState extends State<PhSensor> {
     TextEditingController passController = TextEditingController();
     showDialog(
       context: context,
-      child: Container(
-        margin: EdgeInsets.all(40),
-        child: Center(
-          child: Material(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: ListView(
-                shrinkWrap: true,
-                children: <Widget>[
-                  Container(
-                    child: Center(
-                      child: Text(
-                        'Verify Admin',
-                        style: TextStyle(
-                          color: R.color.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
+      builder: (BuildContext context) {
+        return Container(
+          margin: EdgeInsets.all(40),
+          child: Center(
+            child: Material(
+              child: Container(
+                margin: EdgeInsets.all(10),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    Container(
+                      child: Center(
+                        child: Text(
+                          'Verify Admin',
+                          style: TextStyle(
+                            color: R.color.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25,
+                          ),
                         ),
                       ),
+                      margin: EdgeInsets.all(10),
                     ),
-                    margin: EdgeInsets.all(10),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: passController,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  RaisedButton(
-                    color: R.color.primary,
-                    child: Text(
-                      "Verify",
-                      style: TextStyle(
-                        color: R.color.opposite,
+                    TextField(
+                      controller: passController,
+                      decoration: InputDecoration(
+                        labelText: 'Password',
                       ),
                     ),
-                    onPressed: () {
-                      if (passController.text == 'iamadmin') {
-                        onSuccessCallback();
-                      } else {
-                        onFailureCallback();
-                      }
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+                    SizedBox(
+                      height: 10,
+                    ),
+                    RaisedButton(
+                      color: R.color.primary,
+                      child: Text(
+                        "Verify",
+                        style: TextStyle(
+                          color: R.color.opposite,
+                        ),
+                      ),
+                      onPressed: () {
+                        if (passController.text == 'iamadmin') {
+                          onSuccessCallback();
+                        } else {
+                          onFailureCallback();
+                        }
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
