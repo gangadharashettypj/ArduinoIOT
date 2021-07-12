@@ -4,6 +4,7 @@
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -13,9 +14,15 @@ class BikeScreen extends StatefulWidget {
 }
 
 class _BikeScreenState extends State<BikeScreen> {
-  int bikeStatus = 0;
-  String lat = 'NA';
-  String lng = 'NA';
+  int humidity;
+  int moisture;
+  int temperature;
+  String raining;
+  String lighting;
+
+  bool light = false;
+  bool fan = false;
+  bool sprinkler = false;
 
   @override
   void initState() {
@@ -28,7 +35,7 @@ class _BikeScreenState extends State<BikeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Accident Monitor',
+          'Green House',
         ),
         actions: <Widget>[
           ElevatedButton(
@@ -77,7 +84,7 @@ class _BikeScreenState extends State<BikeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Vehicle Status: ${bikeStatus == 1 ? 'RUNNING' : (bikeStatus == 2 ? 'ACCIDENT' : (bikeStatus == 3 ? 'PROBLEM' : '--'))}',
+                    'Humidity: ${humidity ?? '--'}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -89,6 +96,151 @@ class _BikeScreenState extends State<BikeScreen> {
             SizedBox(
               height: 30,
             ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Temperature: ${temperature ?? '--'}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Moisture: ${moisture == null ? '--' : (moisture > 1020 ? 'LOW' : (moisture > 500 ? 'MEDIUM' : 'LOW'))}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Weather: ${raining ?? '--'}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'lighting: ${lighting ?? '--'}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text('LIGHT'),
+                Text('FAN'),
+                Text('SWITCH'),
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CupertinoSwitch(
+                  value: light,
+                  onChanged: (value) {
+                    setState(() {
+                      light = value;
+                    });
+                    HttpREST().get(
+                      value ? R.api.turnOnLight : R.api.turnOffLight,
+                    );
+                  },
+                ),
+                CupertinoSwitch(
+                  value: fan,
+                  onChanged: (value) {
+                    setState(() {
+                      fan = value;
+                    });
+                    HttpREST().get(
+                      value ? R.api.turnOnFan : R.api.turnOffFan,
+                    );
+                  },
+                ),
+                CupertinoSwitch(
+                  value: sprinkler,
+                  onChanged: (value) {
+                    setState(() {
+                      sprinkler = value;
+                    });
+                    HttpREST().get(
+                      value ? R.api.turnOnSprinkler : R.api.turnOffSprinkler,
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -96,17 +248,34 @@ class _BikeScreenState extends State<BikeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.bikeStatus,
+    DeviceManager().listenForData(R.api.getHumidity,
         (Map<String, String> response) {
       setState(() {
-        bikeStatus = int.parse(response['bikeStatus']);
+        humidity = int.parse(response['humidity']);
       });
     });
-    DeviceManager().listenForData(R.api.bikeLocation,
+    DeviceManager().listenForData(R.api.getTemperature,
         (Map<String, String> response) {
       setState(() {
-        lat = double.parse(response['lat']).toStringAsFixed(6);
-        lng = double.parse(response['lng']).toStringAsFixed(6);
+        temperature = int.parse(response['temperature']);
+      });
+    });
+    DeviceManager().listenForData(R.api.getMoisture,
+        (Map<String, String> response) {
+      setState(() {
+        moisture = int.parse(response['moisture']);
+      });
+    });
+    DeviceManager().listenForData(R.api.getRaining,
+        (Map<String, String> response) {
+      setState(() {
+        raining = response['raining'];
+      });
+    });
+    DeviceManager().listenForData(R.api.getLight,
+        (Map<String, String> response) {
+      setState(() {
+        lighting = response['light'];
       });
     });
   }

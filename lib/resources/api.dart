@@ -19,4 +19,15 @@ class Api {
   get turnOnBike => 'turnOnBike';
   get turnOffBike => 'turnOffBike';
   get getBikeStatus => 'getBikeStatus';
+  get getHumidity => 'getHumidity';
+  get getTemperature => 'getTemperature';
+  get getMoisture => 'getMoisture';
+  get getRaining => 'getRaining';
+  get getLight => 'getLight';
+  get turnOnLight => 'turnOnLight';
+  get turnOffLight => 'turnOffLight';
+  get turnOnFan => 'turnOnFan';
+  get turnOffFan => 'turnOffFan';
+  get turnOnSprinkler => 'turnOnSprinkler';
+  get turnOffSprinkler => 'turnOffSprinkler';
 }
