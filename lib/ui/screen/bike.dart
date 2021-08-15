@@ -142,49 +142,52 @@ class _BikeScreenState extends State<BikeScreen> {
                     String timing = '';
                     await showDialog<String>(
                       context: context,
-                      child: Container(
-                        child: AlertDialog(
-                          contentPadding: const EdgeInsets.all(16.0),
-                          content: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  autofocus: true,
-                                  decoration: InputDecoration(
-                                    labelText: 'Time in seconds',
+                      builder: (BuildContext context) {
+                        return Container(
+                          child: AlertDialog(
+                            contentPadding: const EdgeInsets.all(16.0),
+                            content: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: TextField(
+                                    autofocus: true,
+                                    decoration: InputDecoration(
+                                      labelText: 'Time in seconds',
+                                    ),
+                                    onChanged: (val) {
+                                      timing = val;
+                                    },
+                                    maxLength: 2,
+                                    keyboardType: TextInputType.number,
                                   ),
-                                  onChanged: (val) {
-                                    timing = val;
-                                  },
-                                  maxLength: 2,
-                                  keyboardType: TextInputType.number,
-                                ),
-                              )
+                                )
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                              FlatButton(
+                                  child: const Text('Update'),
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    if (timing.isEmpty) {
+                                      Fluttertoast.showToast(
+                                          msg: 'enter a valid timings');
+                                      return;
+                                    }
+                                    await DeviceManager().sendData(
+                                        R.api.setWaterTiming,
+                                        params: {
+                                          "time": timing,
+                                        });
+                                  })
                             ],
                           ),
-                          actions: <Widget>[
-                            FlatButton(
-                                child: const Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                            FlatButton(
-                                child: const Text('Update'),
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                  if (timing.isEmpty) {
-                                    Fluttertoast.showToast(
-                                        msg: 'enter a valid timings');
-                                    return;
-                                  }
-                                  await DeviceManager()
-                                      .sendData(R.api.setWaterTiming, params: {
-                                    "time": timing,
-                                  });
-                                })
-                          ],
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -199,32 +202,34 @@ class _BikeScreenState extends State<BikeScreen> {
                   onPressed: () async {
                     await showDialog<String>(
                       context: context,
-                      child: Container(
-                        child: AlertDialog(
-                          contentPadding: const EdgeInsets.all(16.0),
-                          content: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Text('Reset coins to 0'),
-                              )
+                      builder: (BuildContext context) {
+                        return Container(
+                          child: AlertDialog(
+                            contentPadding: const EdgeInsets.all(16.0),
+                            content: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Text('Reset coins to 0'),
+                                )
+                              ],
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  }),
+                              FlatButton(
+                                  child: const Text('Reset'),
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    await DeviceManager()
+                                        .sendData(R.api.resetCoins);
+                                  })
                             ],
                           ),
-                          actions: <Widget>[
-                            FlatButton(
-                                child: const Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                }),
-                            FlatButton(
-                                child: const Text('Reset'),
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                  await DeviceManager()
-                                      .sendData(R.api.resetCoins);
-                                })
-                          ],
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),
