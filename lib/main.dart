@@ -1,8 +1,5 @@
 import 'package:arduinoiot/resources/nestbees_resources.dart';
-import 'package:arduinoiot/service/server/server.dart';
-import 'package:arduinoiot/ui/screen/bike.dart';
 import 'package:arduinoiot/ui/screen/home/home.dart';
-import 'package:arduinoiot/ui/screen/home/trialer.dart';
 import 'package:arduinoiot/ui/screen/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,9 +27,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       routes: <String, WidgetBuilder>{
         R.routes.splash: (BuildContext context) => SplashScreen(),
-        R.routes.home: (BuildContext context) => Home(),
-        R.routes.trial: (BuildContext context) => Trail(),
-        R.routes.bike: (BuildContext context) => BikeScreen(),
+        R.routes.home: (BuildContext context) => HomeScreen(),
       },
     );
   }
@@ -45,18 +40,11 @@ class MyApp extends StatelessWidget {
       requestSoundPermission: false,
       requestBadgePermission: false,
       requestAlertPermission: false,
-      onDidReceiveLocalNotification: onDidReceiveLocalNotification,
     );
     var initializationSettings = InitializationSettings(
         initializationSettingsAndroid, initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onNotificationSelected);
-
-    Server().registerService(R.api.notification,
-        (Map<String, String> response) {
-      raiseNotification(response['notificationMessage'],
-          response['notificationBody'], response['notificationTitle']);
-    });
   }
 
   Future onNotificationSelected(String payload) async {
@@ -79,7 +67,4 @@ class MyApp extends StatelessWidget {
     await flutterLocalNotificationsPlugin
         .show(0, title, body, platformChannelSpecifics, payload: 'msg');
   }
-
-  Future onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) {}
 }

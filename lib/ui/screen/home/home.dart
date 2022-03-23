@@ -2,135 +2,225 @@
  * @Author GS
  */
 import 'package:arduinoiot/resources/nestbees_resources.dart';
-import 'package:arduinoiot/util/shared_preference.dart';
+import 'package:arduinoiot/service/manager/device_manager.dart';
+import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 
-class Home extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
-  bool isOnline = false;
+class _HomeScreenState extends State<HomeScreen> {
+  double phValue;
+  int humidity;
+  int waterTemperature;
+  int airTemperature;
+
   @override
   void initState() {
+    startListening();
     super.initState();
-    SharedPreferenceUtil.readBool("ONLINE").then(
-      (bool val) => setState(() {
-        if (val != null) isOnline = val;
-      }),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Arduino IOT"),
+        title: Text(
+          'Hydroponics',
+        ),
         actions: <Widget>[
-          Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: <Widget>[
-              Text("ONLINE"),
-              Switch(
-                value: isOnline,
-                onChanged: (val) {
-                  setState(() {
-                    isOnline = val;
-                  });
-                  SharedPreferenceUtil.writeBool("ONLINE", val);
+          FlatButton(
+            child: Text(
+              'Reconnect',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () async {
+              Response res = await HttpREST().get(
+                R.api.setClientIP,
+                params: {
+                  'ip': 'sd',
+                  'port': '2345',
                 },
-                activeTrackColor: R.color.accent,
-                inactiveTrackColor: R.color.lightGray,
-                activeColor: R.color.opposite,
-              ),
-            ],
-          )
+              );
+            },
+          ),
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
-        child: GridView(
+        padding: EdgeInsets.all(20),
+        child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
-            Card(
-              elevation: 4,
-              child: InkWell(
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
                 child: Container(
-                  child: Center(
-                    child: Text(
-                      "Car",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: R.color.gray,
-                      ),
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'pH: ${humidity == null ? '--' : humidity}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-                onTap: () => Navigator.pushNamed(context, R.routes.car),
               ),
             ),
-            Card(
-              elevation: 4,
-              child: InkWell(
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
                 child: Container(
-                  child: Center(
-                    child: Text(
-                      "Chat",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: R.color.gray,
-                      ),
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Humidity: ${phValue == null ? '--' : phValue}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-                onTap: () => Navigator.pushNamed(context, R.routes.chat),
               ),
             ),
-            Card(
-              elevation: 4,
-              child: InkWell(
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
                 child: Container(
-                  child: Center(
-                    child: Text(
-                      "Servo",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: R.color.gray,
-                      ),
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Air Temperature: ${humidity == null ? '--' : humidity}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-                onTap: () => Navigator.pushNamed(context, R.routes.servo),
               ),
             ),
-            Card(
-              elevation: 4,
-              child: InkWell(
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
                 child: Container(
-                  child: Center(
-                    child: Text(
-                      "Joystick",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: R.color.gray,
-                      ),
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Water Temperature: ${humidity == null ? '--' : humidity}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-                onTap: () => Navigator.pushNamed(context, R.routes.joystick),
               ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            RaisedButton(
+              color: R.color.primary,
+              child: Text(
+                'Water Pump',
+                style: TextStyle(
+                  color: R.color.opposite,
+                ),
+              ),
+              onPressed: () async {
+                await DeviceManager().sendData(R.api.waterPump);
+              },
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            RaisedButton(
+              color: R.color.red,
+              child: Text(
+                'Nutrition Pump',
+                style: TextStyle(
+                  color: R.color.opposite,
+                ),
+              ),
+              onPressed: () async {
+                await DeviceManager().sendData(R.api.nutritionPump);
+              },
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            RaisedButton(
+              color: R.color.green,
+              child: Text(
+                'Light',
+                style: TextStyle(
+                  color: R.color.opposite,
+                ),
+              ),
+              onPressed: () async {
+                await DeviceManager().sendData(R.api.light);
+              },
             ),
           ],
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 2,
-          ),
         ),
       ),
     );
+  }
+
+  void startListening() async {
+    DeviceManager().listenForData(R.api.pH, (Map<String, String> response) {
+      setState(() {
+        phValue = double.parse(response['ph']);
+      });
+    });
+    DeviceManager().listenForData(R.api.humidity,
+        (Map<String, String> response) {
+      setState(() {
+        humidity = int.parse(response['humidity']);
+      });
+    });
+    DeviceManager().listenForData(R.api.airTemperature,
+        (Map<String, String> response) {
+      setState(() {
+        airTemperature = int.parse(response['airTemperature']);
+      });
+    });
+    DeviceManager().listenForData(R.api.waterTemperature,
+        (Map<String, String> response) {
+      setState(() {
+        waterTemperature = int.parse(response['waterTemperature']);
+      });
+    });
   }
 }

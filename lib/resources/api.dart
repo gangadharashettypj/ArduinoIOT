@@ -2,22 +2,15 @@
  * @Author GS
  */
 class Api {
-  get baseUrl => 'http://10.10.10.1/';
-  get root => '';
-  get carController => 'carController';
-  get setClientIP => 'setClientIP';
-  get notification => 'notification';
-  get chat => 'chat';
-  get ph => 'ph';
-  get moisture => 'moisture';
-  get humi => 'humi';
-  get temp => 'temp';
-  get motor => 'motor';
-  get setStudentsData => 'setStudentsData';
-  get numberOfCoins => 'noOfCoins';
-  get getWaterTiming => 'getWaterTiming';
-  get setWaterTiming => 'setWaterTiming';
-  get setWaterLiters => 'setWaterLiters';
-  get getWaterLiters => 'getWaterLiters';
-  get resetCoins => 'resetCoins';
+  String get baseUrl => 'http://10.10.10.1/';
+  String get root => '';
+  String get carController => 'carController';
+  String get setClientIP => 'setClientIP';
+  String get waterPump => 'waterPump';
+  String get nutritionPump => 'nutritionPump';
+  String get light => 'light';
+  String get pH => 'pH';
+  String get humidity => 'humidity';
+  String get airTemperature => 'airTemperature';
+  String get waterTemperature => 'waterTemperature';
 }

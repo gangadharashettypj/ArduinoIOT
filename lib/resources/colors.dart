@@ -13,4 +13,5 @@ class MyColors {
   get accent => Colors.teal[200];
   get white => HexColor.fromHex('#FFFFFF');
   get red => Colors.red;
+  get green => Colors.green;
 }

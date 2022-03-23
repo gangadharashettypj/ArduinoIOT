@@ -21,8 +21,6 @@ analyzer:
     - lib/src/http/**
     - lib/proto_build/**
     - lib/common_widgets/platform_widgets/**
-  ​
-  ​
 linter:
   rules:
     - always_declare_return_types
