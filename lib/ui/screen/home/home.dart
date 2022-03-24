@@ -13,10 +13,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double phValue;
-  int humidity;
-  int waterTemperature;
-  int airTemperature;
+  String phValue;
+  String humidity;
+  String waterTemperature;
+  String airTemperature;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'pH: ${humidity == null ? '--' : humidity}',
+                    'pH: $phValue',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Humidity: ${phValue == null ? '--' : phValue}',
+                    'Humidity: $humidity',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Air Temperature: ${humidity == null ? '--' : humidity}',
+                    'Air Temperature: $airTemperature',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Water Temperature: ${humidity == null ? '--' : humidity}',
+                    'Water Temperature: $waterTemperature',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -201,26 +201,29 @@ class _HomeScreenState extends State<HomeScreen> {
   void startListening() async {
     DeviceManager().listenForData(R.api.pH, (Map<String, String> response) {
       setState(() {
-        phValue = double.parse(response['ph']);
+        phValue = response['pH'];
+        humidity = response['humidity'];
+        airTemperature = response['airTemperature'];
+        waterTemperature = response['waterTemperature'];
       });
     });
-    DeviceManager().listenForData(R.api.humidity,
-        (Map<String, String> response) {
-      setState(() {
-        humidity = int.parse(response['humidity']);
-      });
-    });
-    DeviceManager().listenForData(R.api.airTemperature,
-        (Map<String, String> response) {
-      setState(() {
-        airTemperature = int.parse(response['airTemperature']);
-      });
-    });
-    DeviceManager().listenForData(R.api.waterTemperature,
-        (Map<String, String> response) {
-      setState(() {
-        waterTemperature = int.parse(response['waterTemperature']);
-      });
-    });
+    // DeviceManager().listenForData(R.api.humidity,
+    //     (Map<String, String> response) {
+    //   setState(() {
+    //     humidity = int.parse(response['humidity']);
+    //   });
+    // });
+    // DeviceManager().listenForData(R.api.airTemperature,
+    //     (Map<String, String> response) {
+    //   setState(() {
+    //     airTemperature = int.parse(response['airTemperature']);
+    //   });
+    // });
+    // DeviceManager().listenForData(R.api.waterTemperature,
+    //     (Map<String, String> response) {
+    //   setState(() {
+    //     waterTemperature = int.parse(response['waterTemperature']);
+    //   });
+    // });
   }
 }

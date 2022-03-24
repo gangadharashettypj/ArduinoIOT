@@ -14,9 +14,9 @@ class Server {
   static Future<HttpServer> get inst async {
     if (_instance == null) {
       _instance = await HttpServer.bind('0.0.0.0', 2345);
-      print("Server running on IP : " +
+      print('Server running on IP : ' +
           _instance.address.toString() +
-          " On Port : " +
+          ' On Port : ' +
           _instance.port.toString());
       String str = await GetIp.ipAddress;
       HttpREST().get(
@@ -38,9 +38,9 @@ class Server {
 
   static void _listenToRequests() async {
     Server.instance.listen((HttpRequest request) {
-      // print(request.uri.queryParameters.toString());
-      // print('>>>');
-      // print(maps.keys);
+      print(request.uri.queryParameters.toString());
+      print('>>>');
+      print(maps.keys);
       if (maps.containsKey(request.uri.queryParameters['type'])) {
         maps[request.uri.queryParameters['type']](request.uri.queryParameters);
         request.response
