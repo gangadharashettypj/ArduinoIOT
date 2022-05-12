@@ -18,7 +18,8 @@ dependencies:
   sleek_circular_slider: ^1.1.0
   control_pad: ^1.0.1+1
   fluttertoast: ^7.1.6
-
+  group_radio_button: 1.0.1
+  hive: 1.4.4+1
 
 dev_dependencies:
   flutter_test:

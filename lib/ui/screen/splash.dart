@@ -21,7 +21,7 @@ class SplashScreen extends StatelessWidget {
       body: Container(
         child: Center(
           child: Text(
-            "Arduino IOT",
+            'Stress Calculator',
             style: TextStyle(
               color: R.color.primary,
               fontWeight: FontWeight.bold,
