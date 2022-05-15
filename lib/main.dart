@@ -1,6 +1,7 @@
 import 'package:arduinoiot/db/db.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/ui/screen/form/form.dart';
+import 'package:arduinoiot/ui/screen/form_personal/personal_form.dart';
 import 'package:arduinoiot/ui/screen/home/home.dart';
 import 'package:arduinoiot/ui/screen/splash.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         R.routes.splash: (BuildContext context) => SplashScreen(),
         R.routes.home: (BuildContext context) => HomeScreen(),
         R.routes.form: (BuildContext context) => FormScreen(),
+        R.routes.personalForm: (BuildContext context) => PersonalFormScreen(),
       },
     );
   }

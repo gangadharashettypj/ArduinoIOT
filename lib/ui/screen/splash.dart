@@ -1,7 +1,11 @@
 /*
  * @Author GS
  */
+import 'dart:convert';
+
+import 'package:arduinoiot/db/db.dart';
 import 'package:arduinoiot/local/local_data.dart';
+import 'package:arduinoiot/model/questions_model.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:arduinoiot/service/server/server.dart';
@@ -15,7 +19,19 @@ class SplashScreen extends StatelessWidget {
 
     Future.delayed(
       Duration(seconds: 2),
-      () => Navigator.pushReplacementNamed(context, R.routes.home),
+      () {
+        final data = DB.instance.get(DBKeys.formData);
+        if (data != null && data != '') {
+          final questionsModel = QuestionsModel.fromJson(jsonDecode(data));
+          if (questionsModel.name != null && questionsModel.name.isNotEmpty) {
+            Navigator.pushReplacementNamed(context, R.routes.home);
+          } else {
+            Navigator.pushReplacementNamed(context, R.routes.personalForm);
+          }
+        } else {
+          Navigator.pushReplacementNamed(context, R.routes.personalForm);
+        }
+      },
     );
     return Scaffold(
       body: Container(

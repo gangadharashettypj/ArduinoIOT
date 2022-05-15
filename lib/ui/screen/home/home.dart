@@ -5,7 +5,6 @@ import 'dart:convert';
 
 import 'package:arduinoiot/db/db.dart';
 import 'package:arduinoiot/model/questions_model.dart';
-import 'package:arduinoiot/resources/colors.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/util/sized_box.dart';
@@ -35,6 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
       return -1;
     }
     final model = QuestionsModel.fromJson(jsonDecode(data));
+    if (model.q1 == null) {
+      return -1;
+    }
     var x1 =
         (model.q5 + model.q8 + model.q17 + model.q22 + model.q23 + model.q25) /
             24;
@@ -68,8 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return 'Highly Stressed';
     } else if (calculateStress() > 35) {
       return 'Stressed';
-    } else {
+    } else if (calculateStress() > 0) {
       return 'Mild Stressed';
+    } else {
+      return '--';
     }
   }
 
@@ -117,32 +121,69 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Center(
-                child: LabelWidget(
-                  'STRESS SCORE: ${getStressScore()}',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: MyColors.textDarkColor,
+              Card(
+                color: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: LabelWidget(
+                          'STRESS SCORE:',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white54,
+                        ),
+                      ),
+                      CustomSizedBox.h40,
+                      Center(
+                        child: LabelWidget(
+                          '${getStressScore()}',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26,
+                          maxLine: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               CustomSizedBox.h30,
-              Center(
-                child: LabelWidget(
-                  'STRESS LEVEL:',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: MyColors.textDarkColor,
+              Card(
+                color: Colors.red,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ),
-              Center(
-                child: LabelWidget(
-                  '${getStressLevel()}',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 26,
-                  maxLine: 2,
-                  color: MyColors.textDarkColor,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                  child: Column(
+                    children: [
+                      Center(
+                        child: LabelWidget(
+                          'STRESS LEVEL:',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.white54,
+                        ),
+                      ),
+                      CustomSizedBox.h40,
+                      Center(
+                        child: LabelWidget(
+                          '${getStressLevel()}',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26,
+                          maxLine: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
