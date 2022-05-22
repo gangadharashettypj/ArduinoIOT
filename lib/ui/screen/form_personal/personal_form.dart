@@ -205,7 +205,13 @@ class _PersonalFormScreenState extends State<PersonalFormScreen> {
     if (formKey.currentState.validate()) {
       DB.instance.store(DBKeys.formData, jsonEncode(questionsModel.toJson()));
       Fluttertoast.showToast(msg: 'Form submitted successfully');
-      Navigator.pushReplacementNamed(context, R.routes.home);
+      final data = DB.instance.get(DBKeys.formData);
+      final qModel = QuestionsModel.fromJson(jsonDecode(data));
+      if (qModel.q1 != null) {
+        Navigator.pushReplacementNamed(context, R.routes.instruction);
+      } else {
+        Navigator.pushReplacementNamed(context, R.routes.form);
+      }
     } else {
       Fluttertoast.showToast(msg: 'Please enter a valid details');
     }

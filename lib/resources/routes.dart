@@ -2,8 +2,11 @@
  * @Author GS
  */
 class Routes {
-  get splash => '/splash';
-  get home => '/home';
-  get form => '/form';
-  get personalForm => '/personalForm';
+  final splash = '/splash';
+  final home = '/home';
+  final form = '/form';
+  final personalForm = '/personalForm';
+  final about = '/about';
+  final instruction = '/instruction';
+  final data = '/data';
 }

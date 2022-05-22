@@ -5,14 +5,14 @@ import 'package:arduinoiot/extensions/color_extension.dart';
 import 'package:flutter/material.dart';
 
 class MyColors {
-  get primary => Colors.teal;
-  get gray => Colors.grey;
-  get lightGray => Colors.grey[400];
-  get opposite => Colors.white;
-  get accent => Colors.teal[200];
-  get white => HexColor.fromHex('#FFFFFF');
-  get red => Colors.red;
-  get green => Colors.green;
+  final primary = Color(0xFF009889);
+  final gray = Colors.grey;
+  final lightGray = Colors.grey[400];
+  final opposite = Colors.white;
+  final accent = Colors.teal[200];
+  final white = HexColor.fromHex('#FFFFFF');
+  final red = Colors.red;
+  final green = Colors.green;
 
   /*
   * general

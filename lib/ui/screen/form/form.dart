@@ -1136,7 +1136,7 @@ class _FormScreenState extends State<FormScreen> {
     } else {
       DB.instance.store(DBKeys.formData, jsonEncode(questionsModel.toJson()));
       Fluttertoast.showToast(msg: 'Form submitted successfully');
-      Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, R.routes.home);
     }
   }
 

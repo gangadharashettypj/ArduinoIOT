@@ -23,10 +23,10 @@ class SplashScreen extends StatelessWidget {
         final data = DB.instance.get(DBKeys.formData);
         if (data != null && data != '') {
           final questionsModel = QuestionsModel.fromJson(jsonDecode(data));
-          if (questionsModel.name != null && questionsModel.name.isNotEmpty) {
-            Navigator.pushReplacementNamed(context, R.routes.home);
+          if (questionsModel.q1 != null) {
+            Navigator.pushReplacementNamed(context, R.routes.instruction);
           } else {
-            Navigator.pushReplacementNamed(context, R.routes.personalForm);
+            Navigator.pushReplacementNamed(context, R.routes.form);
           }
         } else {
           Navigator.pushReplacementNamed(context, R.routes.personalForm);
