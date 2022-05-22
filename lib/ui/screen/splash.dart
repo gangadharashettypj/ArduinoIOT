@@ -34,15 +34,11 @@ class SplashScreen extends StatelessWidget {
       },
     );
     return Scaffold(
+      backgroundColor: R.color.primary,
       body: Container(
         child: Center(
-          child: Text(
-            'Stress Calculator',
-            style: TextStyle(
-              color: R.color.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 40,
-            ),
+          child: Image.asset(
+            R.image.logo,
           ),
         ),
       ),

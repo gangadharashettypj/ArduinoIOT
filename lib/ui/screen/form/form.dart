@@ -6,8 +6,8 @@ import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/util/sized_box.dart';
 import 'package:arduinoiot/widget/label_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:group_radio_button/group_radio_button.dart';
 
 class FormScreen extends StatefulWidget {
   const FormScreen({Key key}) : super(key: key);
@@ -54,10 +54,39 @@ class _FormScreenState extends State<FormScreen> {
           Expanded(
             child: ListView(
               children: [
+                Text(
+                  '''
+Please read the Statement and select the options 0,1,2,3 which indicates how much statement will applied to you.There are no right or wrong answers.
+                  ''',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  '''
+The rating scale as follows:
+   1 - Never 
+   2 - Almost Never
+   3 - Sometimes
+   4 - Fairly Often
+   5 - Very Often
+''',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
                 Card(
-                  color: Colors.orange,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -79,16 +108,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q1,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q1 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q1?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q1 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q1 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -96,9 +132,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.orangeAccent,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -120,16 +160,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q2,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q2 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q2?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q2 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q2 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -137,9 +184,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.deepOrange,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -161,16 +212,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q3,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q3 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q3?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q3 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q3 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -178,9 +236,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.red,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -202,16 +264,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q4,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q4 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q4?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q4 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q4 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -219,9 +288,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.purple,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -243,16 +316,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q5,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q5 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q5?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q5 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q5 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -260,9 +340,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.purpleAccent,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -284,16 +368,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q6,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q6 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q6?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q6 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q6 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -301,9 +392,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.deepPurple,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -325,16 +420,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q7,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q7 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q7?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q7 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q7 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -342,9 +444,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.deepPurpleAccent,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -366,16 +472,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q8,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q8 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q8?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q8 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q8 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -383,9 +496,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.blue,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -407,16 +524,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q9,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q9 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q9?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q9 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q9 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -424,9 +548,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.lightBlue,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -448,16 +576,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q10,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q10 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q10?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q10 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q10 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -465,9 +600,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.yellow,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -489,16 +628,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q11,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q11 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q11?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q11 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q11 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -506,9 +652,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.lightGreen,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -530,16 +680,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q12,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q12 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q12?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q12 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q12 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -547,9 +704,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.lightGreen,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -571,16 +732,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q13,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q13 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q13?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q13 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q13 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -588,9 +756,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.pink,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -612,16 +784,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q14,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q14 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q14?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q14 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q14 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -629,9 +808,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.teal,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -653,16 +836,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q15,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q15 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q15?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q15 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q15 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -670,9 +860,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.indigo,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -694,16 +888,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q16,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q16 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q16?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q16 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q16 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -711,9 +912,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.grey,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -735,16 +940,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q17,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q17 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q17?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q17 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q17 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -752,9 +964,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.blueGrey,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -776,16 +992,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q18,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q18 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q18?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q18 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q18 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -793,9 +1016,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.brown,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -817,16 +1044,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q19,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q19 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q19?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q19 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q19 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -834,9 +1068,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.orange,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -858,16 +1096,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q20,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q20 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q20?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q20 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q20 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -875,9 +1120,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.orangeAccent,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -899,16 +1148,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q21,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q21 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q21?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q21 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q21 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -916,9 +1172,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.deepOrange,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -940,16 +1200,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q22,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q22 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q22?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q22 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q22 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -957,9 +1224,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.blue,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -981,16 +1252,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q23,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q23 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q23?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q23 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q23 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -998,9 +1276,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.pink,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -1022,16 +1304,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q24,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q24 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q24?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q24 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q24 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -1039,9 +1328,13 @@ class _FormScreenState extends State<FormScreen> {
                 ),
                 CustomSizedBox.h18,
                 Card(
-                  color: Colors.purple,
+                  color: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: Colors.white,
+                      width: 2,
+                    ),
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 32),
@@ -1063,16 +1356,23 @@ class _FormScreenState extends State<FormScreen> {
                           maxLine: 10,
                         ),
                         CustomSizedBox.h18,
-                        RadioGroup<int>.builder(
-                          groupValue: questionsModel.q25,
-                          onChanged: (value) => setState(() {
-                            questionsModel.q25 = value;
-                          }),
-                          items: [0, 1, 2, 3, 4],
+                        RatingBar.builder(
+                          initialRating: questionsModel.q25?.toDouble() ?? 0.0,
+                          minRating: 1,
                           direction: Axis.horizontal,
-                          itemBuilder: (item) => RadioButtonBuilder(
-                            item.toString(),
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
                           ),
+                          onRatingUpdate: (rating) {
+                            if (rating.toInt() > 0) {
+                              questionsModel.q25 = rating.toInt() - 1;
+                            } else {
+                              questionsModel.q25 = rating.toInt();
+                            }
+                          },
                         ),
                       ],
                     ),
@@ -1082,24 +1382,30 @@ class _FormScreenState extends State<FormScreen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: RaisedButton(
+            margin: EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 12,
+            ),
+            width: double.infinity,
+            child: RaisedButton(
+              color: R.color.white,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 12,
+                ),
+                child: Text(
+                  'SUBMIT FORM',
+                  style: TextStyle(
                     color: R.color.primary,
-                    child: Text(
-                      'SUBMIT FORM',
-                      style: TextStyle(
-                        color: R.color.opposite,
-                      ),
-                    ),
-                    onPressed: () {
-                      handleFormSubmit();
-                    },
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
+              ),
+              onPressed: () {
+                handleFormSubmit();
+              },
             ),
           ),
         ],
@@ -1136,7 +1442,7 @@ class _FormScreenState extends State<FormScreen> {
     } else {
       DB.instance.store(DBKeys.formData, jsonEncode(questionsModel.toJson()));
       Fluttertoast.showToast(msg: 'Form submitted successfully');
-      Navigator.pushReplacementNamed(context, R.routes.home);
+      Navigator.pushReplacementNamed(context, R.routes.instruction);
     }
   }
 
@@ -1152,6 +1458,7 @@ class _FormScreenState extends State<FormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: R.color.primary,
       appBar: AppBar(
         title: Text('Questions Form'),
       ),

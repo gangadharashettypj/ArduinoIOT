@@ -45,11 +45,9 @@ I have trouble initiating conversions or just simply being a part of it.
 I have experienced chronic/recurrent headaches/back pains/chest pain
  */
 
-final formKey = GlobalKey<FormState>();
-
 class _PersonalFormScreenState extends State<PersonalFormScreen> {
   var questionsModel = QuestionsModel();
-
+  final formKey = GlobalKey<FormState>();
   Widget buildForm() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),

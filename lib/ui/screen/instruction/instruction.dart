@@ -33,33 +33,65 @@ class _InstructionScreenState extends State<InstructionScreen> {
           ),
         ],
       ),
-      body: Container(
-        height: double.infinity,
-        child: Image.asset(
-          image,
-          fit: BoxFit.fill,
-        ),
+      body: Stack(
+        children: [
+          Container(
+            height: double.infinity,
+            child: Image.asset(
+              image,
+              fit: BoxFit.fill,
+            ),
+          ),
+          Positioned(
+            bottom: 16,
+            left: 16,
+            right: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (image == R.image.instruction1) Container(),
+                if (image == R.image.instruction2)
+                  FloatingActionButton(
+                    heroTag: 'two',
+                    backgroundColor: Colors.white,
+                    onPressed: () {
+                      setState(() {
+                        image = R.image.instruction1;
+                      });
+                    },
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: R.color.primary,
+                      size: 50,
+                    ),
+                  ),
+                FloatingActionButton(
+                  heroTag: 'one',
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    if (image == R.image.instruction1) {
+                      setState(() {
+                        image = R.image.instruction2;
+                      });
+                    } else {
+                      Navigator.pushNamed(
+                        context,
+                        R.routes.data,
+                      );
+                    }
+                  },
+                  child: Icon(
+                    Icons.chevron_right,
+                    color: R.color.primary,
+                    size: 50,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        onPressed: () {
-          if (image == R.image.instruction1) {
-            setState(() {
-              image = R.image.instruction2;
-            });
-          } else {
-            Navigator.pushNamed(
-              context,
-              R.routes.data,
-            );
-          }
-        },
-        child: Icon(
-          Icons.chevron_right,
-          color: R.color.primary,
-          size: 50,
-        ),
-      ),
+      backgroundColor: R.color.primary,
     );
   }
 }
