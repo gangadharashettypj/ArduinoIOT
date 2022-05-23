@@ -13,10 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String phValue;
-  String humidity;
-  String waterTemperature;
-  String airTemperature;
+  String temperature;
+  String humi;
 
   @override
   void initState() {
@@ -66,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'pH: $phValue',
+                    'Temperature: $temperature',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -90,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Humidity: $humidity',
+                    'Humidity: $humi',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -101,81 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(
               height: 30,
-            ),
-            Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.all(16),
-                  child: Text(
-                    'Air Temperature: $airTemperature',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.all(16),
-                  child: Text(
-                    'Water Temperature: $waterTemperature',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            RaisedButton(
-              color: R.color.primary,
-              child: Text(
-                'Water Pump',
-                style: TextStyle(
-                  color: R.color.opposite,
-                ),
-              ),
-              onPressed: () async {
-                await DeviceManager().sendData(R.api.waterPump);
-              },
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            RaisedButton(
-              color: R.color.red,
-              child: Text(
-                'Nutrition Pump',
-                style: TextStyle(
-                  color: R.color.opposite,
-                ),
-              ),
-              onPressed: () async {
-                await DeviceManager().sendData(R.api.nutritionPump);
-              },
             ),
             SizedBox(
               height: 30,
@@ -199,13 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.pH, (Map<String, String> response) {
-      setState(() {
-        phValue = response['pH'];
-        humidity = response['humidity'];
-        airTemperature = response['airTemperature'];
-        waterTemperature = response['waterTemperature'];
-      });
+    DeviceManager().listenForData(R.api.dht, (Map<String, String> response) {
+      if (mounted) {
+        setState(() {
+          temperature = response['temperature'];
+          humi = response['humidity'];
+        });
+      }
     });
     // DeviceManager().listenForData(R.api.humidity,
     //     (Map<String, String> response) {

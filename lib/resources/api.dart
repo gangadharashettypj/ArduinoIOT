@@ -8,9 +8,6 @@ class Api {
   String get setClientIP => 'setClientIP';
   String get waterPump => 'waterPump';
   String get nutritionPump => 'nutritionPump';
-  String get light => 'light';
-  String get pH => 'pH';
-  String get humidity => 'humidity';
-  String get airTemperature => 'airTemperature';
-  String get waterTemperature => 'waterTemperature';
+  String get light => 'turnOnLight';
+  String get dht => 'dht';
 }
