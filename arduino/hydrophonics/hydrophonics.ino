@@ -19,8 +19,6 @@ WebServer server(80);
 String clientServerIP = "";
 String clientServerPort = "2345";
 
-
-
 String acc = "";
 int gsr = -1;
 int ecg = -1;
@@ -42,7 +40,11 @@ const int sampleSize = 10;
 //GSR
 const int GSR=A5;
 
-int BPM = 0;
+int bpm = 0;
+int beat = 0;
+
+boolean countStatus;
+unsigned long millisBefore;
 
 void setIP() {
   Serial.println(server.client().remoteIP().toString());
@@ -68,7 +70,7 @@ void setLightState() {
 void updateData(){
   if(clientServerIP == "") return;
   HTTPClient http;
-  String url = "http://"+clientServerIP+":"+clientServerPort+"/?type=DATA&ecg="+ String(ecg) +"&gsr="+ String(gsr) + "&acc="+ acc + "&bpm=100&gsrc=" + String(gsrc);
+  String url = "http://"+clientServerIP+":"+clientServerPort+"/?type=DATA&ecg="+ String(ecg) +"&gsr="+ String(gsr) + "&acc="+ acc + "&bpm=" + String(bpm) + "&gsrc=" + String(gsrc);
   url.replace(" ", "%20");
   http.begin(url);
   int httpCode = http.GET();
@@ -151,11 +153,52 @@ void setup(void){
 
 long int timer = 0;
 
+void getBPM(){
+  // read the input on analog pin 0:
+  int sensorValue = analogRead(A0);
+  // print out the value you read:
+//  Serial.println(sensorValue);
+  if (countStatus == 0)
+  {
+    if (sensorValue > 600)
+    {
+      countStatus = 1;
+      beat++;
+//      Serial.println("Beat Detected!");
+//      Serial.print("Beat : ");
+//      Serial.println(beat);
+    }
+  }
+  else
+  {
+    if (sensorValue < 500)
+    {
+      countStatus = 0;
+    }
+  }
+  if (millis() - millisBefore > 15000)
+  {
+    bpm = beat * 4;
+    beat = 0;
+    Serial.print("BPM : ");
+    Serial.println(bpm);
+    millisBefore = millis();
+  }
+  delay(1);        // delay in between reads for stability
+}
+
+
+long long int lastTime = 0;
 void loop() {
   server.handleClient();
   getECG();
   getGSR();
+  getBPM();
   readAcc();
-  updateData();
-  delay(1000);
+
+  if((millis() - lastTime ) > 3000){
+    updateData();
+    lastTime = millis();
+  }
+  
 }

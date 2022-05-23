@@ -1,37 +1,46 @@
-#define USE_ARDUINO_INTERRUPTS true    // Set-up low-level interrupts for most acurate BPM math
-#include <PulseSensorPlayground.h>     // Includes the PulseSensorPlayground Library
-
-const int PulseWire = A0;       // 'S' Signal pin connected to A0
-const int LED13 = 13;          // The on-board Arduino LED
-int Threshold = 550;           // Determine which Signal to "count as a beat" and which to ignore
-                               
-PulseSensorPlayground pulseSensor;  // Creates an object
-
-void setup() {
+boolean countStatus;
+int beat, bpm;
+unsigned long millisBefore;
+ 
+// the setup routine runs once when you press reset:
+void setup()
+{
+  // initialize serial communication at 9600 bits per second:
   Serial.begin(9600);
-
-  // Configure the PulseSensor object, by assigning our variables to it
-  pulseSensor.analogInput(PulseWire);   
-  pulseSensor.blinkOnPulse(LED13);       // Blink on-board LED with heartbeat
-  pulseSensor.setThreshold(Threshold);   
-
-  // Double-check the "pulseSensor" object was created and began seeing a signal
-  if (pulseSensor.begin()) {
-    Serial.println("PulseSensor object created!");
-  } else {
-    Serial.println("PulseSensor object not created!");
-  }
 }
-
-void loop() {
-  int myBPM = pulseSensor.getBeatsPerMinute();      // Calculates BPM
-Serial.print("BPM: ");
-    Serial.println(myBPM);
-  if (pulseSensor.sawStartOfBeat()) {               // Constantly test to see if a beat happened
-    Serial.println("♥  A HeartBeat Happened ! "); // If true, print a message
-    Serial.print("BPM: ");
-    Serial.println(myBPM);                        // Print the BPM value
+ 
+// the loop routine runs over and over again forever:
+void loop()
+{
+  // read the input on analog pin 0:
+  int sensorValue = analogRead(A0);
+  // print out the value you read:
+//  Serial.println(sensorValue);
+  if (countStatus == 0)
+  {
+    if (sensorValue > 600)
+    {
+      countStatus = 1;
+      beat++;
+      Serial.println("Beat Detected!");
+      Serial.print("Beat : ");
+      Serial.println(beat);
     }
-
-  delay(20);
+  }
+  else
+  {
+    if (sensorValue < 500)
+    {
+      countStatus = 0;
+    }
+  }
+  if (millis() - millisBefore > 15000)
+  {
+    bpm = beat * 4;
+    beat = 0;
+    Serial.print("BPM : ");
+    Serial.println(bpm);
+    millisBefore = millis();
+  }
+  delay(1);        // delay in between reads for stability
 }

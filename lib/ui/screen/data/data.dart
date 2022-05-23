@@ -233,7 +233,7 @@ class _DataScreenState extends State<DataScreen> {
           gsr = response['gsr'];
           ecg = response['ecg'];
           accelerometer = response['acc'];
-          print(jsonEncode(response));
+          // print(jsonEncode(response));
         });
       }
     });
