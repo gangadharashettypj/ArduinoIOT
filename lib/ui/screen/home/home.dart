@@ -354,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.pH, (Map<String, String> response) {
+    DeviceManager().listenForData(R.api.data, (Map<String, String> response) {
       setState(() {
         phValue = response['pH'];
         humidity = response['humidity'];

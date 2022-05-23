@@ -1,14 +1,9 @@
-#define USE_ARDUINO_INTERRUPTS false
-
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WebServer.h>
 #include <HTTPClient.h>
 #include <EEPROM.h>
 #include <Arduino.h>
-#include <PulseSensorPlayground.h>
-
-
 
 #define addr IPAddress(224,10,10,10)
 #define addr1 IPAddress(225,10,10,10)
@@ -21,22 +16,15 @@
 char buffer[512];
 IPAddress    apIP(10, 10, 10, 1);
 WebServer server(80);
-String clientServerIP = "10.10.10.2";
+String clientServerIP = "";
 String clientServerPort = "2345";
 
 
 
-//  BPM
-const int OUTPUT_TYPE = SERIAL_PLOTTER;
-
-const int PULSE_INPUT = A0;
-const int PULSE_BLINK = LED_BUILTIN;    // Pin 13 is the on-board LED
-const int PULSE_FADE = 5;
-const int THRESHOLD = 550;   // Adjust this number to avoid noise when idle
-
-byte samplesUntilReport;
-const byte SAMPLES_PER_SERIAL_SAMPLE = 10;
-// BPM END
+String acc = "";
+int gsr = -1;
+int ecg = -1;
+double gsrc=  -1;
 
 //ACC
 const int xInput = A6;
@@ -53,9 +41,6 @@ const int sampleSize = 10;
 
 //GSR
 const int GSR=A5;
-
-                               
-PulseSensorPlayground pulseSensor;  // Creates an instance of the PulseSensorPlayground object called "pulseSensor"
 
 int BPM = 0;
 
@@ -80,40 +65,17 @@ void setLightState() {
 }
 
 
-void getPH(){
-//  HTTPClient http;
-//  String url = "http://"+clientServerIP+":"+clientServerPort+"/?type=pH&pH="+ pH +"&humidity="+ humidity + "&airTemperature="+ airTemperature + "&waterTemperature="+ waterTemperature;
-//  url.replace(" ", "%20");
-//  http.begin(url);
-//  int httpCode = http.GET();
-//  String payload = http.getString();
-//  http.end();
-
+void updateData(){
+  if(clientServerIP == "") return;
+  HTTPClient http;
+  String url = "http://"+clientServerIP+":"+clientServerPort+"/?type=DATA&ecg="+ String(ecg) +"&gsr="+ String(gsr) + "&acc="+ acc + "&bpm=100&gsrc=" + String(gsrc);
+  url.replace(" ", "%20");
+  http.begin(url);
+  int httpCode = http.GET();
+  String payload = http.getString();
+  http.end();
 }
 
-int getBPM(){
-  Serial.print("BPM: ");
-  Serial.println(analogRead(PULSE_INPUT));
-  return 0;
-  if (pulseSensor.sawNewSample()) {
-    if (--samplesUntilReport == (byte) 0) {
-      samplesUntilReport = SAMPLES_PER_SERIAL_SAMPLE;
-
-
-      int myBPM = pulseSensor.getBeatsPerMinute();
-      Serial.print("BPM: ");
-      Serial.println(analogRead(PULSE_INPUT));
-      if (pulseSensor.sawStartOfBeat()) {
-//        pulseSensor.outputBeat();
-        
-        return myBPM;
-      }
-      return 0;
-    }
-    return 0;
-  }
-  return 0;
-}
 
 void readAcc(){
   //Read raw values
@@ -132,6 +94,7 @@ void readAcc(){
   Serial.print(yRaw);
   Serial.print(", ");
   Serial.println(zRaw);
+  acc = "X: " + String(xRaw) + " Y: " + String(yRaw) + " Z: " + String(zRaw);
 }
 
 int ReadAxis(int axisPin)
@@ -152,18 +115,16 @@ float getGSR(){
   conductivevoltage = sensorValue*(5.0/1023.0);
   Serial.print("GSR: ");
   Serial.println(sensorValue);
+  gsr = sensorValue;
+  gsrc = conductivevoltage;
   return sensorValue;
 }
 
 int getECG(){
-//  if((digitalRead(23) == 1) || (digitalRead(22) == 1)){ //check if leads are removed
-//  
-//  }
-//  else{
-    Serial.print("ECG: ");
-    Serial.println(analogRead(A3));
-    return analogRead(A3);
-//  }
+  ecg = analogRead(A3);
+  Serial.print("ECG: ");
+  Serial.println(ecg);
+  return analogRead(A3);
 }
 
 void setup(void){
@@ -182,18 +143,6 @@ void setup(void){
   server.begin();
 
 
-  //BPM
-  pulseSensor.analogInput(PULSE_INPUT);
-  pulseSensor.blinkOnPulse(PULSE_BLINK);
-  pulseSensor.fadeOnPulse(PULSE_FADE);
-
-  pulseSensor.setSerial(Serial);
-  pulseSensor.setOutputType(OUTPUT_TYPE);
-  pulseSensor.setThreshold(THRESHOLD);
-  
-  samplesUntilReport = SAMPLES_PER_SERIAL_SAMPLE;
-  //BPM END
-
   //ecg
   pinMode(23, INPUT); // Setup for leads off detection LO +
   pinMode(22, INPUT); 
@@ -204,12 +153,9 @@ long int timer = 0;
 
 void loop() {
   server.handleClient();
-  getBPM();
   getECG();
   getGSR();
   readAcc();
-  Serial.println("");
-  Serial.println("");
-  Serial.println("");
+  updateData();
   delay(1000);
 }

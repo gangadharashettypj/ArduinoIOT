@@ -20,6 +20,8 @@ class SplashScreen extends StatelessWidget {
     Future.delayed(
       Duration(seconds: 2),
       () {
+        Navigator.pushReplacementNamed(context, R.routes.data);
+        return;
         final data = DB.instance.get(DBKeys.formData);
         if (data != null && data != '') {
           final questionsModel = QuestionsModel.fromJson(jsonDecode(data));

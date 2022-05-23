@@ -18,10 +18,10 @@ class DataScreen extends StatefulWidget {
 }
 
 class _DataScreenState extends State<DataScreen> {
-  String bpm;
-  String gsr;
-  String accelerometer;
-  String ecg;
+  String bpm = '';
+  String gsr = '';
+  String accelerometer = '';
+  String ecg = '';
 
   @override
   void initState() {
@@ -193,7 +193,7 @@ class _DataScreenState extends State<DataScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'X, Y, Z: $accelerometer',
+                    '${accelerometer.replaceAll(': ', ':').split(' ').join('\n')}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -226,13 +226,16 @@ class _DataScreenState extends State<DataScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.pH, (Map<String, String> response) {
-      setState(() {
-        bpm = response['pH'];
-        gsr = response['humidity'];
-        ecg = response['airTemperature'];
-        accelerometer = response['waterTemperature'];
-      });
+    DeviceManager().listenForData(R.api.data, (Map<String, String> response) {
+      if (mounted) {
+        setState(() {
+          bpm = response['bpm'];
+          gsr = response['gsr'];
+          ecg = response['ecg'];
+          accelerometer = response['acc'];
+          print(jsonEncode(response));
+        });
+      }
     });
   }
 }
