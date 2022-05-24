@@ -28,7 +28,7 @@ class _InstructionScreenState extends State<InstructionScreen> {
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () {
-              Navigator.pushNamed(context, R.routes.about);
+              Navigator.pushNamed(context, R.routes.about, arguments: false);
             },
           ),
         ],

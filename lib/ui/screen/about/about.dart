@@ -13,8 +13,10 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
+  bool args;
   @override
   Widget build(BuildContext context) {
+    args ??= ModalRoute.of(context).settings.arguments as bool;
     return Scaffold(
       backgroundColor: R.color.primary,
       appBar: AppBar(
@@ -23,6 +25,19 @@ class _AboutScreenState extends State<AboutScreen> {
         ),
         elevation: 0,
       ),
+      floatingActionButton: args
+          ? FloatingActionButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, R.routes.personalForm);
+              },
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 30,
+                color: R.color.primary,
+              ),
+              backgroundColor: Colors.white,
+            )
+          : SizedBox.shrink(),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: ListView(

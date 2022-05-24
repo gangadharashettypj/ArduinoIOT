@@ -56,7 +56,7 @@ class _FormScreenState extends State<FormScreen> {
               children: [
                 Text(
                   '''
-Please read the Statement and select the options 0,1,2,3 which indicates how much statement will applied to you.There are no right or wrong answers.
+Please read the Statement and select the options 1,2,3,4,5 which indicates how much statement will applied to you.There are no right or wrong answers.
                   ''',
                   style: TextStyle(
                     color: Colors.white,
@@ -1140,7 +1140,7 @@ The rating scale as follows:
                         ),
                         CustomSizedBox.h18,
                         LabelWidget(
-                          'How often do you feel exhausted while doing everyday chores?',
+                          'I often am concerned or overthink about my academic performance?',
                           color: Colors.white,
                           fontSize: 20,
                           textAlign: TextAlign.center,
@@ -1192,7 +1192,7 @@ The rating scale as follows:
                         ),
                         CustomSizedBox.h18,
                         LabelWidget(
-                          'How often do you experience loss of appetite?',
+                          'How often do you feel exhausted while doing everyday chores?',
                           color: Colors.white,
                           fontSize: 20,
                           textAlign: TextAlign.center,
@@ -1244,7 +1244,7 @@ The rating scale as follows:
                         ),
                         CustomSizedBox.h18,
                         LabelWidget(
-                          'I have trouble initiating conversions or just simply being a part of it.?',
+                          'How often do you experience loss of appetite?',
                           color: Colors.white,
                           fontSize: 20,
                           textAlign: TextAlign.center,
@@ -1296,7 +1296,7 @@ The rating scale as follows:
                         ),
                         CustomSizedBox.h18,
                         LabelWidget(
-                          'I have experienced chronic/recurrent headaches/back pains/chest pain?',
+                          'I have trouble initiating conversions or just simply being a part of it.?',
                           color: Colors.white,
                           fontSize: 20,
                           textAlign: TextAlign.center,
@@ -1348,7 +1348,7 @@ The rating scale as follows:
                         ),
                         CustomSizedBox.h18,
                         LabelWidget(
-                          'I have experienced chronic/recurrent headaches/back pains/chest pain 4?',
+                          'I have experienced chronic/recurrent headaches/back pains/chest pain?',
                           color: Colors.white,
                           fontSize: 20,
                           textAlign: TextAlign.center,

@@ -208,7 +208,7 @@ class _DataScreenState extends State<DataScreen> {
             RaisedButton(
               color: R.color.primary,
               child: Text(
-                'Save Data',
+                'Analyse Data',
                 style: TextStyle(
                   color: R.color.opposite,
                   fontWeight: FontWeight.bold,

@@ -29,7 +29,11 @@ class SplashScreen extends StatelessWidget {
             Navigator.pushReplacementNamed(context, R.routes.form);
           }
         } else {
-          Navigator.pushReplacementNamed(context, R.routes.personalForm);
+          Navigator.pushReplacementNamed(
+            context,
+            R.routes.about,
+            arguments: true,
+          );
         }
       },
     );
