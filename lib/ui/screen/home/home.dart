@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Hydroponics',
+          'Room Count',
         ),
         actions: <Widget>[
           FlatButton(
