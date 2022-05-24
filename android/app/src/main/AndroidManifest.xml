@@ -11,6 +11,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="Stress Tracker"
         android:usesCleartextTraffic="true"
+        android:roundIcon="@drawable/logo"
         android:icon="@drawable/logo">
         <activity
             android:name=".MainActivity"
