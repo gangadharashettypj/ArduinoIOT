@@ -191,12 +191,14 @@ void getBPM(){
 long long int lastTime = 0;
 void loop() {
   server.handleClient();
-  getECG();
-  getGSR();
+  
   getBPM();
-  readAcc();
+  
 
   if((millis() - lastTime ) > 3000){
+    getECG();
+    getGSR();
+    readAcc();
     updateData();
     lastTime = millis();
   }

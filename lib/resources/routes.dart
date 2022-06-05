@@ -9,4 +9,5 @@ class Routes {
   final about = '/about';
   final instruction = '/instruction';
   final data = '/data';
+  final rangeData = '/rangeData';
 }

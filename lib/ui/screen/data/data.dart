@@ -10,6 +10,7 @@ import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 
 class DataScreen extends StatefulWidget {
@@ -20,13 +21,35 @@ class DataScreen extends StatefulWidget {
 class _DataScreenState extends State<DataScreen> {
   String bpm = '';
   String gsr = '';
+  String gsrc = '';
   String accelerometer = '';
   String ecg = '';
+  double linearResult = -1;
+  double dnnResult = -1;
 
   @override
   void initState() {
     startListening();
     super.initState();
+  }
+
+  void getAnalysis() async {
+    // [0.003863636, 92.11363636, 21.39022727],
+    try {
+      // linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+      //     'linearPredict', [0.003863636, 92.11363636, 21.39022727]);
+      // dnnResult = await MethodChannel('com.trial.arduinoiot')
+      //     .invokeMethod('dnnPredict', [0.003863636, 92.11363636, 21.39022727]);
+      linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+          'linearPredict',
+          [double.parse(ecg), double.parse(bpm), double.parse(gsrc)]);
+      dnnResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+          'dnnPredict',
+          [double.parse(ecg), double.parse(bpm), double.parse(gsrc)]);
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
   }
 
   int calculateStress() {
@@ -169,6 +192,30 @@ class _DataScreenState extends State<DataScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
+                    'GSRC: $gsrc',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
                     'ECG: $ecg',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -202,6 +249,58 @@ class _DataScreenState extends State<DataScreen> {
                 ),
               ),
             ),
+            if (linearResult != -1)
+              SizedBox(
+                height: 30,
+              ),
+            if (linearResult != -1)
+              Container(
+                width: double.infinity,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  elevation: 8,
+                  child: Container(
+                    margin: EdgeInsets.all(16),
+                    child: Text(
+                      'Linear Analysis: ${linearResult.toStringAsFixed(3)}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (dnnResult != -1)
+              SizedBox(
+                height: 30,
+              ),
+            if (dnnResult != -1)
+              Container(
+                width: double.infinity,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  elevation: 8,
+                  child: Container(
+                    margin: EdgeInsets.all(16),
+                    child: Text(
+                      'Dnn Analysis: ${dnnResult.toStringAsFixed(3)}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             SizedBox(
               height: 30,
             ),
@@ -216,7 +315,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
               ),
               onPressed: () async {
-                await DeviceManager().sendData(R.api.waterPump);
+                getAnalysis();
               },
             ),
           ],
@@ -231,6 +330,7 @@ class _DataScreenState extends State<DataScreen> {
         setState(() {
           bpm = response['bpm'];
           gsr = response['gsr'];
+          gsrc = response['gsrc'];
           ecg = response['ecg'];
           accelerometer = response['acc'];
           // print(jsonEncode(response));

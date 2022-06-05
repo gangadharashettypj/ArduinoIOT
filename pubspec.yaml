@@ -13,7 +13,6 @@ dependencies:
   cupertino_icons: ^0.1.2
   shared_preferences: ^0.5.6
   get_ip: ^0.4.0
-  flutter_local_notifications: ^1.4.0
   chat_list: ^0.0.1+21
   sleek_circular_slider: ^1.1.0
   control_pad: ^1.0.1+1
@@ -21,6 +20,7 @@ dependencies:
   group_radio_button: 1.0.1
   hive: 1.4.4+1
   flutter_rating_bar: 3.2.0+1
+  tflite_flutter: 0.5.0
 
 dev_dependencies:
   flutter_test:
