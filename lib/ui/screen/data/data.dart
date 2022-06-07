@@ -11,6 +11,7 @@ import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_speedometer/flutter_speedometer.dart';
 import 'package:http/http.dart';
 
 class DataScreen extends StatefulWidget {
@@ -40,12 +41,23 @@ class _DataScreenState extends State<DataScreen> {
       //     'linearPredict', [0.003863636, 92.11363636, 21.39022727]);
       // dnnResult = await MethodChannel('com.trial.arduinoiot')
       //     .invokeMethod('dnnPredict', [0.003863636, 92.11363636, 21.39022727]);
+      // setState(() {});
+      // return;
+
+      if (ecg == '' || bpm == '' || gsrc == '') {
+        return;
+      }
       linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
           'linearPredict',
-          [double.parse(ecg), double.parse(bpm), double.parse(gsrc)]);
+          [double.parse(ecg) / 10000, double.parse(bpm), double.parse(gsrc)]);
       dnnResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
           'dnnPredict',
-          [double.parse(ecg), double.parse(bpm), double.parse(gsrc)]);
+          [double.parse(ecg) / 10000, double.parse(bpm), double.parse(gsrc)]);
+      if (linearResult > 1) linearResult = 1;
+      if (dnnResult > 1) dnnResult = 1;
+
+      dnnResult = dnnResult * 100;
+      linearResult = linearResult * 100;
       setState(() {});
     } catch (e) {
       print(e);
@@ -103,6 +115,8 @@ class _DataScreenState extends State<DataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(linearResult);
+    print(dnnResult);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: R.color.primary,
@@ -142,7 +156,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 elevation: 8,
                 child: Container(
-                  margin: EdgeInsets.all(16),
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: Text(
                     'BPM: $bpm',
                     style: TextStyle(
@@ -154,7 +168,7 @@ class _DataScreenState extends State<DataScreen> {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 10,
             ),
             Container(
               width: double.infinity,
@@ -166,31 +180,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 elevation: 8,
                 child: Container(
-                  margin: EdgeInsets.all(16),
-                  child: Text(
-                    'GSR: $gsr',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.all(16),
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: Text(
                     'GSRC: $gsrc',
                     style: TextStyle(
@@ -202,7 +192,7 @@ class _DataScreenState extends State<DataScreen> {
               ),
             ),
             SizedBox(
-              height: 30,
+              height: 10,
             ),
             Container(
               width: double.infinity,
@@ -214,7 +204,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 elevation: 8,
                 child: Container(
-                  margin: EdgeInsets.all(16),
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   child: Text(
                     'ECG: $ecg',
                     style: TextStyle(
@@ -225,85 +215,96 @@ class _DataScreenState extends State<DataScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 30,
-            ),
-            Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.all(16),
-                  child: Text(
-                    '${accelerometer.replaceAll(': ', ':').split(' ').join('\n')}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            if (linearResult != -1)
+            // if (linearResult != -1)
+            //   SizedBox(
+            //     height: 10,
+            //   ),
+            // if (linearResult != -1)
+            //   Container(
+            //     width: double.infinity,
+            //     child: Card(
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.all(
+            //           Radius.circular(20),
+            //         ),
+            //       ),
+            //       elevation: 8,
+            //       child: Container(
+            //         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            //         child: Text(
+            //           'Linear Analysis: ${linearResult.toStringAsFixed(1)}',
+            //           style: TextStyle(
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 20,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // if (dnnResult != -1)
+            //   SizedBox(
+            //     height: 10,
+            //   ),
+            // if (dnnResult != -1)
+            //   Container(
+            //     width: double.infinity,
+            //     child: Card(
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.all(
+            //           Radius.circular(20),
+            //         ),
+            //       ),
+            //       elevation: 8,
+            //       child: Container(
+            //         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            //         child: Text(
+            //           'Dnn Analysis: ${dnnResult.toStringAsFixed(1)}',
+            //           style: TextStyle(
+            //             fontWeight: FontWeight.bold,
+            //             fontSize: 20,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            if (dnnResult != -1 && linearResult != -1)
               SizedBox(
                 height: 30,
               ),
-            if (linearResult != -1)
-              Container(
-                width: double.infinity,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
+            if (dnnResult != -1 && linearResult != -1)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Speedometer(
+                    size: 130,
+                    minValue: 0,
+                    maxValue: 100,
+                    currentValue: (linearResult * 100).toInt(),
+                    warningValue: 70,
+                    displayText: 'Stress',
+                    backgroundColor: Colors.white,
+                    meterColor: Colors.green,
+                    warningColor: Colors.red,
+                    kimColor: Colors.black,
                   ),
-                  elevation: 8,
-                  child: Container(
-                    margin: EdgeInsets.all(16),
-                    child: Text(
-                      'Linear Analysis: ${linearResult.toStringAsFixed(3)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
+                  Speedometer(
+                    size: 130,
+                    minValue: 0,
+                    maxValue: 100,
+                    currentValue: (dnnResult * 100).toInt(),
+                    warningValue: 70,
+                    displayText: 'Stress',
+                    backgroundColor: Colors.white,
+                    meterColor: Colors.green,
+                    warningColor: Colors.red,
+                    kimColor: Colors.black,
                   ),
-                ),
+                ],
               ),
-            if (dnnResult != -1)
+            if (dnnResult != -1 && linearResult != -1)
               SizedBox(
                 height: 30,
               ),
-            if (dnnResult != -1)
-              Container(
-                width: double.infinity,
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                  ),
-                  elevation: 8,
-                  child: Container(
-                    margin: EdgeInsets.all(16),
-                    child: Text(
-                      'Dnn Analysis: ${dnnResult.toStringAsFixed(3)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            SizedBox(
-              height: 30,
-            ),
             RaisedButton(
               color: R.color.primary,
               child: Text(
@@ -321,6 +322,7 @@ class _DataScreenState extends State<DataScreen> {
           ],
         ),
       ),
+      backgroundColor: Colors.white,
     );
   }
 

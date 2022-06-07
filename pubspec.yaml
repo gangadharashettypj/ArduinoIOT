@@ -21,6 +21,7 @@ dependencies:
   hive: 1.4.4+1
   flutter_rating_bar: 3.2.0+1
   tflite_flutter: 0.5.0
+  flutter_speedometer: 1.0.2
 
 dev_dependencies:
   flutter_test:
