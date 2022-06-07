@@ -37,6 +37,7 @@ class SplashScreen extends StatelessWidget {
         }
       },
     );
+
     return Scaffold(
       backgroundColor: R.color.primary,
       body: Container(
