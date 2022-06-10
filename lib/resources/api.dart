@@ -10,4 +10,5 @@ class Api {
   String get nutritionPump => 'nutritionPump';
   String get light => 'turnOnLight';
   String get dht => 'dht';
+  String get data => 'data';
 }

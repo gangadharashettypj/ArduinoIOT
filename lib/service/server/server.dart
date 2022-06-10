@@ -38,9 +38,6 @@ class Server {
 
   static void _listenToRequests() async {
     Server.instance.listen((HttpRequest request) {
-      print(request.uri.queryParameters.toString());
-      print('>>>');
-      print(maps.keys);
       if (maps.containsKey(request.uri.queryParameters['type'])) {
         maps[request.uri.queryParameters['type']](request.uri.queryParameters);
         request.response

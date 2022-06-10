@@ -13,8 +13,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String temperature;
-  String humi;
+  String level;
+  String pressure;
+  String workType = 'false';
 
   @override
   void initState() {
@@ -64,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Temperature: $temperature',
+                    'Level: $level',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -88,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Humidity: $humi',
+                    'Pressure: $pressure',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -106,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             RaisedButton(
               color: R.color.green,
               child: Text(
-                'Light',
+                'OPEN / CLOSE VALVE',
                 style: TextStyle(
                   color: R.color.opposite,
                 ),
@@ -122,13 +123,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.dht, (Map<String, String> response) {
-      if (mounted) {
-        setState(() {
-          temperature = response['temperature'];
-          humi = response['humidity'];
-        });
-      }
+    DeviceManager().listenForData(R.api.data, (Map<String, String> response) {
+      setState(() {
+        print(response);
+        level = response['level'];
+        pressure = response['pressure'];
+        workType = response['workType'];
+      });
     });
     // DeviceManager().listenForData(R.api.humidity,
     //     (Map<String, String> response) {
