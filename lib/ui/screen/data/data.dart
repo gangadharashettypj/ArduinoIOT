@@ -46,6 +46,9 @@ class _DataScreenState extends State<DataScreen> {
       //
       // dnnResult = dnnResult * 100;
       // linearResult = linearResult * 100;
+      //
+      // dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
+      // linearResult = linearResult * 0.6 + calculateStress() * 0.4;
       // setState(() {});
       // return;
 
@@ -63,6 +66,8 @@ class _DataScreenState extends State<DataScreen> {
 
       dnnResult = dnnResult * 100;
       linearResult = linearResult * 100;
+      dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
+      linearResult = linearResult * 0.6 + calculateStress() * 0.4;
       setState(() {});
     } catch (e) {
       print(e);
@@ -220,62 +225,33 @@ class _DataScreenState extends State<DataScreen> {
                 ),
               ),
             ),
-            // if (linearResult != -1)
-            //   SizedBox(
-            //     height: 10,
-            //   ),
-            // if (linearResult != -1)
-            //   Container(
-            //     width: double.infinity,
-            //     child: Card(
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.all(
-            //           Radius.circular(20),
-            //         ),
-            //       ),
-            //       elevation: 8,
-            //       child: Container(
-            //         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            //         child: Text(
-            //           'Linear Analysis: ${linearResult.toStringAsFixed(1)}',
-            //           style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 20,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // if (dnnResult != -1)
-            //   SizedBox(
-            //     height: 10,
-            //   ),
-            // if (dnnResult != -1)
-            //   Container(
-            //     width: double.infinity,
-            //     child: Card(
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.all(
-            //           Radius.circular(20),
-            //         ),
-            //       ),
-            //       elevation: 8,
-            //       child: Container(
-            //         margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            //         child: Text(
-            //           'Dnn Analysis: ${dnnResult.toStringAsFixed(1)}',
-            //           style: TextStyle(
-            //             fontWeight: FontWeight.bold,
-            //             fontSize: 20,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            if (linearResult != -1)
-              SizedBox(
-                height: 30,
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: Text(
+                    'Stress Q&A: ${calculateStress() == -1 ? '' : calculateStress()}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
               ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
             if (linearResult != -1)
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 16),
