@@ -13,8 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String motion;
-  String moisture;
+  String temperature;
+  String humi;
 
   @override
   void initState() {
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Motion: $motion',
+                    'Temperature: $temperature',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Moisture: $moisture',
+                    'Humidity: $humi',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -100,6 +100,21 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 30,
             ),
+            SizedBox(
+              height: 30,
+            ),
+            RaisedButton(
+              color: R.color.green,
+              child: Text(
+                'Light',
+                style: TextStyle(
+                  color: R.color.opposite,
+                ),
+              ),
+              onPressed: () async {
+                await DeviceManager().sendData(R.api.light);
+              },
+            ),
           ],
         ),
       ),
@@ -107,13 +122,31 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.motion, (Map<String, String> response) {
+    DeviceManager().listenForData(R.api.dht, (Map<String, String> response) {
       if (mounted) {
         setState(() {
-          motion = response['motion'];
-          moisture = response['moisture'];
+          temperature = response['temperature'];
+          humi = response['humidity'];
         });
       }
     });
+    // DeviceManager().listenForData(R.api.humidity,
+    //     (Map<String, String> response) {
+    //   setState(() {
+    //     humidity = int.parse(response['humidity']);
+    //   });
+    // });
+    // DeviceManager().listenForData(R.api.airTemperature,
+    //     (Map<String, String> response) {
+    //   setState(() {
+    //     airTemperature = int.parse(response['airTemperature']);
+    //   });
+    // });
+    // DeviceManager().listenForData(R.api.waterTemperature,
+    //     (Map<String, String> response) {
+    //   setState(() {
+    //     waterTemperature = int.parse(response['waterTemperature']);
+    //   });
+    // });
   }
 }
