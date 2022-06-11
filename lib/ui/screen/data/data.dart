@@ -66,6 +66,7 @@ class _DataScreenState extends State<DataScreen> {
       if (dnnResult > 1) dnnResult = 1;
 
       dnnResult = dnnResult * 100;
+      actualDnnResult = dnnResult;
       linearResult = linearResult * 100;
       dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
       linearResult = linearResult * 0.6 + calculateStress() * 0.4;
