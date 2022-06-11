@@ -58,116 +58,194 @@ class _PersonalFormScreenState extends State<PersonalFormScreen> {
             Expanded(
               child: ListView(
                 children: [
-                  TextFieldWidget(
-                    placeHolder: 'Name',
-                    initialValue: questionsModel.name,
-                    onChanged: (val) {
-                      questionsModel.name = val;
-                    },
-                    validator: (val) {
-                      return val.isEmpty ? 'Enter a valid name' : null;
-                    },
-                  ),
-                  CustomSizedBox.h12,
-                  TextFieldWidget(
-                    placeHolder: 'Phone',
-                    initialValue: questionsModel.phone?.toString(),
-                    textInputType: TextInputType.phone,
-                    maxLength: 10,
-                    onChanged: (val) {
-                      questionsModel.phone = int.tryParse(val);
-                    },
-                    validator: (val) {
-                      return val.isEmpty || val.length != 10
-                          ? 'Enter a valid phone'
-                          : null;
-                    },
-                  ),
-                  CustomSizedBox.h12,
-                  TextFieldWidget(
-                    placeHolder: 'Age',
-                    maxLength: 2,
-                    textInputType: TextInputType.number,
-                    initialValue: questionsModel.age?.toString(),
-                    onChanged: (val) {
-                      questionsModel.age = int.tryParse(val);
-                    },
-                    validator: (val) {
-                      return val.isEmpty || val.length > 99
-                          ? 'Enter a valid age'
-                          : null;
-                    },
-                  ),
-                  CustomSizedBox.h12,
-                  LabelWidget(
-                    'Gender',
-                    color: MyColors.textDarkColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    maxLine: 2,
-                  ),
-                  RadioGroup<String>.builder(
-                    groupValue: questionsModel.gender,
-                    onChanged: (value) => setState(() {
-                      questionsModel.gender = value;
-                    }),
-                    items: ['MALE', 'FEMALE'],
-                    direction: Axis.horizontal,
-                    itemBuilder: (item) => RadioButtonBuilder(
-                      item,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder: 'Name',
+                      initialValue: questionsModel.name,
+                      onChanged: (val) {
+                        questionsModel.name = val;
+                      },
+                      validator: (val) {
+                        return val.isEmpty ? 'Enter a valid name' : null;
+                      },
                     ),
                   ),
                   CustomSizedBox.h12,
-                  TextFieldWidget(
-                    placeHolder: 'Course',
-                    initialValue: questionsModel.course,
-                    onChanged: (val) {
-                      questionsModel.course = val;
-                    },
-                    validator: (val) {
-                      return val.isEmpty ? 'Enter a valid course' : null;
-                    },
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder: 'Phone',
+                      initialValue: questionsModel.phone?.toString(),
+                      textInputType: TextInputType.phone,
+                      maxLength: 10,
+                      onChanged: (val) {
+                        questionsModel.phone = int.tryParse(val);
+                      },
+                      validator: (val) {
+                        return val.isEmpty || val.length != 10
+                            ? 'Enter a valid phone'
+                            : null;
+                      },
+                    ),
                   ),
                   CustomSizedBox.h12,
-                  TextFieldWidget(
-                    placeHolder: 'Semester',
-                    textInputType: TextInputType.number,
-                    maxLength: 1,
-                    initialValue: questionsModel.semester?.toString(),
-                    onChanged: (val) {
-                      questionsModel.semester = int.tryParse(val);
-                    },
-                    validator: (val) {
-                      return val.isEmpty ? 'Enter a valid semester' : null;
-                    },
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder: 'Age',
+                      maxLength: 2,
+                      textInputType: TextInputType.number,
+                      initialValue: questionsModel.age?.toString(),
+                      onChanged: (val) {
+                        questionsModel.age = int.tryParse(val);
+                      },
+                      validator: (val) {
+                        return val.isEmpty || val.length > 99
+                            ? 'Enter a valid age'
+                            : null;
+                      },
+                    ),
                   ),
                   CustomSizedBox.h12,
-                  TextFieldWidget(
-                    placeHolder: 'College',
-                    initialValue: questionsModel.college,
-                    onChanged: (val) {
-                      questionsModel.college = val;
-                    },
-                    validator: (val) {
-                      return val.isEmpty ? 'Enter a valid college' : null;
-                    },
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: LabelWidget(
+                            'Gender',
+                            color: MyColors.textDarkColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            maxLine: 2,
+                          ),
+                        ),
+                        RadioGroup<String>.builder(
+                          groupValue: questionsModel.gender,
+                          onChanged: (value) => setState(() {
+                            questionsModel.gender = value;
+                          }),
+                          items: ['MALE', 'FEMALE'],
+                          direction: Axis.horizontal,
+                          itemBuilder: (item) => RadioButtonBuilder(
+                            item,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   CustomSizedBox.h12,
-                  TextFieldWidget(
-                    placeHolder: 'Having disabilities',
-                    initialValue: questionsModel.disabilities,
-                    onChanged: (val) {
-                      questionsModel.disabilities = val;
-                    },
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder: 'Course',
+                      initialValue: questionsModel.course,
+                      onChanged: (val) {
+                        questionsModel.course = val;
+                      },
+                      validator: (val) {
+                        return val.isEmpty ? 'Enter a valid course' : null;
+                      },
+                    ),
                   ),
                   CustomSizedBox.h12,
-                  TextFieldWidget(
-                    placeHolder:
-                        'Having any previous medical records(If yes, give the details. Else , mention NA)',
-                    initialValue: questionsModel.previousMedicalRecords,
-                    onChanged: (val) {
-                      questionsModel.previousMedicalRecords = val;
-                    },
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder: 'Semester',
+                      textInputType: TextInputType.number,
+                      maxLength: 1,
+                      initialValue: questionsModel.semester?.toString(),
+                      onChanged: (val) {
+                        questionsModel.semester = int.tryParse(val);
+                      },
+                      validator: (val) {
+                        return val.isEmpty ? 'Enter a valid semester' : null;
+                      },
+                    ),
+                  ),
+                  CustomSizedBox.h12,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder: 'College',
+                      initialValue: questionsModel.college,
+                      onChanged: (val) {
+                        questionsModel.college = val;
+                      },
+                      validator: (val) {
+                        return val.isEmpty ? 'Enter a valid college' : null;
+                      },
+                    ),
+                  ),
+                  CustomSizedBox.h12,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder: 'Having Disabilities',
+                      initialValue: questionsModel.disabilities,
+                      onChanged: (val) {
+                        questionsModel.disabilities = val;
+                      },
+                    ),
+                  ),
+                  CustomSizedBox.h12,
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: TextFieldWidget(
+                      borderColor: Colors.white,
+                      placeHolder:
+                          'Having any previous medical records\n(If yes, give the details. Else , mention NA)',
+                      initialValue: questionsModel.previousMedicalRecords,
+                      onChanged: (val) {
+                        questionsModel.previousMedicalRecords = val;
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -178,11 +256,12 @@ class _PersonalFormScreenState extends State<PersonalFormScreen> {
                 children: [
                   Expanded(
                     child: RaisedButton(
-                      color: R.color.primary,
+                      color: R.color.white,
                       child: Text(
                         'SUBMIT FORM',
                         style: TextStyle(
-                          color: R.color.opposite,
+                          color: R.color.primary,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       onPressed: () {
@@ -205,11 +284,11 @@ class _PersonalFormScreenState extends State<PersonalFormScreen> {
       Fluttertoast.showToast(msg: 'Form submitted successfully');
       final data = DB.instance.get(DBKeys.formData);
       final qModel = QuestionsModel.fromJson(jsonDecode(data));
-      if (qModel.q1 != null) {
-        Navigator.pushReplacementNamed(context, R.routes.instruction);
-      } else {
-        Navigator.pushReplacementNamed(context, R.routes.form);
-      }
+      // if (qModel.q1 != null) {
+      //   Navigator.pushReplacementNamed(context, R.routes.instruction);
+      // } else {
+      Navigator.pushReplacementNamed(context, R.routes.form);
+      // }
     } else {
       Fluttertoast.showToast(msg: 'Please enter a valid details');
     }
@@ -227,6 +306,7 @@ class _PersonalFormScreenState extends State<PersonalFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: R.color.primary,
       appBar: AppBar(
         title: Text('Personal Form'),
       ),

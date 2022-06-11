@@ -9,7 +9,6 @@ import 'package:arduinoiot/model/questions_model.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
-import 'package:arduinoiot/ui/screen/radial_gauge/radial_gauge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
@@ -20,13 +19,14 @@ class DataScreen extends StatefulWidget {
 }
 
 class _DataScreenState extends State<DataScreen> {
-  String bpm = '';
-  String gsr = '';
-  String gsrc = '';
-  String accelerometer = '';
-  String ecg = '';
+  String bpm = '0';
+  String gsr = '0';
+  String gsrc = '0';
+  String accelerometer = '0';
+  String ecg = '0';
   double linearResult = -1;
   double dnnResult = -1;
+  double actualDnnResult = -1;
 
   @override
   void initState() {
@@ -34,23 +34,24 @@ class _DataScreenState extends State<DataScreen> {
     super.initState();
   }
 
-  void getAnalysis() async {
+  Future<void> getAnalysis() async {
     // [0.003863636, 92.11363636, 21.39022727],
     try {
-      // linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
-      //     'linearPredict', [0.003863636, 92.11363636, 21.39022727]);
-      // dnnResult = await MethodChannel('com.trial.arduinoiot')
-      //     .invokeMethod('dnnPredict', [0.003863636, 92.11363636, 21.39022727]);
-      // if (linearResult > 1) linearResult = 1;
-      // if (dnnResult > 1) dnnResult = 1;
-      //
-      // dnnResult = dnnResult * 100;
-      // linearResult = linearResult * 100;
-      //
-      // dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
-      // linearResult = linearResult * 0.6 + calculateStress() * 0.4;
-      // setState(() {});
-      // return;
+      linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+          'linearPredict', [0.003863636, 92.11363636, 21.39022727]);
+      dnnResult = await MethodChannel('com.trial.arduinoiot')
+          .invokeMethod('dnnPredict', [0.003863636, 92.11363636, 21.39022727]);
+      if (linearResult > 1) linearResult = 1;
+      if (dnnResult > 1) dnnResult = 1;
+
+      dnnResult = dnnResult * 100;
+      actualDnnResult = dnnResult;
+      linearResult = linearResult * 100;
+
+      dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
+      linearResult = linearResult * 0.6 + calculateStress() * 0.4;
+      setState(() {});
+      return;
 
       if (ecg == '' || bpm == '' || gsrc == '') {
         return;
@@ -166,7 +167,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 elevation: 8,
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: Text(
                     'BPM: $bpm',
                     style: TextStyle(
@@ -178,7 +179,7 @@ class _DataScreenState extends State<DataScreen> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 16,
             ),
             Container(
               width: double.infinity,
@@ -190,7 +191,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 elevation: 8,
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: Text(
                     'GSRC: $gsrc',
                     style: TextStyle(
@@ -202,7 +203,7 @@ class _DataScreenState extends State<DataScreen> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 16,
             ),
             Container(
               width: double.infinity,
@@ -214,7 +215,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 elevation: 8,
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: Text(
                     'ECG: $ecg',
                     style: TextStyle(
@@ -226,110 +227,8 @@ class _DataScreenState extends State<DataScreen> {
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 16,
             ),
-            Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                  child: Text(
-                    'Stress Q&A: ${calculateStress() == -1 ? '' : calculateStress()}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            if (linearResult != -1)
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16),
-                height: 200,
-                child: AnimatedRadialGauge(
-                  builder: (context, _, value) => RadialGaugeLabel(
-                    style: TextStyle(
-                      color: const Color(0xFF002E5F),
-                      fontSize: 70,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    value: value,
-                  ),
-                  duration: const Duration(milliseconds: 2000),
-                  curve: Curves.elasticOut,
-                  min: 0,
-                  max: 100,
-                  value: linearResult,
-                  axis: GaugeAxis(
-                    degrees: 260,
-                    pointer: RoundedTrianglePointer(
-                      size: 16,
-                      borderRadius: 16 * 0.125,
-                      backgroundColor: const Color(0xFF002E5F),
-                      border: GaugePointerBorder(
-                        color: Colors.white,
-                        width: 16 * 0.125,
-                      ),
-                    ),
-                    transformer: const GaugeAxisTransformer.colorFadeIn(
-                      interval: Interval(0.0, 0.3),
-                      background: Color(0xFFD9DEEB),
-                    ),
-                    style: GaugeAxisStyle(
-                      thickness: 14,
-                      segmentSpacing: 4,
-                      blendColors: false,
-                    ),
-                    segments: [
-                      GaugeSegment(
-                        from: 0,
-                        to: 33.3,
-                        color: Colors.green,
-                      ),
-                      GaugeSegment(
-                        from: 33.3,
-                        to: 66.6,
-                        color: Colors.orange,
-                      ),
-                      GaugeSegment(
-                        from: 66.6,
-                        to: 100,
-                        color: Colors.red,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            if (linearResult != -1)
-              Center(
-                child: Text(
-                  'Stress Score',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-            if (linearResult != -1)
-              SizedBox(
-                height: 30,
-              ),
-            if (linearResult != -1)
-              Image.asset(
-                linearResult < 33
-                    ? R.image.normal
-                    : (linearResult < 67 ? R.image.moderate : R.image.high),
-              ),
             RaisedButton(
               color: R.color.primary,
               child: Text(
@@ -341,7 +240,17 @@ class _DataScreenState extends State<DataScreen> {
                 ),
               ),
               onPressed: () async {
-                getAnalysis();
+                await getAnalysis();
+                await Navigator.pushNamed(context, R.routes.analysis,
+                    arguments: {
+                      'bpm': bpm,
+                      'ecg': ecg,
+                      'gsr': gsr,
+                      'gsrc': gsrc,
+                      'result': dnnResult,
+                      'stressScore': calculateStress(),
+                      'actualDnnResult': actualDnnResult,
+                    });
               },
             ),
           ],

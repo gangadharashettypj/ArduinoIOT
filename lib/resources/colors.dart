@@ -13,6 +13,7 @@ class MyColors {
   final white = HexColor.fromHex('#FFFFFF');
   final red = Colors.red;
   final green = Colors.green;
+  final blue = Color(0xFF008FA1);
 
   /*
   * general

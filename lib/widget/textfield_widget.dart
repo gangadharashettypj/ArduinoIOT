@@ -47,7 +47,7 @@ class TextFieldWidget extends StatelessWidget {
     this.placeHolder,
     this.filled = false,
     this.maxLength,
-    this.fontSize,
+    this.fontSize = 20,
     this.fontWeight,
     this.suffixIcon,
     this.textAlign,
@@ -69,11 +69,10 @@ class TextFieldWidget extends StatelessWidget {
           LabelWidget(
             placeHolder,
             color: MyColors.textDarkColor,
-            fontSize: 12,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
             maxLine: 2,
           ),
-        CustomSizedBox.h4,
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
           onTap: onTap,
@@ -87,6 +86,7 @@ class TextFieldWidget extends StatelessWidget {
                   )
                 : null,
             hintText: hintText,
+            alignLabelWithHint: true,
             fillColor: Colors.white,
             border: OutlineInputBorder(
               borderSide: BorderSide(

@@ -1,8 +1,10 @@
 import 'package:arduinoiot/db/db.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/ui/screen/about/about.dart';
+import 'package:arduinoiot/ui/screen/data/analysis.dart';
 import 'package:arduinoiot/ui/screen/data/data.dart';
 import 'package:arduinoiot/ui/screen/data/range_form.dart';
+import 'package:arduinoiot/ui/screen/data/recommendation.dart';
 import 'package:arduinoiot/ui/screen/form/form.dart';
 import 'package:arduinoiot/ui/screen/form_personal/personal_form.dart';
 import 'package:arduinoiot/ui/screen/home/home.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/services.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DB.instance.register();
+  await DB.instance.clear();
   runApp(MyApp());
 }
 
@@ -51,6 +54,9 @@ class MyApp extends StatelessWidget {
         R.routes.instruction: (BuildContext context) => InstructionScreen(),
         R.routes.data: (BuildContext context) => DataScreen(),
         R.routes.rangeData: (BuildContext context) => RangeFormScreen(),
+        R.routes.analysis: (BuildContext context) => AnalysisScreenMain(),
+        R.routes.recommendation: (BuildContext context) =>
+            RecommendationScreen(),
       },
     );
   }

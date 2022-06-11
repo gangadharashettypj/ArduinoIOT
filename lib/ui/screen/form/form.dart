@@ -1485,7 +1485,7 @@ The rating scale as follows:
     } else {
       DB.instance.store(DBKeys.formData, jsonEncode(questionsModel.toJson()));
       Fluttertoast.showToast(msg: 'Form submitted successfully');
-      Navigator.pushReplacementNamed(context, R.routes.instruction);
+      Navigator.pushReplacementNamed(context, R.routes.data);
     }
   }
 
