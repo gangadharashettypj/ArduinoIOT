@@ -37,21 +37,21 @@ class _DataScreenState extends State<DataScreen> {
   Future<void> getAnalysis() async {
     // [0.003863636, 92.11363636, 21.39022727],
     try {
-      linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
-          'linearPredict', [0.003863636, 92.11363636, 21.39022727]);
-      dnnResult = await MethodChannel('com.trial.arduinoiot')
-          .invokeMethod('dnnPredict', [0.003863636, 92.11363636, 21.39022727]);
-      if (linearResult > 1) linearResult = 1;
-      if (dnnResult > 1) dnnResult = 1;
-
-      dnnResult = dnnResult * 100;
-      actualDnnResult = dnnResult;
-      linearResult = linearResult * 100;
-
-      dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
-      linearResult = linearResult * 0.6 + calculateStress() * 0.4;
-      setState(() {});
-      return;
+      // linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+      //     'linearPredict', [0.003863636, 92.11363636, 21.39022727]);
+      // dnnResult = await MethodChannel('com.trial.arduinoiot')
+      //     .invokeMethod('dnnPredict', [0.003863636, 92.11363636, 21.39022727]);
+      // if (linearResult > 1) linearResult = 1;
+      // if (dnnResult > 1) dnnResult = 1;
+      //
+      // dnnResult = dnnResult * 100;
+      // actualDnnResult = dnnResult;
+      // linearResult = linearResult * 100;
+      //
+      // dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
+      // linearResult = linearResult * 0.6 + calculateStress() * 0.4;
+      // setState(() {});
+      // return;
 
       if (ecg == '' || bpm == '' || gsrc == '') {
         return;
