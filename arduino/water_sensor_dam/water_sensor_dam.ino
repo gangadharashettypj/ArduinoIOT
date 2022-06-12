@@ -61,13 +61,35 @@ void sendHumidity(){
   http.end();
 }
 
-void openValvle() {
-  valveOpened = !valveOpened;
+void manualMode() {
+  manual = true;
   server.send(200, "text/plain", "success");
 }
 
-void setManualModel() {
-  manual = !manual;
+void autoMode() {
+  manual = false;
+  server.send(200, "text/plain", "success");
+}
+
+void up() {
+  if(servoLevel == 0){
+    servoLevel = 90;
+  }else if(servoLevel == 90){
+    servoLevel = 180;
+  } else{
+    servoLevel = 180;
+  }
+  server.send(200, "text/plain", "success");
+}
+
+void down() {
+  if(servoLevel == 180){
+    servoLevel = 90;
+  }else if(servoLevel == 90){
+    servoLevel = 0;
+  } else{
+    servoLevel = 0;
+  }
   server.send(200, "text/plain", "success");
 }
 
@@ -77,17 +99,17 @@ void setup(void){
   Serial.println("");
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
-  WiFi.softAP("GreenHouse", "");
+  WiFi.softAP("DamProject", "");
 
   server.on("/setClientIP", setIP);
-  server.on("/openValvle", openValvle);
-  server.on("/setManualModel", setManualModel);
+  server.on("/manual", manualMode);
+  server.on("/auto", autoMode);
+  server.on("/up", up);
+  server.on("/down", down);
 
   server.begin();
   Serial.println("HTTP server started");
 
-
-  delay(2000);
   pinMode(D4, INPUT_PULLUP);
   pinMode(D6, INPUT_PULLUP);
   pinMode(D7, INPUT_PULLUP);
@@ -104,6 +126,7 @@ void setup(void){
 void loop(void){
   server.handleClient();
 
+  if(!manual){
   servoLevel = 0;
    level = "EMPTY";
    if(digitalRead(D4)){
@@ -111,29 +134,27 @@ void loop(void){
       level = "LOW";
    }
    if(digitalRead(D6)){
-      servoLevel = 50;
+      servoLevel = 90;
       level = "MEDIUM";
    }
 
    if(digitalRead(D7)){
-      servoLevel = 100;
+      servoLevel = 180;
       level = "HIGH";
    }
 
    if(valveOpened){
     servoLevel = 100;
    }
-   
+  }
+  V = analogRead(A0) * 5.00 / 1024;     //Sensor output voltage
+  P = (V - OffSet) * 400;             //Calculate water pressure
 
+  P = P- 150;
+  if(P<0) P=0;
   
-//  V = analogRead(A0) * 5.00 / 1024;     //Sensor output voltage
-//  P = (V - OffSet) * 400;             //Calculate water pressure
-//
-//  if(level == "EMPTY" || level == "LOW"){
-//    P = 0;
-//  }
-// 
-  if(millis() - last > 1000){
+
+  if((millis()- last) > 2000){
     last = millis();
     lcd.clear();
     lcd.setCursor(0, 1);
@@ -149,12 +170,7 @@ void loop(void){
     lcd.print(level);
 
     servo.write(servoLevel);
-
-  }
-
-  if((millis()- last) > 2000){
-    last = millis();
     sendHumidity();
   }
-
+  delay(10);
 }

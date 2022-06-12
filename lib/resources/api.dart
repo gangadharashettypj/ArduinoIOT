@@ -11,4 +11,8 @@ class Api {
   String get light => 'turnOnLight';
   String get dht => 'dht';
   String get data => 'data';
+  String get up => 'up';
+  String get down => 'down';
+  String get manual => 'manual';
+  String get auto => 'auto';
 }

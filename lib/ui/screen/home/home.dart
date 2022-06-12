@@ -101,20 +101,97 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 30,
             ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Current Mode: ${workType == '1' ? 'Manual' : 'Automatic'}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SizedBox(
               height: 30,
             ),
-            RaisedButton(
-              color: R.color.green,
-              child: Text(
-                'OPEN / CLOSE VALVE',
-                style: TextStyle(
-                  color: R.color.opposite,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                RaisedButton(
+                  color: R.color.green,
+                  child: Text(
+                    'OPEN',
+                    style: TextStyle(
+                      color: R.color.opposite,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await DeviceManager().sendData(R.api.up);
+                  },
+                ),
+                RaisedButton(
+                  color: R.color.green,
+                  child: Text(
+                    'CLOSE',
+                    style: TextStyle(
+                      color: R.color.opposite,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await DeviceManager().sendData(R.api.down);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 32),
+              child: Visibility(
+                visible: workType == '0',
+                child: RaisedButton(
+                  color: R.color.red,
+                  child: Text(
+                    'Start Manual',
+                    style: TextStyle(
+                      color: R.color.opposite,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await DeviceManager().sendData(R.api.manual);
+                  },
                 ),
               ),
-              onPressed: () async {
-                await DeviceManager().sendData(R.api.light);
-              },
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 32),
+              child: Visibility(
+                visible: workType == '1',
+                child: RaisedButton(
+                  color: R.color.green,
+                  child: Text(
+                    'Start Automatic',
+                    style: TextStyle(
+                      color: R.color.opposite,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await DeviceManager().sendData(R.api.auto);
+                  },
+                ),
+              ),
             ),
           ],
         ),
@@ -131,23 +208,5 @@ class _HomeScreenState extends State<HomeScreen> {
         workType = response['workType'];
       });
     });
-    // DeviceManager().listenForData(R.api.humidity,
-    //     (Map<String, String> response) {
-    //   setState(() {
-    //     humidity = int.parse(response['humidity']);
-    //   });
-    // });
-    // DeviceManager().listenForData(R.api.airTemperature,
-    //     (Map<String, String> response) {
-    //   setState(() {
-    //     airTemperature = int.parse(response['airTemperature']);
-    //   });
-    // });
-    // DeviceManager().listenForData(R.api.waterTemperature,
-    //     (Map<String, String> response) {
-    //   setState(() {
-    //     waterTemperature = int.parse(response['waterTemperature']);
-    //   });
-    // });
   }
 }
