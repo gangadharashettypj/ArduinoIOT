@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "438289451456",
+    "firebase_url": "https://smart-gun-640af-default-rtdb.firebaseio.com",
+    "project_id": "smart-gun-640af",
+    "storage_bucket": "smart-gun-640af.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438289451456:android:0be2eb7c7e81c371196025",
+        "android_client_info": {
+          "package_name": "com.nixbees.dreamtecharduino"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438289451456-6o2b4ou0dnrv1odtj561jqgb652m9krc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHdX58M559EfVJdSRLYAAPQVBcFfncunI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438289451456-6o2b4ou0dnrv1odtj561jqgb652m9krc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438289451456:android:4f03445496308d7f196025",
+        "android_client_info": {
+          "package_name": "com.trial.arduinoiot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438289451456-6o2b4ou0dnrv1odtj561jqgb652m9krc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHdX58M559EfVJdSRLYAAPQVBcFfncunI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438289451456-6o2b4ou0dnrv1odtj561jqgb652m9krc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

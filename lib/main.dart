@@ -1,73 +1,89 @@
-import 'package:arduinoiot/db/db.dart';
-import 'package:arduinoiot/resources/nestbees_resources.dart';
-import 'package:arduinoiot/ui/screen/about/about.dart';
-import 'package:arduinoiot/ui/screen/data/analysis.dart';
-import 'package:arduinoiot/ui/screen/data/data.dart';
-import 'package:arduinoiot/ui/screen/data/range_form.dart';
-import 'package:arduinoiot/ui/screen/data/recommendation.dart';
-import 'package:arduinoiot/ui/screen/form/form.dart';
-import 'package:arduinoiot/ui/screen/form_personal/personal_form.dart';
-import 'package:arduinoiot/ui/screen/home/home.dart';
-import 'package:arduinoiot/ui/screen/instruction/instruction.dart';
-import 'package:arduinoiot/ui/screen/splash.dart';
+import 'package:arduinoiot/home.dart';
+import 'package:arduinoiot/login.dart';
+import 'package:arduinoiot/register.dart';
+import 'package:arduinoiot/util/user.dart';
+import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() async {
+List<CameraDescription> cameras;
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DB.instance.register();
-  await DB.instance.clear();
-  runApp(MyApp());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await Firebase.initializeApp();
+  String email = prefs.getString('email');
+  String uid = prefs.getString('uid');
+  String displayName = prefs.getString('displayName');
+  String photoUrl = prefs.getString('photoUrl');
+
+  User user = User();
+  user.setUser({
+    'email': email,
+    'displayName': displayName,
+    'uid': uid,
+    'photoUrl': photoUrl,
+  });
+
+  try {
+    cameras = await availableCameras();
+  } on CameraException catch (e) {
+    print('Error: $e.code\nError Message: $e.message');
+  }
+
+  runApp(
+    email != null && uid != null
+        ? MyApp(
+            email: user.email,
+            uid: user.uid,
+            displayName: user.displayName,
+            photoUrl: user.photoUrl,
+            cameras: cameras,
+          )
+        : MyApp(
+            cameras: cameras,
+          ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  BuildContext _context;
+  final String email;
+  final String uid;
+  final String displayName;
+  final String photoUrl;
+  final List<CameraDescription> cameras;
+
+  const MyApp({
+    this.email,
+    this.uid,
+    this.displayName,
+    this.photoUrl,
+    this.cameras,
+  });
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
-    SystemChrome.setEnabledSystemUIOverlays([]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Yoga Guru',
       theme: ThemeData(
-        primarySwatch: MaterialColor(0xFF009889, {
-          50: const Color(0xFF009889),
-          100: const Color(0xFF009889),
-          200: const Color(0xFF009889),
-          300: const Color(0xFF009889),
-          400: const Color(0xFF009889),
-          500: const Color(0xFF009889),
-          600: const Color(0xFF009889),
-          700: const Color(0xFF009889),
-          800: const Color(0xFF009889),
-          900: const Color(0xFF009889)
-        }),
+        primarySwatch: Colors.blueGrey,
       ),
-      title: "NestBees",
-      home: SplashScreen(),
+      initialRoute: (email != null && uid != null) ? '/' : '/login',
       routes: <String, WidgetBuilder>{
-        R.routes.splash: (BuildContext context) => SplashScreen(),
-        R.routes.home: (BuildContext context) => HomeScreen(),
-        R.routes.form: (BuildContext context) => FormScreen(),
-        R.routes.personalForm: (BuildContext context) => PersonalFormScreen(),
-        R.routes.about: (BuildContext context) => AboutScreen(),
-        R.routes.instruction: (BuildContext context) => InstructionScreen(),
-        R.routes.data: (BuildContext context) => DataScreen(),
-        R.routes.rangeData: (BuildContext context) => RangeFormScreen(),
-        R.routes.analysis: (BuildContext context) => AnalysisScreenMain(),
-        R.routes.recommendation: (BuildContext context) =>
-            RecommendationScreen(),
+        '/': (BuildContext context) => Home(
+              email: email,
+              uid: uid,
+              displayName: displayName,
+              photoUrl: photoUrl,
+              cameras: cameras,
+            ),
+        '/login': (BuildContext context) => Login(
+              cameras: cameras,
+            ),
+        'register': (BuildContext context) => Register(),
       },
-    );
-  }
-
-  Future onNotificationSelected(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-    }
-    await Navigator.pushNamed(
-      _context,
-      '',
     );
   }
 }

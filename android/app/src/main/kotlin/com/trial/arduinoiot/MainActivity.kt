@@ -1,88 +1,72 @@
 package com.trial.arduinoiot
 
-import android.content.res.AssetFileDescriptor
 import android.util.Log
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 import org.tensorflow.lite.Interpreter
 import java.io.FileInputStream
-import java.nio.MappedByteBuffer
+import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 
 class MainActivity : FlutterActivity() {
 
-    var linearTflite: Interpreter? = null
-    var dnnTflite: Interpreter? = null
+    private var tflite: Interpreter? = null
+
+    companion object {
+        private const val CHANNEL = "ondeviceML"
+    }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
-        try {
-            dnnTflite = Interpreter(loadDnnModelFile())
-            linearTflite = Interpreter(loadLinearModelFile())
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-
-        val messenger = flutterEngine.dartExecutor.binaryMessenger
-        MethodChannel(messenger, "com.trial.arduinoiot")
-            .setMethodCallHandler { call, result ->
-                when (call.method) {
-                    "linearPredict" -> {
-                        val prediction = doLinearInference(call.arguments as List<Float>)
-
-
-                        result.success(prediction)
-                    }
-                    "dnnPredict" -> {
-                        val prediction = doDnnInference(call.arguments as List<Float>)
-
-                        result.success(prediction)
-                    }
-                    else -> result.notImplemented()
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            CHANNEL
+        ).setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
+            if (call.method == "predictData") {
+                try {
+                    tflite = Interpreter(loadModelFile(call.argument<Any>("model").toString() + ".tflite"))
+                } catch (e: Exception) {
+                    println("Exception while loading: $e")
+                    throw RuntimeException(e)
                 }
+                val args = call.argument<ArrayList<Double>>("arg")!!
+                val prediction: Float = predictData(args)
+                if (prediction != 0f) {
+                    result.success(prediction)
+                } else {
+                    result.error("UNAVAILABLE", "prediction  not available.", null)
+                }
+            } else {
+                result.notImplemented()
             }
+        }
     }
 
-    private fun loadLinearModelFile(): MappedByteBuffer {
-        val fileDescriptor: AssetFileDescriptor = this.assets.openFd("dnn_model.tflite")
+    // This method interact with our model and makes prediction returning value of
+    fun predictData(input_data: java.util.ArrayList<Double>): Float {
+        val inputArray = Array(1) { FloatArray(input_data.size) }
+        var i = 0
+        for (e in input_data) {
+            inputArray[0][i] = e.toFloat()
+            i++
+        }
+        val output_data = Array(1) { FloatArray(1) }
+        tflite!!.run(inputArray, output_data)
+        Log.d("tag", ">> " + output_data[0][0])
+        return output_data[0][0]
+    }
+
+
+    private fun loadModelFile(modelName: String): ByteBuffer {
+        val fileDescriptor = this.assets.openFd(modelName)
         val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
-        val fileChannel: FileChannel = inputStream.channel
-        val startOffset: Long = fileDescriptor.startOffset
-        val declareLength: Long = fileDescriptor.declaredLength
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declareLength)
-    }
-
-    private fun loadDnnModelFile(): MappedByteBuffer {
-        val fileDescriptor: AssetFileDescriptor = this.assets.openFd("dnn_model.tflite")
-        val inputStream = FileInputStream(fileDescriptor.fileDescriptor)
-        val fileChannel: FileChannel = inputStream.channel
-        val startOffset: Long = fileDescriptor.startOffset
-        val declareLength: Long = fileDescriptor.declaredLength
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declareLength)
-    }
-
-    private fun doDnnInference(list: List<Float>): Float {
-//        val inputVal = FloatArray(3)
-//        inputVal[0] = 0.003863636F
-//        inputVal[1] = 92.11363636F
-//        inputVal[2] = 21.39022727F
-        val output = Array(1) { FloatArray(1) }
-        dnnTflite!!.run(list.toFloatArray(), output)
-        println(output[0][0])
-        return output[0][0]
-    }
-
-    private fun doLinearInference(list: List<Float>): Float {
-//        val inputVal = FloatArray(3)
-//        inputVal[0] = 0.003863636F
-//        inputVal[1] = 92.11363636F
-//        inputVal[2] = 21.39022727F
-        val output = Array(1) { FloatArray(1) }
-        linearTflite!!.run(list.toFloatArray(), output)
-        println(output[0][0])
-        return output[0][0]
+        val fileChannel = inputStream.channel
+        val startOffset = fileDescriptor.startOffset
+        val declaredLength = fileDescriptor.declaredLength
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
     }
 }

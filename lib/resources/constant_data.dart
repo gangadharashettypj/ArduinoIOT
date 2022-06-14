@@ -1,4 +1,0 @@
-/*
- * @Author GS
- */
-class NestBeesStrings {}
