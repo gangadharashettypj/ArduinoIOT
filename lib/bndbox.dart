@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class BndBox extends StatefulWidget {
-  static const platform = const MethodChannel('ondeviceML');
+  static const platform = MethodChannel('ondeviceML');
 
   final List<dynamic> results;
   final int previewH;
