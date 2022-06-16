@@ -15,6 +15,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String temperature;
   String humi;
+  String moisture;
 
   @override
   void initState() {
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Room Count',
+          'DreamTech',
         ),
         actions: <Widget>[
           FlatButton(
@@ -100,6 +101,30 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 30,
             ),
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Moisture: $moisture',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
             SizedBox(
               height: 30,
             ),
@@ -127,6 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           temperature = response['temperature'];
           humi = response['humidity'];
+          moisture = (response['moisture'] == '1') ? 'DRY' : 'WET';
         });
       }
     });
