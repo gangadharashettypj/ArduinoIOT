@@ -7,7 +7,7 @@ class Api {
   String get carController => 'carController';
   String get setClientIP => 'setClientIP';
   String get waterPump => 'waterPump';
-  String get nutritionPump => 'nutritionPump';
+  String get bookSelected => 'bookSelected';
   String get light => 'turnOnLight';
   String get dht => 'dht';
   String get data => 'data';
