@@ -1,8 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tflite/tflite.dart';
-import 'dart:math' as math;
 
 typedef void Callback(List<dynamic> list, int h, int w);
 
@@ -32,7 +33,7 @@ class _CameraState extends State<Camera> {
       controller = new CameraController(
         // widget.camera[0] for back camera
         // widget.camera[1] for front camera
-        widget.cameras[1],
+        widget.cameras[0],
         ResolutionPreset.high,
       );
 
