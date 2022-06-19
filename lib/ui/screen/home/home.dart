@@ -13,8 +13,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String temperature;
-  String humi;
+  String accident;
+  String isPanic;
+  String isEmergency;
 
   @override
   void initState() {
@@ -52,6 +53,31 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView(
           shrinkWrap: true,
           children: <Widget>[
+            if (isEmergency == '1' || isPanic == '1' || accident != '')
+              Container(
+                width: double.infinity,
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  elevation: 8,
+                  child: Container(
+                    margin: EdgeInsets.all(16),
+                    child: Text(
+                      'Location: 13.206715 N, 77.378240 E',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            SizedBox(
+              height: 30,
+            ),
             Container(
               width: double.infinity,
               child: Card(
@@ -60,11 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Radius.circular(20),
                   ),
                 ),
+                color: accident != '' ? Colors.red : null,
                 elevation: 8,
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Temperature: $temperature',
+                    'Accident: ${accident == '' ? 'No' : accident}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -84,11 +111,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Radius.circular(20),
                   ),
                 ),
+                color: isPanic == '1' ? Colors.red : null,
                 elevation: 8,
                 child: Container(
                   margin: EdgeInsets.all(16),
                   child: Text(
-                    'Humidity: $humi',
+                    'Panic: ${isPanic == '1' ? 'Yes' : 'No'}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -100,20 +128,30 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(
               height: 30,
             ),
-            SizedBox(
-              height: 30,
-            ),
-            RaisedButton(
-              color: R.color.green,
-              child: Text(
-                'Light',
-                style: TextStyle(
-                  color: R.color.opposite,
+            Container(
+              width: double.infinity,
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                color: isEmergency == '1' ? Colors.red : null,
+                elevation: 8,
+                child: Container(
+                  margin: EdgeInsets.all(16),
+                  child: Text(
+                    'Emergency: ${isEmergency == '1' ? 'Yes' : 'No'}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
                 ),
               ),
-              onPressed: () async {
-                await DeviceManager().sendData(R.api.light);
-              },
+            ),
+            SizedBox(
+              height: 30,
             ),
           ],
         ),
@@ -122,11 +160,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.dht, (Map<String, String> response) {
+    DeviceManager().listenForData(R.api.data, (Map<String, String> response) {
       if (mounted) {
         setState(() {
-          temperature = response['temperature'];
-          humi = response['humidity'];
+          accident = response['accident'];
+          isPanic = response['isPanic'];
+          isEmergency = response['isEmergency'];
         });
       }
     });
