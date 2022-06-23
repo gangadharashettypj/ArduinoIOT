@@ -35,12 +35,32 @@ class _DataScreenState extends State<DataScreen> {
   }
 
   Future<void> getAnalysis() async {
-    // [0.003863636, 92.11363636, 21.39022727],
+    /*
+    2020,1,1,5,19.31,14.22,93.44,92.51,3.51,128.5,5.47,128.28
+2020,1,1,6,19.33,13.98,92.06,92.64,3.6,124.03,5.26,123.93
+2020,1,1,7,20.34,13.61,84.19,92.78,4.21,120.42,5.2,120.73
+2020,1,1,8,21.73,12.88,73.19,92.89,4.46,118.09,5.3,118.72
+2020,1,1,9,23.26,12.15,63.0,92.9,4.3,117.03,5.03,117.88
+2020,1,1,10,24.87,11.66,54.94,92.87,3.86,115.01,4.51,115.86
+2020,1,1,11,26.45,11.35,48.62,92.78,3.43,113.23,4.04,114.19
+2020,1,1,12,27.68,11.11,44.38,92.65,3.07,113.24,3.66,114.32
+2020,1,1,13,28.16,11.11,42.88,92.52,2.7,115.68,3.24,116.81
+2020,1,1,14,27.91,11.11,43.62,92.45,2.19,120.96,2.67,120.99
+2020,1,1,15,27.39,11.23,45.5,92.44,1.56,124.8,1.94,124.33
+2020,1,1,16,26.56,12.08,51.38,92.48,0.8,116.82,1.11,116.21
+2020,1,1,17,25.15,13.92,64.25,92.55,0.54,65.28,0.83,66.09
+2020,1,1,18,23.84,15.01,74.94,92.64,0.88,43.57,1.49,45.0
+2020,1,1,19,22.87,14.95,79.38,92.74,1.2,50.0,2.27,51.43
+2020,1,1,20,22.16,14.59,80.62,92.82,1.45,54.68,2.97,55.6
+2020,1,1,21,21.48,14.47,83.5,92.83,1.6,55.92,3.34,55.19
+2020,1,1,22,20.93,14.47,86.38,92.8,1.7,56.46,3.44,55.37
+2020,1,1,23,20.6,14.53,88.44,92.75,1.85,60.2,3.32,60.42
+     */
     try {
-      // linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
-      //     'linearPredict', [0.003863636, 92.11363636, 21.39022727]);
-      // dnnResult = await MethodChannel('com.trial.arduinoiot')
-      //     .invokeMethod('dnnPredict', [0.003863636, 92.11363636, 21.39022727]);
+      linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+          'linearPredict', [14.53, 88.44, 92.75, 1.85, 60.2, 3.32, 60.42]);
+      dnnResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+          'dnnPredict', [14.53, 88.44, 92.75, 1.85, 60.2, 3.32, 60.42]);
       // if (linearResult > 1) linearResult = 1;
       // if (dnnResult > 1) dnnResult = 1;
       //
@@ -51,7 +71,9 @@ class _DataScreenState extends State<DataScreen> {
       // dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
       // linearResult = linearResult * 0.6 + calculateStress() * 0.4;
       // setState(() {});
-      // return;
+      print(linearResult);
+      print(dnnResult);
+      return;
 
       if (ecg == '' || bpm == '' || gsrc == '') {
         return;
@@ -242,6 +264,7 @@ class _DataScreenState extends State<DataScreen> {
               ),
               onPressed: () async {
                 await getAnalysis();
+                return;
                 await Navigator.pushNamed(context, R.routes.analysis,
                     arguments: {
                       'bpm': bpm,
