@@ -13,8 +13,6 @@ DHT_Unified dht(DHTPIN, DHTTYPE);
 
 
 int currentPeople = 0;
-int sensor1[] = {14,12};
-int sensor2[] = {26,27};
 int sensor1Initial = 60;
 int sensor2Initial = 60;
 
@@ -72,29 +70,101 @@ uint32_t idleTimeForStream = 15000;
 uint32_t delayMS;
 
 
-int measureDistance(int a[]) {
-  pinMode(a[1], OUTPUT);
-  digitalWrite(a[1], LOW);
-  delayMicroseconds(2);
-  digitalWrite(a[1], HIGH);
-  delayMicroseconds(10);
-  digitalWrite(a[1], LOW);
-  pinMode(a[0], INPUT);
-  long duration = pulseIn(a[0], HIGH, 100000);
-  return duration / 29 / 2;
-}
-
 
 TaskHandle_t Task1;
 TaskHandle_t Task2;
 long long int last = 0, lastT = 0;;
 
-void setup(void){
+
+
+void Task2code( void * parameter) {
+  for (;;) {
+    if (Firebase.ready())
+    {
+
+      if (!Firebase.RTDB.readStream(&fbdo))
+        Serial.printf("sream read error, %s\n\n", fbdo.errorReason().c_str());
+
+      if (fbdo.streamTimeout())
+      {
+        Serial.println("stream timed out, resuming...\n");
+
+        if (!fbdo.httpConnected())
+          Serial.printf("error code: %d, reason: %s\n\n", fbdo.httpCode(), fbdo.errorReason().c_str());
+      }
+
+      if (fbdo.streamAvailable())
+      {
+        bool dat = fbdo.boolData();
+        digitalWrite(16, dat);
+        Serial.printf("sream path, %s\nevent path, %s\ndata type, %s\nevent type, %s\nvalue, %s\n\n",
+                      fbdo.streamPath().c_str(),
+                      fbdo.dataPath().c_str(),
+                      fbdo.dataType().c_str(),
+                      fbdo.eventType().c_str(),
+                      String(dat).c_str());
+      }
+
+
+      if (!Firebase.RTDB.readStream(&fbdo1))
+        Serial.printf("sream read error, %s\n\n", fbdo1.errorReason().c_str());
+
+      if (fbdo1.streamTimeout())
+      {
+        Serial.println("stream timed out, resuming...\n");
+
+        if (!fbdo1.httpConnected())
+          Serial.printf("error code: %d, reason: %s\n\n", fbdo1.httpCode(), fbdo1.errorReason().c_str());
+      }
+
+      if (fbdo1.streamAvailable())
+      {
+        bool dat = fbdo1.boolData();
+        digitalWrite(17, dat);
+        Serial.printf("sream path, %s\nevent path, %s\ndata type, %s\nevent type, %s\nvalue, %s\n\n",
+                      fbdo1.streamPath().c_str(),
+                      fbdo1.dataPath().c_str(),
+                      fbdo1.dataType().c_str(),
+                      fbdo1.eventType().c_str(),
+                      String(dat).c_str());
+      }
+    }
+    if (millis() - lastT > delayMS) {
+      lastT = millis();
+      sensors_event_t event;
+      dht.temperature().getEvent(&event);
+      if (isnan(event.temperature)) {
+        Serial.println(F("Error reading temperature!"));
+      }
+      else {
+        Serial.print(F("Temperature: "));
+        Serial.print(event.temperature);
+        Serial.println(F("°C"));
+        tem = event.temperature;
+      }
+      // Get humidity event and print its value.
+      dht.humidity().getEvent(&event);
+      if (isnan(event.relative_humidity)) {
+        Serial.println(F("Error reading humidity!"));
+      }
+      else {
+        Serial.print(F("Humidity: "));
+        Serial.print(event.relative_humidity);
+        Serial.println(F("%"));
+        humi = event.relative_humidity;
+      }
+    }
+  }
+
+}
+
+
+
+
+
+void setup(void) {
   Serial.begin(115200);
   Serial.println("");
-
-  sensor1Initial = measureDistance(sensor1);
-  sensor2Initial = measureDistance(sensor2);
 
   pinMode(2, OUTPUT);
   pinMode(15, OUTPUT);
@@ -184,152 +254,74 @@ void setup(void){
 
   pinMode(16, OUTPUT);
   pinMode(17, OUTPUT);
+  pinMode(26, INPUT);
+  pinMode(27, INPUT);
 
 
-   xTaskCreatePinnedToCore(
-      Task2code,   /* Task function. */
-      "Task2",     /* name of task. */
-      10000,       /* Stack size of task */
-      NULL,        /* parameter of the task */
-      1,           /* priority of the task */
-      &Task2,      /* Task handle to keep track of created task */
-      1);          /* pin task to core 1 */
-    delay(500);
-}
-
-void Task2code( void * parameter) {
- for(;;){
-    if (Firebase.ready())
-    {
-
-      if (!Firebase.RTDB.readStream(&fbdo))
-        Serial.printf("sream read error, %s\n\n", fbdo.errorReason().c_str());
-
-      if (fbdo.streamTimeout())
-      {
-        Serial.println("stream timed out, resuming...\n");
-
-        if (!fbdo.httpConnected())
-          Serial.printf("error code: %d, reason: %s\n\n", fbdo.httpCode(), fbdo.errorReason().c_str());
-      }
-
-      if (fbdo.streamAvailable())
-      {
-        bool dat = fbdo.boolData();
-        digitalWrite(16, dat);
-         Serial.printf("sream path, %s\nevent path, %s\ndata type, %s\nevent type, %s\nvalue, %s\n\n",
-                      fbdo.streamPath().c_str(),
-                      fbdo.dataPath().c_str(),
-                      fbdo.dataType().c_str(),
-                      fbdo.eventType().c_str(),
-                      String(dat).c_str());
-      }
-
-
-      if (!Firebase.RTDB.readStream(&fbdo1))
-        Serial.printf("sream read error, %s\n\n", fbdo1.errorReason().c_str());
-
-      if (fbdo1.streamTimeout())
-      {
-        Serial.println("stream timed out, resuming...\n");
-
-        if (!fbdo1.httpConnected())
-          Serial.printf("error code: %d, reason: %s\n\n", fbdo1.httpCode(), fbdo1.errorReason().c_str());
-      }
-
-      if (fbdo1.streamAvailable())
-      {
-        bool dat = fbdo1.boolData();
-        digitalWrite(17, dat);
-         Serial.printf("sream path, %s\nevent path, %s\ndata type, %s\nevent type, %s\nvalue, %s\n\n",
-                      fbdo1.streamPath().c_str(),
-                      fbdo1.dataPath().c_str(),
-                      fbdo1.dataType().c_str(),
-                      fbdo1.eventType().c_str(),
-                      String(dat).c_str());
-      }
-    }
-    if(millis() - lastT > delayMS){
-      lastT = millis();
-       sensors_event_t event;
-      dht.temperature().getEvent(&event);
-      if (isnan(event.temperature)) {
-        Serial.println(F("Error reading temperature!"));
-      }
-      else {
-        Serial.print(F("Temperature: "));
-        Serial.print(event.temperature);
-        Serial.println(F("°C"));
-        tem = event.temperature;
-      }
-      // Get humidity event and print its value.
-      dht.humidity().getEvent(&event);
-      if (isnan(event.relative_humidity)) {
-        Serial.println(F("Error reading humidity!"));
-      }
-      else {
-        Serial.print(F("Humidity: "));
-        Serial.print(event.relative_humidity);
-        Serial.println(F("%"));
-        humi = event.relative_humidity;
-      }
-    }
- }
-
+  xTaskCreatePinnedToCore(
+    Task2code,   /* Task function. */
+    "Task2",     /* name of task. */
+    10000,       /* Stack size of task */
+    NULL,        /* parameter of the task */
+    1,           /* priority of the task */
+    &Task2,      /* Task handle to keep track of created task */
+    1);          /* pin task to core 1 */
+  delay(500);
 }
 
 
-
-void loop(void){
+void loop(void) {
   delay(delayMS);
-//Read ultrasonic sensors
-  int sensor1Val = measureDistance(sensor1);
-  int sensor2Val = measureDistance(sensor2);
+  //Read ultrasonic sensors
+  //  int sensor1Val = measureDistance(sensor1);
+  //  int sensor2Val = measureDistance(sensor2);
+  bool sensor1Val = !digitalRead(26);
+  bool sensor2Val = !digitalRead(27);
 
   //Process the data
-  if(sensor1Val < sensor1Initial - 10 && sequence.charAt(0) != '1'){
+  if (sensor1Val  && sequence.charAt(0) != '1') {
     sequence += "1";
-  }else if(sensor2Val < sensor2Initial - 10 && sequence.charAt(0) != '2'){
+  } else if (sensor2Val && sequence.charAt(0) != '2') {
     sequence += "2";
   }
 
-  if(sequence.equals("12")){
+  if (sequence.equals("12")) {
     currentPeople++;
-    sequence="";
+    sequence = "";
     delay(550);
-  }else if(sequence.equals("21") && currentPeople > 0){
+  } else if (sequence.equals("21") && currentPeople > 0) {
     currentPeople--;
-    sequence="";
+    sequence = "";
     delay(550);
   }
 
   //Resets the sequence if it is invalid or timeouts
-  if(sequence.length() > 2 || sequence.equals("11") || sequence.equals("22") || timeoutCounter > 200){
-    sequence="";
+  if (sequence.length() > 2 || sequence.equals("11") || sequence.equals("22") || timeoutCounter > 200) {
+    sequence = "";
   }
 
-  if(sequence.length() == 1){ //
+  if (sequence.length() == 1) { //
     timeoutCounter++;
-  }else{
-    timeoutCounter=0;
+  } else {
+    timeoutCounter = 0;
   }
 
   //Print values to serial
-//  Serial.print("Seq: ");
-//  Serial.print(sequence);
-//  Serial.print(" S1: ");
-//  Serial.print(sensor1Val);
-//  Serial.print(" S2: ");
-//  Serial.println(sensor2Val);
+  //  Serial.print("Seq: ");
+  //  Serial.print(sequence);
+  //  Serial.print(" S1: ");
+  //  Serial.print(sensor1Val);
+  //  Serial.print(" S2: ");
+  //  Serial.println(sensor2Val);
 
-//
-//  Serial.print(" TOTAL: ");
-//  Serial.println(currentPeople);
+  //
+  //  Serial.print(" TOTAL: ");
+  //  Serial.println(currentPeople);
 
-  if(currentPeople > 0){
+  if (currentPeople > 0) {
     digitalWrite(2, LOW);
     digitalWrite(15, LOW);
-  }else{
+  } else {
     digitalWrite(2, HIGH);
     digitalWrite(15, HIGH);
   }
@@ -337,18 +329,18 @@ void loop(void){
   digitalWrite(8, swutch);
 
 
-//  float h = dht.readHumidity();
-//  float t = dht.readTemperature();
-//  if(h<100) humi = h;
-//  if(t<100) tem = t;
+  //  float h = dht.readHumidity();
+  //  float t = dht.readTemperature();
+  //  if(h<100) humi = h;
+  //  if(t<100) tem = t;
 
-//  Serial.print(tem);
-//  Serial.print(" , ");
-//  Serial.println(humi);
+  //  Serial.print(tem);
+  //  Serial.print(" , ");
+  //  Serial.println(humi);
 
 
 
-  if(millis() - last > 2000){
+  if (millis() - last > 2000) {
 
 
     last = millis();
@@ -366,6 +358,6 @@ void loop(void){
     oled.putString("HUMI: ");
     oled.setTextXY(3, 8);
     oled.putString(String(humi).c_str());
-   }
+  }
 
 }
