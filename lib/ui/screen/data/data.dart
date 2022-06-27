@@ -2,16 +2,12 @@
  * @Author GS
  */
 
-import 'dart:convert';
-
-import 'package:arduinoiot/db/db.dart';
-import 'package:arduinoiot/model/questions_model.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
-import 'package:arduinoiot/service/manager/device_manager.dart';
-import 'package:arduinoiot/service/rest/http_rest.dart';
+import 'package:arduinoiot/widget/textfield_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DataScreen extends StatefulWidget {
   @override
@@ -19,20 +15,8 @@ class DataScreen extends StatefulWidget {
 }
 
 class _DataScreenState extends State<DataScreen> {
-  String bpm = '0';
-  String gsr = '0';
-  String gsrc = '0';
-  String accelerometer = '0';
-  String ecg = '0';
   double linearResult = -1;
   double dnnResult = -1;
-  double actualDnnResult = -1;
-
-  @override
-  void initState() {
-    startListening();
-    super.initState();
-  }
 
   Future<void> getAnalysis() async {
     /*
@@ -57,226 +41,118 @@ class _DataScreenState extends State<DataScreen> {
 2020,1,1,23,20.6,14.53,88.44,92.75,1.85,60.2,3.32,60.42
      */
     try {
+      // linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+      //   'linearPredict',
+      //   [14.53, 88.44, 92.75, 1.85, 60.2, 3.32, 60.42],
+      // );
+      // dnnResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
+      //   'dnnPredict',
+      //   [14.53, 88.44, 92.75, 1.85, 60.2, 3.32, 60.42],
+      // );
       linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
-          'linearPredict', [14.53, 88.44, 92.75, 1.85, 60.2, 3.32, 60.42]);
+        'linearPredict',
+        [
+          double.parse(controllers[0].text),
+          double.parse(controllers[1].text),
+          double.parse(controllers[2].text),
+          double.parse(controllers[3].text),
+          double.parse(controllers[4].text),
+          double.parse(controllers[5].text),
+          double.parse(controllers[6].text),
+        ],
+      );
       dnnResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
-          'dnnPredict', [14.53, 88.44, 92.75, 1.85, 60.2, 3.32, 60.42]);
-      // if (linearResult > 1) linearResult = 1;
-      // if (dnnResult > 1) dnnResult = 1;
-      //
-      // dnnResult = dnnResult * 100;
-      // actualDnnResult = dnnResult;
-      // linearResult = linearResult * 100;
-      //
-      // dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
-      // linearResult = linearResult * 0.6 + calculateStress() * 0.4;
-      // setState(() {});
+        'dnnPredict',
+        [
+          double.parse(controllers[0].text),
+          double.parse(controllers[1].text),
+          double.parse(controllers[2].text),
+          double.parse(controllers[3].text),
+          double.parse(controllers[4].text),
+          double.parse(controllers[5].text),
+          double.parse(controllers[6].text),
+        ],
+      );
       print(linearResult);
       print(dnnResult);
-      return;
-
-      if (ecg == '' || bpm == '' || gsrc == '') {
-        return;
-      }
-      linearResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
-          'linearPredict',
-          [double.parse(ecg) / 10000, double.parse(bpm), double.parse(gsrc)]);
-      dnnResult = await MethodChannel('com.trial.arduinoiot').invokeMethod(
-          'dnnPredict',
-          [double.parse(ecg) / 10000, double.parse(bpm), double.parse(gsrc)]);
-      if (linearResult > 1) linearResult = 1;
-      if (dnnResult > 1) dnnResult = 1;
-
-      dnnResult = dnnResult * 100;
-      actualDnnResult = dnnResult;
-      linearResult = linearResult * 100;
-      dnnResult = dnnResult * 0.6 + calculateStress() * 0.4;
-      linearResult = linearResult * 0.6 + calculateStress() * 0.4;
       setState(() {});
     } catch (e) {
       print(e);
     }
   }
 
-  int calculateStress() {
-    final data = DB.instance.get(DBKeys.formData);
-    if (data == null || data == '') {
-      return -1;
-    }
-    final model = QuestionsModel.fromJson(jsonDecode(data));
-    if (model.q1 == null) {
-      return -1;
-    }
-    var x1 =
-        (model.q5 + model.q8 + model.q17 + model.q22 + model.q23 + model.q25) /
-            24;
-    var x2 = (model.q1 +
-            model.q2 +
-            model.q7 +
-            model.q15 +
-            model.q18 +
-            model.q10 +
-            model.q9 +
-            model.q21) /
-        32;
-    var x3 = (model.q12 + model.q11 + model.q24 + model.q19) / 16;
-    var x4 = (model.q3 +
-            model.q4 +
-            model.q6 +
-            model.q13 +
-            model.q14 +
-            model.q16 +
-            model.q20) /
-        28;
-    return ((x1 + x2 + x3 + x4) / 4 * 100).toInt();
-  }
-
-  String getStressScore() {
-    return calculateStress() != -1 ? calculateStress().toString() : '--';
-  }
-
-  String getStressLevel() {
-    if (calculateStress() > 50) {
-      return 'Highly Stressed';
-    } else if (calculateStress() > 35) {
-      return 'Stressed';
-    } else if (calculateStress() > 0) {
-      return 'Mild Stressed';
-    } else {
-      return '--';
-    }
-  }
-
+  final controllers = [
+    TextEditingController(text: '14.53'),
+    TextEditingController(text: '88.44'),
+    TextEditingController(text: '92.75'),
+    TextEditingController(text: '1.85'),
+    TextEditingController(text: '60.2'),
+    TextEditingController(text: '3.32'),
+    TextEditingController(text: '60.42'),
+  ];
   @override
   Widget build(BuildContext context) {
-    print(linearResult);
-    print(dnnResult);
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: R.color.primary,
-        title: Text(
-          'Live Device Data',
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              'Reconnect',
-              style: TextStyle(color: Colors.white),
+        title: Row(
+          children: [
+            Icon(
+              Icons.location_on,
+              color: Colors.white,
             ),
-            onPressed: () async {
-              Response res = await HttpREST().get(
-                R.api.setClientIP,
-                params: {
-                  'ip': 'sd',
-                  'port': '2345',
-                },
-              );
-            },
-          ),
-        ],
+            SizedBox(
+              width: 16,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Bengaluru',
+                  style: GoogleFonts.lato(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  '13.3264, 77.1191',
+                  style: GoogleFonts.lato(
+                    color: Colors.white,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [],
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Container(
+        child: Stack(
+          children: [
+            Image.asset(
+              R.image.sunny,
+              fit: BoxFit.cover,
+              height: double.infinity,
               width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Text(
-                    'BPM: $bpm',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 16,
             ),
             Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Text(
-                    'GSRC: $gsrc',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 16,
+              decoration: BoxDecoration(color: Colors.black38),
             ),
             Container(
-              width: double.infinity,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+              margin: EdgeInsets.only(top: 32),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: buildQuestionsView(),
                   ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Text(
-                    'ECG: $ecg',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
+                  singleWeather(),
+                ],
               ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            RaisedButton(
-              color: R.color.primary,
-              child: Text(
-                'Analyse Data',
-                style: TextStyle(
-                  color: R.color.opposite,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              onPressed: () async {
-                await getAnalysis();
-                return;
-                await Navigator.pushNamed(context, R.routes.analysis,
-                    arguments: {
-                      'bpm': bpm,
-                      'ecg': ecg,
-                      'gsr': gsr,
-                      'gsrc': gsrc,
-                      'result': dnnResult,
-                      'stressScore': calculateStress(),
-                      'actualDnnResult': actualDnnResult,
-                    });
-              },
-            ),
+            )
           ],
         ),
       ),
@@ -284,18 +160,348 @@ class _DataScreenState extends State<DataScreen> {
     );
   }
 
-  void startListening() async {
-    DeviceManager().listenForData(R.api.data, (Map<String, String> response) {
-      if (mounted) {
-        setState(() {
-          bpm = response['bpm'];
-          gsr = response['gsr'];
-          gsrc = response['gsrc'];
-          ecg = response['ecg'];
-          accelerometer = response['acc'];
-          // print(jsonEncode(response));
-        });
-      }
-    });
+  Widget singleWeather() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 40),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.white30,
+              ),
+            ),
+          ),
+          Text(
+            'TEMPERATURE\n${dnnResult == -1 ? '' : '${dnnResult.toInt()}° C'}',
+            style: GoogleFonts.lato(
+              fontSize: 45,
+              fontWeight: FontWeight.w900,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Visibility(
+                visible: false,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Wind',
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                '23',
+                                style: GoogleFonts.lato(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'km/h',
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Rain',
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                '50',
+                                style: GoogleFonts.lato(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                '%',
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Humidity',
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                '60',
+                                style: GoogleFonts.lato(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                '%',
+                                style: GoogleFonts.lato(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildQuestionsView() {
+    return ListView(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFieldWidget(
+                  borderColor: Colors.white60,
+                  placeHolder: 'Specific Humi',
+                  maxLength: 8,
+                  textInputType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controllers[0],
+                  validator: (val) {
+                    return val.isEmpty || val.length > 99
+                        ? 'Enter a valid age'
+                        : null;
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFieldWidget(
+                  borderColor: Colors.white60,
+                  placeHolder: 'Relative Humi',
+                  maxLength: 8,
+                  textInputType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controllers[1],
+                  validator: (val) {
+                    return val.isEmpty || val.length > 99
+                        ? 'Enter a valid age'
+                        : null;
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFieldWidget(
+                  borderColor: Colors.white60,
+                  placeHolder: 'Surface Pressure',
+                  maxLength: 8,
+                  textInputType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controllers[2],
+                  validator: (val) {
+                    return val.isEmpty || val.length > 99
+                        ? 'Enter a valid age'
+                        : null;
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFieldWidget(
+                  borderColor: Colors.white60,
+                  placeHolder: 'Wind Speed(10m)',
+                  maxLength: 8,
+                  textInputType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controllers[3],
+                  validator: (val) {
+                    return val.isEmpty || val.length > 99
+                        ? 'Enter a valid age'
+                        : null;
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFieldWidget(
+                  borderColor: Colors.white60,
+                  placeHolder: 'Wind Direction(10m)',
+                  maxLength: 8,
+                  textInputType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controllers[4],
+                  validator: (val) {
+                    return val.isEmpty || val.length > 99
+                        ? 'Enter a valid age'
+                        : null;
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFieldWidget(
+                  borderColor: Colors.white60,
+                  placeHolder: 'Wind Speed(10m)',
+                  maxLength: 8,
+                  textInputType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controllers[5],
+                  validator: (val) {
+                    return val.isEmpty || val.length > 99
+                        ? 'Enter a valid age'
+                        : null;
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFieldWidget(
+                  borderColor: Colors.white60,
+                  placeHolder: 'Wind Direction(10m)',
+                  maxLength: 8,
+                  textInputType: TextInputType.numberWithOptions(decimal: true),
+                  controller: controllers[6],
+                  validator: (val) {
+                    return val.isEmpty || val.length > 99
+                        ? 'Enter a valid age'
+                        : null;
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 50,
+                margin: EdgeInsets.only(top: 16),
+                child: RaisedButton(
+                  color: Colors.white,
+                  child: Text(
+                    'PREDICT',
+                    style: TextStyle(
+                      color: R.color.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  onPressed: () {
+                    validateAndPredict();
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  void validateAndPredict() {
+    if (controllers[0].text.isEmpty ||
+        controllers[1].text.isEmpty ||
+        controllers[2].text.isEmpty ||
+        controllers[3].text.isEmpty ||
+        controllers[4].text.isEmpty ||
+        controllers[5].text.isEmpty ||
+        controllers[6].text.isEmpty) {
+      Fluttertoast.showToast(msg: 'Please enter a valid input');
+      return;
+    }
+    getAnalysis();
   }
 }

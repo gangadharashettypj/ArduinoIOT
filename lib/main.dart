@@ -1,14 +1,6 @@
 import 'package:arduinoiot/db/db.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
-import 'package:arduinoiot/ui/screen/about/about.dart';
-import 'package:arduinoiot/ui/screen/data/analysis.dart';
 import 'package:arduinoiot/ui/screen/data/data.dart';
-import 'package:arduinoiot/ui/screen/data/range_form.dart';
-import 'package:arduinoiot/ui/screen/data/recommendation.dart';
-import 'package:arduinoiot/ui/screen/form/form.dart';
-import 'package:arduinoiot/ui/screen/form_personal/personal_form.dart';
-import 'package:arduinoiot/ui/screen/home/home.dart';
-import 'package:arduinoiot/ui/screen/instruction/instruction.dart';
 import 'package:arduinoiot/ui/screen/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,16 +39,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       routes: <String, WidgetBuilder>{
         R.routes.splash: (BuildContext context) => SplashScreen(),
-        R.routes.home: (BuildContext context) => HomeScreen(),
-        R.routes.form: (BuildContext context) => FormScreen(),
-        R.routes.personalForm: (BuildContext context) => PersonalFormScreen(),
-        R.routes.about: (BuildContext context) => AboutScreen(),
-        R.routes.instruction: (BuildContext context) => InstructionScreen(),
         R.routes.data: (BuildContext context) => DataScreen(),
-        R.routes.rangeData: (BuildContext context) => RangeFormScreen(),
-        R.routes.analysis: (BuildContext context) => AnalysisScreenMain(),
-        R.routes.recommendation: (BuildContext context) =>
-            RecommendationScreen(),
       },
     );
   }

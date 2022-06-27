@@ -23,6 +23,8 @@ dependencies:
   tflite_flutter: 0.5.0
   step_progress_indicator: 0.2.5+8
   equatable:
+  flutter_svg:
+  google_fonts:
 
 dev_dependencies:
   flutter_test:

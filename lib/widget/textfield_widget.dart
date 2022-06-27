@@ -3,7 +3,6 @@
  */
 
 import 'package:arduinoiot/resources/colors.dart';
-import 'package:arduinoiot/util/sized_box.dart';
 import 'package:arduinoiot/widget/label_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +14,6 @@ class TextFieldWidget extends StatelessWidget {
   final String suffixText;
   final TextInputType textInputType;
   final int numberOfLine;
-  final String initialValue;
   final bool obscureText;
   final VoidCallback onTap;
   final Widget prefix;
@@ -30,7 +28,7 @@ class TextFieldWidget extends StatelessWidget {
   final TextAlign textAlign;
   final Color borderColor;
   final List<TextInputFormatter> formatters;
-  final TextEditingController controller = TextEditingController();
+  TextEditingController controller;
 
   TextFieldWidget({
     Key key,
@@ -39,7 +37,6 @@ class TextFieldWidget extends StatelessWidget {
     this.textInputType = TextInputType.text,
     this.onChanged,
     this.validator,
-    this.initialValue = '',
     this.obscureText = false,
     this.onTap,
     this.prefix,
@@ -54,9 +51,10 @@ class TextFieldWidget extends StatelessWidget {
     this.formatters,
     this.alignLabelWithHint = false,
     this.onSaved,
+    this.controller,
     this.borderColor = MyColors.textDarkColor,
   }) : super(key: key) {
-    controller.text = initialValue;
+    controller ??= TextEditingController();
   }
 
   @override
@@ -68,7 +66,7 @@ class TextFieldWidget extends StatelessWidget {
         if (placeHolder != null)
           LabelWidget(
             placeHolder,
-            color: MyColors.textDarkColor,
+            color: Colors.white60,
             fontSize: 14,
             fontWeight: FontWeight.w600,
             maxLine: 2,
@@ -141,8 +139,8 @@ class TextFieldWidget extends StatelessWidget {
             ),
           style: TextStyle(
             fontSize: fontSize,
-            fontWeight: fontWeight,
-            color: MyColors.textColor,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
           ),
           textAlign: textAlign ?? TextAlign.start,
           onChanged: onChanged,

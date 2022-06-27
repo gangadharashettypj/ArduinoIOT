@@ -10,4 +10,5 @@ class Images {
   final normal = 'assets/normal.jpeg';
   final moderate = 'assets/moderate.jpeg';
   final high = 'assets/high.jpeg';
+  final sunny = 'assets/sunny.jpeg';
 }
