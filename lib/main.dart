@@ -1,4 +1,3 @@
-import 'package:arduinoiot/db/db.dart';
 import 'package:arduinoiot/resources/nestbees_resources.dart';
 import 'package:arduinoiot/ui/screen/data/data.dart';
 import 'package:arduinoiot/ui/screen/splash.dart';
@@ -7,8 +6,6 @@ import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DB.instance.register();
-  await DB.instance.clear();
   runApp(MyApp());
 }
 

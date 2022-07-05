@@ -146,10 +146,18 @@ class _DataScreenState extends State<DataScreen> {
               margin: EdgeInsets.only(top: 32),
               child: Column(
                 children: [
+                  singleWeather(),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 40),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white30,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: buildQuestionsView(),
                   ),
-                  singleWeather(),
                 ],
               ),
             )
@@ -166,13 +174,8 @@ class _DataScreenState extends State<DataScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 40),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.white30,
-              ),
-            ),
+          SizedBox(
+            height: 30,
           ),
           Text(
             'TEMPERATURE\n${dnnResult == -1 ? '' : '${dnnResult.toInt()}° C'}',
@@ -312,7 +315,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 child: TextFieldWidget(
                   borderColor: Colors.white60,
-                  placeHolder: 'Specific Humi',
+                  placeHolder: 'Specific Humidity',
                   maxLength: 8,
                   textInputType: TextInputType.numberWithOptions(decimal: true),
                   controller: controllers[0],
@@ -332,7 +335,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 child: TextFieldWidget(
                   borderColor: Colors.white60,
-                  placeHolder: 'Relative Humi',
+                  placeHolder: 'Relative Humidity',
                   maxLength: 8,
                   textInputType: TextInputType.numberWithOptions(decimal: true),
                   controller: controllers[1],
@@ -426,7 +429,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 child: TextFieldWidget(
                   borderColor: Colors.white60,
-                  placeHolder: 'Wind Speed(10m)',
+                  placeHolder: 'Wind Speed(50m)',
                   maxLength: 8,
                   textInputType: TextInputType.numberWithOptions(decimal: true),
                   controller: controllers[5],
@@ -453,7 +456,7 @@ class _DataScreenState extends State<DataScreen> {
                 ),
                 child: TextFieldWidget(
                   borderColor: Colors.white60,
-                  placeHolder: 'Wind Direction(10m)',
+                  placeHolder: 'Wind Direction(50m)',
                   maxLength: 8,
                   textInputType: TextInputType.numberWithOptions(decimal: true),
                   controller: controllers[6],
