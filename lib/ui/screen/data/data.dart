@@ -108,18 +108,11 @@ class _DataScreenState extends State<DataScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Bengaluru',
+                  'Temperature Prediction',
                   style: GoogleFonts.lato(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-                  ),
-                ),
-                Text(
-                  '13.3264, 77.1191',
-                  style: GoogleFonts.lato(
-                    color: Colors.white,
-                    fontSize: 11,
                   ),
                 ),
               ],
