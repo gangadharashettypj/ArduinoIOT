@@ -11,6 +11,7 @@ import 'package:arduinoiot/service/manager/device_manager.dart';
 import 'package:arduinoiot/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 
 class DataScreen extends StatefulWidget {
@@ -241,6 +242,11 @@ class _DataScreenState extends State<DataScreen> {
                 ),
               ),
               onPressed: () async {
+                if (bpm == '0' || ecg == '0' || gsrc == '0') {
+                  await Fluttertoast.showToast(
+                      msg: 'Please connect to sensor and try again...');
+                  return;
+                }
                 await getAnalysis();
                 await Navigator.pushNamed(context, R.routes.analysis,
                     arguments: {
