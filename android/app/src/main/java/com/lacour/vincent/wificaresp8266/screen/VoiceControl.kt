@@ -44,9 +44,6 @@ class VoiceControl : AppCompatActivity() {
 
         carConnector = CarConnector(
             this@VoiceControl,
-            findViewById(R.id.data1),
-            findViewById(R.id.data2),
-            this
         )
         preferences = Preferences(this@VoiceControl)
 

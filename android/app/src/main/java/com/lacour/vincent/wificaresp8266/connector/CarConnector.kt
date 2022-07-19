@@ -32,64 +32,11 @@ private interface CarApiService {
     fun data2(): Call<ResponseBody>
 }
 
-class CarConnector(context: Context, data1: Button, data2: Button, activity: Activity) {
+class CarConnector(context: Context) {
 
     private val preferences = Preferences(context)
     private var service: CarApiService? = null
 
-    var timerHandler: Handler = Handler()
-    private val timerRunnable: Runnable = object : Runnable {
-        override fun run() {
-            if (service == null) return
-            val request = (service as CarApiService).data1()
-            request.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-
-                    val data = response.body()?.string() ?: ""
-                    Log.i("Response11", response.body()?.string() ?: "")
-                    if (data == "GAS") {
-                        activity.runOnUiThread {
-                            data1.setBackgroundColor(Color.RED)
-                        }
-                    } else {
-                        activity.runOnUiThread {
-                            data1.setBackgroundColor(Color.WHITE)
-                        }
-                    }
-
-                }
-
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.e("Failure", t.message.toString())
-                }
-            })
-            val request1 = (service as CarApiService).data2()
-            request1.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    val data = response.body()?.string() ?: ""
-                    Log.i("Response22", data)
-                    activity.runOnUiThread {
-                        if (data == "FLAME") {
-                            data2.setBackgroundColor(Color.RED)
-                        } else {
-                            data2.setBackgroundColor(Color.WHITE)
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.e("Failure", t.message.toString())
-                }
-            })
-            timerHandler.postDelayed(this, 1000)
-        }
-    }
 
     init {
         val url = "http://${preferences.getIpAddress()}:${preferences.getPort()}"
@@ -103,9 +50,6 @@ class CarConnector(context: Context, data1: Button, data2: Button, activity: Act
                 Toast.LENGTH_LONG
             ).show()
         }
-
-        timerHandler.postDelayed(timerRunnable, 0);
-
     }
 
     fun moveForward() = sendMoveRequest(preferences.getMoveForwardValue())
@@ -147,6 +91,22 @@ class CarConnector(context: Context, data1: Button, data2: Button, activity: Act
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                t.printStackTrace()
+                Log.e("Failure", t.message.toString())
+            }
+        })
+    }
+
+    fun sendActionServoRequest(type: String, value: Int) {
+        if (service == null) return
+        val request = (service as CarApiService).action("${type}_${value}")
+        request.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                Log.i("Response", response.code().toString())
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                t.printStackTrace()
                 Log.e("Failure", t.message.toString())
             }
         })

@@ -20,17 +20,16 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <Servo.h>
 
-const char *ssid = "WIFI_CAR_ESP9266";
-const char *password = "wificarpassword";
+const char *ssid = "ROBOT";
+const char *password = "";
 
 IPAddress ip(192, 168, 4, 1);
 IPAddress netmask(255, 255, 255, 0);
 const int port = 8080; // Port
 ESP8266WebServer server(port);
 
-static const uint8_t pwm_A = 5 ;
-static const uint8_t pwm_B = 4;
 static const uint8_t dir_A = D5;
 static const uint8_t dir_B = D6;
 static const uint8_t dir_A1 = D7;
@@ -39,13 +38,13 @@ static const uint8_t dir_B1 = D8;
 // Motor speed = [0-1024]
 int motor_speed = 1024;
 
+Servo myservo;
+
 void setup() {
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(ip, ip, netmask);
   WiFi.softAP(ssid, password);
 
-  pinMode(pwm_A, OUTPUT); // PMW A
-  pinMode(pwm_B, OUTPUT); // PMW B
   pinMode(dir_A, OUTPUT); // DIR A
   pinMode(dir_B, OUTPUT); // DIR B
   pinMode(dir_A1, OUTPUT); // DIR A
@@ -53,16 +52,18 @@ void setup() {
 
   server.on("/move", HTTP_GET, handleMoveRequest);
   server.on("/action", HTTP_GET, handleActionRequest);
-  server.on("/data1", HTTP_GET, getData1);
-  server.on("/data2", HTTP_GET, getData2);
   server.onNotFound(handleNotFound);
   server.begin();
-  pinMode(D3, INPUT);
-  pinMode(D4, INPUT);
+  pinMode(D3, OUTPUT);
+  pinMode(D2, OUTPUT);
+  Serial.begin(115200);
 }
 
+bool state = false;
+
 void loop() {
-  server.handleClient();
+  server.handleClient(); 
+  digitalWrite(D3, state);
 }
 
 void handleMoveRequest() {
@@ -71,23 +72,28 @@ void handleMoveRequest() {
     return;
   }
   String direction = server.arg("dir");
+  Serial.println(direction);
   if (direction.equals("F")) {
+    digitalWrite(D2, LOW);
     forward();
     server.send(200, "text / plain", "Move: forward");
   }
   else if (direction.equals("B")) {
+    digitalWrite(D2, LOW);
     backward();
     server.send(200, "text / plain", "Move: backward");
   }
   else  if (direction.equals("S")) {
-    stop_motors();
-    server.send(200, "text / plain", "Move: stop");
+    digitalWrite(D2, LOW);
+    server.send(200, "text / plain", "Turn: Right");
   }
   else  if (direction.equals("L")) {
+    digitalWrite(D2, LOW);
     turn_left();
     server.send(200, "text / plain", "Turn: Left");
   }
   else  if (direction.equals("R")) {
+    digitalWrite(D2, LOW);
     turn_right();
     server.send(200, "text / plain", "Turn: Right");
   }
@@ -97,21 +103,6 @@ void handleMoveRequest() {
 }
 
 
-void getData1() {
-  if(!digitalRead(D4)){
-    server.send(200, "text / plain", "GAS");
-  }else{
-    server.send(200, "text / plain", "");
-  }
-  
-}
-void getData2() {
-  if(!digitalRead(D3)){
-    server.send(200, "text / plain", "FLAME");
-  }else{
-    server.send(200, "text / plain", "");
-  }
-}
 
 void handleActionRequest() {
   if (!server.hasArg("type")) {
@@ -119,15 +110,14 @@ void handleActionRequest() {
     return;
   }
   String type = server.arg("type");
+  Serial.println(type);
   if (type.equals("1")) {
-    digitalWrite(dir_A, LOW);
-    digitalWrite(dir_B, LOW);
-    digitalWrite(dir_A1, LOW);
-    digitalWrite(dir_B1, LOW);
+    digitalWrite(D2, HIGH);
+    
     server.send(200, "text / plain", "Action 1");
   }
   else if (type.equals("2")) {
-    // TODO : Action 2
+    state = !state;
     server.send(200, "text / plain", "Action 2");
   }
   else if (type.equals("3")) {
@@ -165,13 +155,13 @@ void handleNotFound() {
 
 
 void stop_motors() {
-  analogWrite(pwm_A, 0);
-  analogWrite(pwm_B, 0);
+  digitalWrite(dir_A, LOW);
+  digitalWrite(dir_B, LOW);
+  digitalWrite(dir_A1, LOW);
+  digitalWrite(dir_B1, LOW);
 }
 
 void backward() {
-  analogWrite(pwm_A, motor_speed);
-  analogWrite(pwm_B, motor_speed);
   digitalWrite(dir_A, LOW);
   digitalWrite(dir_B, HIGH);
   digitalWrite(dir_A1, LOW);
@@ -179,8 +169,6 @@ void backward() {
 }
 
 void forward() {
-  analogWrite(pwm_A, motor_speed);
-  analogWrite(pwm_B, motor_speed);
   digitalWrite(dir_A, HIGH);
   digitalWrite(dir_B, LOW);
   digitalWrite(dir_A1, HIGH);
@@ -188,8 +176,6 @@ void forward() {
 }
 
 void turn_left() {
-  analogWrite(pwm_A, motor_speed);
-  analogWrite(pwm_B, motor_speed);
   digitalWrite(dir_A, LOW);
   digitalWrite(dir_B, HIGH);
   digitalWrite(dir_A1, HIGH);
@@ -197,8 +183,6 @@ void turn_left() {
 }
 
 void turn_right() {
-  analogWrite(pwm_A, motor_speed);
-  analogWrite(pwm_B, motor_speed);
   digitalWrite(dir_A, HIGH);
   digitalWrite(dir_B, LOW);
   digitalWrite(dir_A1, LOW);

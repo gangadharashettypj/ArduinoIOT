@@ -35,9 +35,6 @@ class AccelerometerControl : AppCompatActivity(), SensorEventListener {
 
         carConnector = CarConnector(
             this@AccelerometerControl,
-            findViewById(R.id.data1),
-            findViewById(R.id.data2),
-            this
         )
 
         mSensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager

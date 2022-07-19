@@ -1,14 +1,16 @@
 package com.lacour.vincent.wificaresp8266.screen
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
-
+import android.widget.SeekBar
+import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.lacour.vincent.wificaresp8266.R
 import com.lacour.vincent.wificaresp8266.connector.CarConnector
 import kotlinx.android.synthetic.main.button_control_activity.*
+
 
 class ButtonControl : AppCompatActivity() {
 
@@ -26,7 +28,7 @@ class ButtonControl : AppCompatActivity() {
             }
         }
 
-        carConnector = CarConnector(this@ButtonControl, findViewById(R.id.data1), findViewById(R.id.data2), this)
+        carConnector = CarConnector(this@ButtonControl)
 
         arrow_up.setOnTouchListener { v: View, e: MotionEvent -> onTouchArrow(v, e) }
         arrow_right.setOnTouchListener { v: View, e: MotionEvent -> onTouchArrow(v, e) }
@@ -41,6 +43,77 @@ class ButtonControl : AppCompatActivity() {
         action_button_6.setOnTouchListener { v: View, e: MotionEvent -> onTouchAction(v, e) }
         action_button_7.setOnTouchListener { v: View, e: MotionEvent -> onTouchAction(v, e) }
         action_button_8.setOnTouchListener { v: View, e: MotionEvent -> onTouchAction(v, e) }
+
+        slider1.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar, progress: Int,
+                fromUser: Boolean
+            ) {
+
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                carConnector.sendActionServoRequest("S1", seekBar.progress)
+
+            }
+        })
+
+        slider2.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar, progress: Int,
+                fromUser: Boolean
+            ) {
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                carConnector.sendActionServoRequest("S2", seekBar.progress)
+
+            }
+        })
+
+        slider3.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar, progress: Int,
+                fromUser: Boolean
+            ) {
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                carConnector.sendActionServoRequest("S3", seekBar.progress)
+
+            }
+        })
+
+        slider4.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
+            override fun onProgressChanged(
+                seekBar: SeekBar, progress: Int,
+                fromUser: Boolean
+            ) {
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                carConnector.sendActionServoRequest("S4", seekBar.progress)
+
+            }
+        })
+
+
     }
 
     private fun onTouchArrow(v: View, event: MotionEvent): Boolean {
@@ -91,7 +164,7 @@ class ButtonControl : AppCompatActivity() {
                     action_button_1.setTextColor(orangeColor)
                 }
                 R.id.action_button_2 -> {
-                    carConnector.actionTwo()
+                    carConnector.sendActionServoRequest("TOGGLE", 0)
                     action_button_2.setTextColor(orangeColor)
                 }
                 R.id.action_button_3 -> {
