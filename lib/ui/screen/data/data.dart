@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:location/location.dart';
+import 'package:weather/weather.dart';
 
 class DataScreen extends StatefulWidget {
   @override
@@ -81,6 +83,59 @@ class _DataScreenState extends State<DataScreen> {
     }
   }
 
+  void getTodayWeatherData() async {
+    final location = Location();
+
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    LocationData _locationData;
+
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+    final wf = WeatherFactory('2a255f8f486b9147c4b5f9ba6a864332');
+    Weather w = await wf.currentWeatherByLocation(
+      _locationData.latitude,
+      _locationData.longitude,
+    );
+    if (mounted) {
+      setState(() {
+        if (w.humidity != null) {
+          controllers[1].text = w.humidity.toStringAsFixed(2);
+        }
+        if (w.pressure != null) {
+          controllers[2].text = w.pressure.toStringAsFixed(2);
+        }
+        if (w.windSpeed != null) {
+          controllers[3].text = w.windSpeed.toStringAsFixed(2);
+        }
+        if (w.windDegree != null) {
+          controllers[4].text = w.windDegree.toStringAsFixed(2);
+        }
+        if (w.windSpeed != null) {
+          controllers[5].text = w.windSpeed.toStringAsFixed(2);
+        }
+        if (w.windDegree != null) {
+          controllers[6].text = w.windDegree.toStringAsFixed(2);
+        }
+      });
+    }
+  }
+
   final controllers = [
     TextEditingController(text: '14.53'),
     TextEditingController(text: '88.44'),
@@ -90,6 +145,7 @@ class _DataScreenState extends State<DataScreen> {
     TextEditingController(text: '3.32'),
     TextEditingController(text: '60.42'),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,6 +203,18 @@ class _DataScreenState extends State<DataScreen> {
                         color: Colors.white30,
                       ),
                     ),
+                  ),
+                  RaisedButton(
+                    color: Colors.white,
+                    child: Text(
+                      'Get Today Weather Data',
+                      style: TextStyle(
+                        color: R.color.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    onPressed: getTodayWeatherData,
                   ),
                   Expanded(
                     child: buildQuestionsView(),

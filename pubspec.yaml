@@ -25,6 +25,8 @@ dependencies:
   equatable:
   flutter_svg:
   google_fonts:
+  weather: 1.4.0
+  location:
 
 dev_dependencies:
   flutter_test:
