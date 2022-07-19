@@ -10,24 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="535119f2-aa7a-4505-a1c5-dc0ba3070c7f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/drawable/circle_bg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/connector/CarConnector.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/connector/CarConnector.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/screen/AccelerometerControl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/screen/AccelerometerControl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/screen/ButtonControl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/screen/ButtonControl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/screen/VoiceControl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/lacour/vincent/wificaresp8266/screen/VoiceControl.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/button_control_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/button_control_activity.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wifi_car_esp8266_AP/wifi_car_esp8266_AP.ino" beforeDir="false" afterPath="$PROJECT_DIR$/../wifi_car_esp8266_AP/wifi_car_esp8266_AP.ino" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[320024dcc0ef95f3]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[/Users/gangadharashetty/.android/avd/Pixel_3a_API_32_arm64-v8a.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -73,8 +63,6 @@
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
-      <option name="FORCE_STOP_RUNNING_APP" value="true" />
       <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
       <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
@@ -140,5 +128,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
