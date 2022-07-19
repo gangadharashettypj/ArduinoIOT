@@ -48,10 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
       'Control System',
     ],
     '7th Semester': [
-      'Embedded System',
+      'PSA',
     ],
     '8th Semester': [
-      'Digital Design',
+      'PSP',
     ],
   };
   var pins = {
