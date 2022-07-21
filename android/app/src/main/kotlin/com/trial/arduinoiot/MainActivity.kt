@@ -65,10 +65,6 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun doDnnInference(list: List<Float>): Float {
-//        val inputVal = FloatArray(3)
-//        inputVal[0] = 0.003863636F
-//        inputVal[1] = 92.11363636F
-//        inputVal[2] = 21.39022727F
         val output = Array(1) { FloatArray(1) }
         dnnTflite!!.run(list.toFloatArray(), output)
         println(output[0][0])
@@ -76,10 +72,6 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun doLinearInference(list: List<Float>): Float {
-//        val inputVal = FloatArray(3)
-//        inputVal[0] = 0.003863636F
-//        inputVal[1] = 92.11363636F
-//        inputVal[2] = 21.39022727F
         val output = Array(1) { FloatArray(1) }
         linearTflite!!.run(list.toFloatArray(), output)
         println(output[0][0])
