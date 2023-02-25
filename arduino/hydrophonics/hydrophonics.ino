@@ -4,9 +4,11 @@
 #include <HTTPClient.h>
 #include <EEPROM.h>
 #include <Arduino.h>
-#include <OneWire.h>
-#include <DallasTemperature.h>
 #include "DHT.h"
+
+#include <Wire.h>
+#include <ACROBOTIC_SSD1306.h>
+
 
 #define addr IPAddress(224, 10, 10, 10)
 #define addr1 IPAddress(225, 10, 10, 10)
@@ -65,12 +67,15 @@ void calculateVoltage(int pin){
   Serial.println("VOLTAGE: " + String(pin) + " " + String(vIN));
   if(pin == 33){
     v1 = String(vIN);
+    v1 = v1.substring(0, v1.length() - 1);
   }
   if(pin == 25){
     v2 = String(vIN);
+    v2 = v2.substring(0, v2.length() - 1);
   }
   if(pin == 26){
     v3 = String(vIN);
+    v3 = v3.substring(0, v3.length() - 1);
   }
 }
 
@@ -94,12 +99,15 @@ void calculateCurrent(int pin){
   Serial.println("CURRENT: " + String(pin) + " " + String(AcsValueF));
   if(pin == 34){
     c1 = String(AcsValueF);
+    c1 = c1.substring(0, c1.length() - 1);
   }
   if(pin == 35){
     c2 = String(AcsValueF);
+    c2 = c2.substring(0, c2.length() - 1);
   }
   if(pin == 32){
     c3 = String(AcsValueF);
+    c3 = c3.substring(0, c3.length() - 1);
   }
 }
 
@@ -117,6 +125,17 @@ void setup(void) {
   Serial.println("Server Started");
 
   dht.begin();
+
+  pinMode(34, INPUT);
+  pinMode(35, INPUT);
+  pinMode(32, INPUT);
+  pinMode(33, INPUT);
+  pinMode(25, INPUT);
+  pinMode(26, INPUT);
+
+   Wire.begin();	
+  oled.init();                      // Initialze SSD1306 OLED display
+  oled.clearDisplay(); 
 }
 
 unsigned long int timer = 0;
@@ -139,8 +158,30 @@ void loop() {
   calculateVoltage(26);
 
   if(millis() - timer > 2000){
+    oled.clearDisplay();              // Clear screen
+    oled.setTextXY(0,1);              // Set cursor position, start of line 0
+    String s1 = "1:V:" + v1 + ",C:" + c1;
+    char charBuf[s1.length() + 1];
+    s1.toCharArray(charBuf, s1.length() + 1);
+    oled.putString(charBuf);
+    oled.setTextXY(2,1);              // Set cursor position, start of line 1
+    String s2 = "2:V:" + v2 + ",C:" + c2;
+    char charBuf2[s2.length() + 1];
+    s2.toCharArray(charBuf2, s2.length() + 1);
+    oled.putString(charBuf2);
+    oled.setTextXY(4,1);              // Set cursor position, start of line 2
+    String s3 = "3:V:" + v3 + ",C:" + c3;
+    char charBuf3[s3.length() + 1];
+    s3.toCharArray(charBuf3, s3.length() + 1);
+    oled.putString(charBuf3);
+    oled.setTextXY(6,1);             // Set cursor position, line 2 10th character
+    String s4 = "H:" + humi + ",T:" + temp;
+    char charBuf4[s4.length() + 1];
+    s4.toCharArray(charBuf4, s4.length() + 1);
+    oled.putString(charBuf4);
     getData();
     timer = millis();
+    
   }
   
 }
