@@ -20,10 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String v2 = '';
   String c2 = '';
 
-  String v3 = '';
-  String c3 = '';
-
-  String humi = '';
   String temp = '';
 
   @override
@@ -37,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Hydroponics',
+          'Arduino IOT',
         ),
         actions: <Widget>[
           TextButton(
@@ -158,69 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: const EdgeInsets.all(16),
                   child: Text(
-                    'V3: $v3',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Text(
-                    'C3: $c3',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Text(
-                    'Humidity: $humi',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Text(
                     'Temperature: $temp',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -245,9 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
         c1 = response['c1'] ?? '--';
         v2 = response['v2'] ?? '--';
         c2 = response['c2'] ?? '--';
-        v3 = response['v3'] ?? '--';
-        c3 = response['c3'] ?? '--';
-        humi = response['humi'] ?? '--';
         temp = response['temp'] ?? '--';
       });
     });

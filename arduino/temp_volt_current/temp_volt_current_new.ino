@@ -4,20 +4,20 @@
 #include <HTTPClient.h>
 #include <EEPROM.h>
 #include <Arduino.h>
-#include "DHT.h"
 
 #include <Wire.h>
 #include <ACROBOTIC_SSD1306.h>
+
+#include <OneWire.h>
+#include <DallasTemperature.h>
 
 
 #define addr IPAddress(224, 10, 10, 10)
 #define addr1 IPAddress(225, 10, 10, 10)
 #define BUFFER_SIZE 512
 #define port 4200
-#define DHTPIN 2
-#define DHTTYPE DHT11
 
-DHT dht(DHTPIN, DHTTYPE);
+const int SENSOR_PIN = 12;
 
 char buffer[512];
 IPAddress apIP(10, 10, 10, 1);
@@ -35,11 +35,11 @@ String c1;
 String v2;
 String c2;
 
-String v3;
-String c3;
 
-String humi;
 String temp;
+
+OneWire oneWire(SENSOR_PIN);         // setup a oneWire instance 
+DallasTemperature sensors(&oneWire);
 
 void setIP() {
   Serial.println("Setting IP");
@@ -53,7 +53,7 @@ void setIP() {
 void getData() {
   HTTPClient http;
   http.setTimeout(3);
-  String url = "http://" + clientServerIP + ":" + clientServerPort + "/?type=getData&v1=" + v1 + "&v2=" + v2 + "&v3=" + v3 + "&c1=" + c1 + "&c2=" + c2 + "&c3=" + c3 + "&humi=" + humi + "&temp=" + temp ;
+  String url = "http://" + clientServerIP + ":" + clientServerPort + "/?type=getData&v1=" + v1 + "&v2=" + v2 + "&c1=" + c1 + "&c2=" + c2 + "&temp=" + temp ;
   url.replace(" ", "%20");
   http.begin(url);
   int httpCode = http.GET();
@@ -62,22 +62,17 @@ void getData() {
 
 void calculateVoltage(int pin){
   int value = analogRead(pin);
-  float vOUT = (value * 9.0) / 4096.0;
+  float vOUT = (value * 5.0) / 1024.0;
   float vIN = vOUT / (R2/(R1+R2));
   Serial.println("VOLTAGE: " + String(pin) + " " + String(vIN));
   if(pin == 33){
     v1 = String(vIN);
     v1 = v1.substring(0, v1.length() - 1);
   }
-  else if(pin == 39){
+  if(pin == 25){
     v2 = String(vIN);
     v2 = v2.substring(0, v2.length() - 1);
   }
-  else if(pin == 36){
-    v3 = String(vIN);
-    v3 = v3.substring(0, v3.length() - 1);
-  }
-  delay(100);
 }
 
 void calculateCurrent(int pin){
@@ -96,7 +91,7 @@ void calculateCurrent(int pin){
   //out to be 2.5 which is out offset. If your arduino is working on different voltage than 
   //you must change the offset according to the input voltage)
   //0.100v(100mV) is rise in output voltage when 1A current flows at input
-  AcsValueF = (2.5 - (AvgAcs * (5.0 / 4096.0)) )/0.100;
+  AcsValueF = (2.5 - (AvgAcs * (5.0 / 1024.0)) )/0.100;
   Serial.println("CURRENT: " + String(pin) + " " + String(AcsValueF));
   if(pin == 34){
     c1 = String(AcsValueF);
@@ -106,11 +101,6 @@ void calculateCurrent(int pin){
     c2 = String(AcsValueF);
     c2 = c2.substring(0, c2.length() - 1);
   }
-  if(pin == 32){
-    c3 = String(AcsValueF);
-    c3 = c3.substring(0, c3.length() - 1);
-  }
-  delay(100);
 }
 
 void setup(void) {
@@ -126,14 +116,14 @@ void setup(void) {
   server.begin();
   Serial.println("Server Started");
 
-  dht.begin();
 
   pinMode(34, INPUT);
   pinMode(35, INPUT);
-  pinMode(32, INPUT);
   pinMode(33, INPUT);
-  pinMode(39, INPUT);
-  pinMode(36, INPUT);
+  pinMode(25, INPUT);
+
+  sensors.begin();    // initialize the sensor
+
 
    Wire.begin();	
   oled.init();                      // Initialze SSD1306 OLED display
@@ -145,19 +135,17 @@ unsigned long int timer = 0;
 void loop() {
   server.handleClient();
 
+  sensors.requestTemperatures();
 
-  humi = String(dht.readHumidity());
-  temp = String(dht.readTemperature());
-  Serial.println("HUMI: " + String(humi));
+
+  temp = String(sensors.getTempCByIndex(0));
   Serial.println("TEMP: " + String(temp));
 
   calculateCurrent(34);
   calculateCurrent(35);
-  calculateCurrent(32);
 
   calculateVoltage(33);
-  calculateVoltage(39);
-  calculateVoltage(36);
+  calculateVoltage(25);
 
   if(millis() - timer > 2000){
     oled.clearDisplay();              // Clear screen
@@ -171,17 +159,13 @@ void loop() {
     char charBuf2[s2.length() + 1];
     s2.toCharArray(charBuf2, s2.length() + 1);
     oled.putString(charBuf2);
-    oled.setTextXY(4,1);              // Set cursor position, start of line 2
-    String s3 = "3:V:" + v3 + ",C:" + c3;
-    char charBuf3[s3.length() + 1];
-    s3.toCharArray(charBuf3, s3.length() + 1);
-    oled.putString(charBuf3);
-    oled.setTextXY(6,1);             // Set cursor position, line 2 10th character
-    String s4 = "H:" + humi + ",T:" + temp;
+    oled.setTextXY(3,1);              // Set cursor position, start of line 2
+    
+    String s4 = "T:" + temp;
     char charBuf4[s4.length() + 1];
     s4.toCharArray(charBuf4, s4.length() + 1);
     oled.putString(charBuf4);
-    // getData();
+    getData();
     timer = millis();
     
   }
