@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
       ),
       title: "NestBees",
-      home: SplashScreen(),
+      home: const SplashScreen(),
       routes: <String, WidgetBuilder>{
-        R.routes.splash: (BuildContext context) => SplashScreen(),
+        R.routes.splash: (BuildContext context) => const SplashScreen(),
         R.routes.home: (BuildContext context) => const HomeScreen(),
       },
     );

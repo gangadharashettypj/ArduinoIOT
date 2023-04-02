@@ -14,11 +14,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String v1 = '';
-  String c1 = '';
+  String humi = '';
+  String level = '';
 
-  String v2 = '';
-  String c2 = '';
+  String windDirection = '';
+  String speed = '';
 
   String temp = '';
 
@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Arduino IOT',
+          'Flood Detection',
         ),
         actions: <Widget>[
           TextButton(
@@ -70,70 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: const EdgeInsets.all(16),
                   child: Text(
-                    'V1: $v1',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Text(
-                    'C1: $c1',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Text(
-                    'V2: $v2',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Text(
-                    'C2: $c2',
+                    'Humidity: $humi',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -163,6 +100,69 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  child: Text(
+                    'Level: $level',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  child: Text(
+                    'Wind Direction: $windDirection',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Card(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(20),
+                  ),
+                ),
+                elevation: 8,
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  child: Text(
+                    'Speed: $speed',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -170,14 +170,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.getData,
-        (Map<String, String> response) {
-      print(response);
+    DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
       setState(() {
-        v1 = response['v1'] ?? '--';
-        c1 = response['c1'] ?? '--';
-        v2 = response['v2'] ?? '--';
-        c2 = response['c2'] ?? '--';
+        humi = response['humi'] ?? '--';
+        level = response['level'] ?? '--';
+        windDirection = response['windDirection'] ?? '--';
+        speed = response['speed'] ?? '--';
         temp = response['temp'] ?? '--';
       });
     });
