@@ -3,7 +3,6 @@
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPClient.h>
-#include <Servo.h>
 #include <WiFiUdp.h>
 
 
@@ -13,8 +12,8 @@
 #define port 4200
 
 char buffer[512];
-IPAddress    apIP(10, 10, 10, 1);
-Servo myservo;
+IPAddress    apIP(10, 10, 10, 1);  
+
 ESP8266WebServer server(80);
 String clientServerIP = "";
 String clientServerPort = "";
@@ -22,23 +21,18 @@ String clientServerPort = "";
 WiFiUDP udpReceiver;
 
 
-
-
-
 const byte numChars = 100;
 char receivedChars[numChars];
-char tempChars[numChars];        // temporary array for use when parsing
-
-      // variables to hold the parsed data
+char tempChars[numChars];        
 char windDirection[20] = {0};
-int temp = 0;
-int humi = 0;
-int speed = 0;
-int level = 0;
+int s1 = 0;
+int s2 = 0;
+int s3 = 0;
+int s4 = 0;
 
 boolean newData = false;
 
-SoftwareSerial MySerial(D2, D3);
+SoftwareSerial MySerial(D3, D2);
 
 
 WiFiClient wifiClient;
@@ -54,17 +48,17 @@ void setIP() {
 }
 
 void sendHTTPMsg(){
-  Serial.println("sendHTTPMsg");
-  HTTPClient http;
-  String url = "http://"+clientServerIP+":"+clientServerPort+"/?type=flood&windDirection="+windDirection+"&humi="+humi+"&temp="+temp+"&speed="+speed+"&level="+level;
+  Serial.println("sendHTTPMsg"); 
+  HTTPClient http;  
+  String url = "http://"+clientServerIP+":"+clientServerPort+"/?type=flood&s1="+String(s1)+"&s2="+String(s2)+"&s3="+String(s3)+"&s4="+String(s4);
   url.replace(" ", "%20");
   Serial.println(url);
-  http.begin(wifiClient, url);
-  int httpCode = http.GET();
-  String payload = http.getString();
-  Serial.println(payload);
+  http.begin(wifiClient, url);  
+  int httpCode = http.GET();                                                                 
+  String payload = http.getString();   
+  Serial.println(payload); 
   http.end();
-
+  
 }
 
 
@@ -75,10 +69,10 @@ void setup() {
 
   WiFi.mode(WIFI_AP);
   WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
-  WiFi.softAP("FloodDetection", "");
-
+  WiFi.softAP("CLASS", "");
+ 
   server.on("/setClientIP", setIP);
-
+  
   server.begin();
   Serial.println("HTTP server started");
   udpReceiver.beginMulticast(WiFi.localIP(),addr,4200);
@@ -136,26 +130,25 @@ void parseData() {  // split the data into its parts
   strcpy(windDirection, strtokIndx);    // copy it to messageFromPC
 
   strtokIndx = strtok(NULL, ",");    // this continues where the previous call left off
-  humi = atoi(strtokIndx);  // convert this part to an integer
+  s1 = atoi(strtokIndx);  // convert this part to an integer
 
   strtokIndx = strtok(NULL, ",");
-  temp = atoi(strtokIndx);  // convert this part to a float
+  s2 = atoi(strtokIndx);  // convert this part to a float
 
   strtokIndx = strtok(NULL, ",");
-  level = atoi(strtokIndx);  // convert this part to a float
+  s3 = atoi(strtokIndx);  // convert this part to a float
 
   strtokIndx = strtok(NULL, ",");
-  speed = atoi(strtokIndx);  // convert this part to a float
+  s4 = atoi(strtokIndx);  // convert this part to a float
 }
 
 //============
 
 void showParsedData() {
-  Serial.println("==========");
-  Serial.println(windDirection);
-  Serial.println(humi);
-  Serial.println(temp);
-  Serial.println(speed);
-  Serial.println(level);
-  Serial.println(">>>>>>>>");
+  // Serial.println("==========");
+  // Serial.println(s1);
+  // Serial.println(s2);
+  // Serial.println(s3);
+  // Serial.println(s4);
+  // Serial.println(">>>>>>>>");
 }

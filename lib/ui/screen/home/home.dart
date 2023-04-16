@@ -14,13 +14,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String humi = '';
-  String level = '';
-
-  String windDirection = '';
-  String speed = '';
-
-  String temp = '';
+  String s1 = '';
+  String s2 = '';
+  String s3 = '';
+  String s4 = '';
 
   @override
   void initState() {
@@ -33,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Flood Detection',
+          'Attendance',
         ),
         actions: <Widget>[
           TextButton(
@@ -70,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: const EdgeInsets.all(16),
                   child: Text(
-                    'Humidity: $humi',
+                    'Darshan: $s1',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -91,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: const EdgeInsets.all(16),
                   child: Text(
-                    'Temperature: $temp',
+                    'Kanishka: $s2',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -112,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: const EdgeInsets.all(16),
                   child: Text(
-                    'Level: $level',
+                    'Manoj: $s3',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -133,28 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: const EdgeInsets.all(16),
                   child: Text(
-                    'Wind Direction: $windDirection',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
-                  ),
-                ),
-                elevation: 8,
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  child: Text(
-                    'Speed: $speed',
+                    'Sandeep: $s4',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -172,11 +148,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void startListening() async {
     DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
       setState(() {
-        humi = response['humi'] ?? '--';
-        level = response['level'] ?? '--';
-        windDirection = response['windDirection'] ?? '--';
-        speed = response['speed'] ?? '--';
-        temp = response['temp'] ?? '--';
+        s1 = response['s1']
+                ?.replaceAll('0', 'ABSENT')
+                .replaceAll('1', 'PRESENT') ??
+            '--';
+        s2 = response['s2']
+                ?.replaceAll('0', 'ABSENT')
+                .replaceAll('1', 'PRESENT') ??
+            '--';
+        s3 = response['s3']
+                ?.replaceAll('0', 'ABSENT')
+                .replaceAll('1', 'PRESENT') ??
+            '--';
+        s4 = response['s4']
+                ?.replaceAll('0', 'ABSENT')
+                .replaceAll('1', 'PRESENT') ??
+            '--';
       });
     });
   }
