@@ -16,6 +16,7 @@ dependencies:
   http: 0.13.5
   fluttertoast: 8.2.1
   r_get_ip: 0.1.1
+  hive:
 
 dev_dependencies:
   flutter_test:

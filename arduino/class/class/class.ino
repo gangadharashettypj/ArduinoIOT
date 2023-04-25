@@ -64,6 +64,7 @@ void loop() {
   } else {
     if ((millis() - lastTime) > 60000) {
       classGoingOn = true;
+      s1 = s2 = s3 = s4 = false;      
       lastTime = millis();
       lcd.clear();
     }

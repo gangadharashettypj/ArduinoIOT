@@ -1,10 +1,12 @@
+import 'package:arduino_iot_v2/db/db.dart';
 import 'package:arduino_iot_v2/resources/nestbees_resources.dart';
 import 'package:arduino_iot_v2/ui/screen/home/home.dart';
 import 'package:arduino_iot_v2/ui/screen/splash.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dbInstance.register();
   runApp(const MyApp());
 }
 
