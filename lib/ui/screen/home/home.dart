@@ -3,7 +3,6 @@
  */
 import 'package:arduino_iot_v2/db/db.dart';
 import 'package:arduino_iot_v2/resources/nestbees_resources.dart';
-import 'package:arduino_iot_v2/service/manager/device_manager.dart';
 import 'package:arduino_iot_v2/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
 
@@ -55,74 +54,157 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: ListView.separated(
-          controller: scrollController,
-          itemBuilder: (BuildContext context, int index) {
-            final items = messages.reversed.toList()[index].split(',');
-            return Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: R.color.primary,
-                  width: 3,
-                ),
-                borderRadius: BorderRadius.circular(8),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  HttpREST().get(
+                    R.api.controller,
+                    params: {'command': 'AUTO'},
+                  );
+                },
+                child: const Text('AUTO MODE'),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              ElevatedButton(
+                onPressed: () {
+                  HttpREST().get(
+                    R.api.controller,
+                    params: {'command': 'MANUAL'},
+                  );
+                },
+                child: const Text('MANUAL MODE'),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              InkWell(
+                onTapDown: (_) {
+                  HttpREST().get(
+                    R.api.controller,
+                    params: {'command': 'FRONT'},
+                  );
+                },
+                onTapUp: (_) {
+                  HttpREST().get(
+                    R.api.controller,
+                    params: {'command': 'STOP'},
+                  );
+                },
+                child: AbsorbPointer(
+                  absorbing: true,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('FRONT'),
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(
-                    '${messages.length - index}. ${items[0].replaceAll('Tilt', 'Crash')}'
-                        .toUpperCase(),
-                    style: TextStyle(
-                      color: R.color.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                  InkWell(
+                    onTapDown: (_) {
+                      HttpREST().get(
+                        R.api.controller,
+                        params: {'command': 'LEFT'},
+                      );
+                    },
+                    onTapUp: (_) {
+                      HttpREST().get(
+                        R.api.controller,
+                        params: {'command': 'STOP'},
+                      );
+                    },
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('LEFT'),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Date: ${items[1]}   Time: ${items[2]}'.toUpperCase(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Lat: ${items[3]}    Lon: ${items[4]}'.toUpperCase(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    'Acc   X: ${items[5]}  Y: ${items[6]}  Z: ${items[7]}'
-                        .toUpperCase(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                  InkWell(
+                    onTapDown: (_) {
+                      HttpREST().get(
+                        R.api.controller,
+                        params: {'command': 'RIGHT'},
+                      );
+                    },
+                    onTapUp: (_) {
+                      HttpREST().get(
+                        R.api.controller,
+                        params: {'command': 'STOP'},
+                      );
+                    },
+                    child: AbsorbPointer(
+                      absorbing: true,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('RIGHT'),
+                      ),
                     ),
                   ),
                 ],
               ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(height: 30);
-          },
-          itemCount: messages.length,
-        ),
+              InkWell(
+                onTapDown: (_) {
+                  HttpREST().get(
+                    R.api.controller,
+                    params: {'command': 'BACK'},
+                  );
+                },
+                onTapUp: (_) {
+                  HttpREST().get(
+                    R.api.controller,
+                    params: {'command': 'STOP'},
+                  );
+                },
+                child: AbsorbPointer(
+                  absorbing: true,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('BACK'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  HttpREST().get(
+                    R.api.r1,
+                  );
+                },
+                child: const Text('Switch 1'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  HttpREST().get(
+                    R.api.r2,
+                  );
+                },
+                child: const Text('Switch 2'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
   void startListening() async {
-    DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
-      setState(() {
-        messages.add(response['data']!);
-        dbInstance.store(DBKeys.data, messages);
-      });
-    });
+    // DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
+    //   setState(() {
+    //     messages.add(response['data']!);
+    //     dbInstance.store(DBKeys.data, messages);
+    //   });
+    // });
   }
 }

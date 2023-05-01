@@ -6,4 +6,7 @@ class Api {
   String get root => '';
   String get flood => 'flood';
   String get setClientIP => 'setClientIP';
+  String get controller => 'controller';
+  String get r1 => 'r1';
+  String get r2 => 'r2';
 }
