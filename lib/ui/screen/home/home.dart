@@ -1,8 +1,8 @@
 /*
  * @Author GS
  */
-import 'package:arduino_iot_v2/db/db.dart';
 import 'package:arduino_iot_v2/resources/nestbees_resources.dart';
+import 'package:arduino_iot_v2/service/manager/device_manager.dart';
 import 'package:arduino_iot_v2/service/rest/http_rest.dart';
 import 'package:flutter/material.dart';
 
@@ -14,14 +14,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> messages = [];
+  String message = '';
 
   @override
   void initState() {
     startListening();
-    if (dbInstance.containsKey(DBKeys.data)) {
-      messages = dbInstance.get(DBKeys.data);
-    }
     super.initState();
   }
 
@@ -31,10 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     scrollController.animateTo(0,
         duration: const Duration(milliseconds: 300), curve: Curves.decelerate);
+    final items = message.split(',');
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Black Box',
+          'Kid Monitoring',
         ),
         actions: <Widget>[
           TextButton(
@@ -55,156 +53,155 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  HttpREST().get(
-                    R.api.controller,
-                    params: {'command': 'AUTO'},
-                  );
-                },
-                child: const Text('AUTO MODE'),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  HttpREST().get(
-                    R.api.controller,
-                    params: {'command': 'MANUAL'},
-                  );
-                },
-                child: const Text('MANUAL MODE'),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              InkWell(
-                onTapDown: (_) {
-                  HttpREST().get(
-                    R.api.controller,
-                    params: {'command': 'FRONT'},
-                  );
-                },
-                onTapUp: (_) {
-                  HttpREST().get(
-                    R.api.controller,
-                    params: {'command': 'STOP'},
-                  );
-                },
-                child: AbsorbPointer(
-                  absorbing: true,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('FRONT'),
+              elevation: 8,
+              child: Container(
+                margin: const EdgeInsets.all(16),
+                child: Text(
+                  'Temperature: ${items.length > 1 ? items[1] : 'NA'}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTapDown: (_) {
-                      HttpREST().get(
-                        R.api.controller,
-                        params: {'command': 'LEFT'},
-                      );
-                    },
-                    onTapUp: (_) {
-                      HttpREST().get(
-                        R.api.controller,
-                        params: {'command': 'STOP'},
-                      );
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('LEFT'),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTapDown: (_) {
-                      HttpREST().get(
-                        R.api.controller,
-                        params: {'command': 'RIGHT'},
-                      );
-                    },
-                    onTapUp: (_) {
-                      HttpREST().get(
-                        R.api.controller,
-                        params: {'command': 'STOP'},
-                      );
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('RIGHT'),
-                      ),
-                    ),
-                  ),
-                ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
               ),
-              InkWell(
-                onTapDown: (_) {
-                  HttpREST().get(
-                    R.api.controller,
-                    params: {'command': 'BACK'},
-                  );
-                },
-                onTapUp: (_) {
-                  HttpREST().get(
-                    R.api.controller,
-                    params: {'command': 'STOP'},
-                  );
-                },
-                child: AbsorbPointer(
-                  absorbing: true,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('BACK'),
+              elevation: 8,
+              child: Container(
+                margin: const EdgeInsets.all(16),
+                child: Text(
+                  'Humidity: ${items.length > 2 ? items[2] : 'NA'}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  HttpREST().get(
-                    R.api.r1,
-                  );
-                },
-                child: const Text('Switch 1'),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  HttpREST().get(
-                    R.api.r2,
-                  );
-                },
-                child: const Text('Switch 2'),
+              elevation: 8,
+              child: Container(
+                margin: const EdgeInsets.all(16),
+                child: Text(
+                  'BPM: ${items.length > 3 ? items[3] : 'NA'}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
               ),
-            ],
+            ),
           ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              elevation: 8,
+              child: Container(
+                margin: const EdgeInsets.all(16),
+                child: Text(
+                  'Toilet: ${items.length > 4 ? (int.parse(items[4]) > 250 ? 'YES' : 'NO') : 'NA'}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: Card(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(20),
+                ),
+              ),
+              elevation: 8,
+              child: Container(
+                margin: const EdgeInsets.all(16),
+                child: Text(
+                  'Crying: ${items.length > 5 ? (items[5] == '1' ? 'YES' : 'NO') : 'NA'}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // const SizedBox(height: 12),
+          // SizedBox(
+          //   width: double.infinity,
+          //   child: Card(
+          //     shape: const RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.all(
+          //         Radius.circular(20),
+          //       ),
+          //     ),
+          //     elevation: 8,
+          //     child: Container(
+          //       margin: const EdgeInsets.all(16),
+          //       child: Text(
+          //         message,
+          //         style: const TextStyle(
+          //           fontWeight: FontWeight.bold,
+          //           fontSize: 20,
+          //         ),
+          //         maxLines: 3,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
   }
 
+  int millis = -1;
+
   void startListening() async {
-    // DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
-    //   setState(() {
-    //     messages.add(response['data']!);
-    //     dbInstance.store(DBKeys.data, messages);
-    //   });
-    // });
+    DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
+      if ((DateTime.now().millisecondsSinceEpoch - millis) > 2000) {
+        millis = DateTime.now().millisecondsSinceEpoch;
+        setState(() {
+          message = response['data'] ?? '';
+        });
+      }
+    });
   }
 }
