@@ -97,19 +97,33 @@ class _HomeScreenState extends State<HomeScreen> {
               fontSize: 22,
             ),
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                HttpREST().get(
-                  R.api.controller,
-                  params: {'command': 'AUTO'},
-                );
-              },
+          if (data.split(',').length > 1)
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  HttpREST().get(
+                    R.api.controller,
+                    params: {'command': 'AUTO'},
+                  );
+                },
+                child: Text(
+                  (data.split(',')[1] == '1')
+                      ? 'CLOSED CIRCUIT'
+                      : 'OPEN CIRCUIT',
+                ),
+              ),
+            )
+          else
+            const Center(
               child: Text(
-                (data.split(',')[1] == '1') ? 'CLOSED CIRCUIT' : 'OPEN CIRCUIT',
+                'CHECK CONNECTION',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
               ),
             ),
-          ),
         ],
       ),
     );
