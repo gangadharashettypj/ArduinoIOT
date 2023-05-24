@@ -41,6 +41,7 @@ String c3;
 String humi;
 String temp;
 
+
 void setIP() {
   Serial.println("Setting IP");
   Serial.println(server.client().remoteIP().toString());
