@@ -77,13 +77,16 @@ void loop() {
   float V = analogRead(A0) * 5.00 / 1024;  //Sensor output voltage
   float P = (V - OffSet) * 400;
 
-  if(P < 0){
+  if(P < 50){
     P = 0;
   }
 
   // Serial.println(String(voltage) + "," + String(power));
 
-  String str = "<" + String(waterFlow) + "," + String(motor) + "," + String(voltage) + "," + String(power) + "," + String(P) + ">";
+  String motorString = motor ? "ON": "OFF";
+  String waterString = waterFlow ? "ON": "OFF";
+
+  String str = "<" + String(waterString) + "," + String(motorString) + "," + String(voltage) + "," + String(power) + "," + String(P) + ">";
   if ((millis() - lastLogged) > 1000) {
 
     lcd.clear();
