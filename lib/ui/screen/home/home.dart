@@ -6,6 +6,7 @@ import 'package:arduino_iot_v2/resources/nestbees_resources.dart';
 import 'package:arduino_iot_v2/service/rest/http_rest.dart';
 import 'package:arduino_iot_v2/service/udp/udp.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,25 +18,43 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<String> messages = [];
 
+  VlcPlayerController? _videoPlayerController;
+
+  String url = '192.168.29.122';
+
+  final controller = TextEditingController();
+
   @override
   void initState() {
     startListening();
     if (dbInstance.containsKey(DBKeys.data)) {
       messages = dbInstance.get(DBKeys.data);
     }
+    controller.text = url;
+    // playVideo();
     super.initState();
   }
 
-  ScrollController scrollController = ScrollController();
+  @override
+  void dispose() {
+    _videoPlayerController?.dispose();
+    super.dispose();
+  }
+
+  void playVideo() {
+    _videoPlayerController = VlcPlayerController.network(
+      'http://$url:5001/video_feed',
+      autoPlay: true,
+      options: VlcPlayerOptions(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 300), curve: Curves.decelerate);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Black Box',
+          'Platoon',
         ),
         actions: <Widget>[
           TextButton(
@@ -58,28 +77,87 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Column(
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: controller,
+                    decoration: const InputDecoration(
+                      hintText: 'IP Address',
+                      alignLabelWithHint: true,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      url = controller.text;
+                      playVideo();
+                    });
+                  },
+                  child: const Text('PLAY'),
+                ),
+                const SizedBox(width: 12),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      _videoPlayerController?.dispose();
+                      _videoPlayerController = null;
+                    });
+                  },
+                  child: const Text('STOP'),
+                ),
+              ],
+            ),
+          ),
+          if (_videoPlayerController == null)
+            SizedBox(
+              height: 200,
+              child: Container(
+                color: Colors.grey,
+                child: const Center(
+                  child: Text(
+                    'LIVE VIDEO',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          if (_videoPlayerController != null)
+            SizedBox(
+              height: 200,
+              child: VlcPlayer(
+                aspectRatio: 4 / 3,
+                placeholder: Container(),
+                controller: _videoPlayerController!,
+              ),
+            ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
                 onPressed: () {
                   LocalUDP.send('PLATOON');
                 },
-                child: const Text('PLATOON MODE'),
+                child: const Text('PLATOON'),
               ),
-              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   LocalUDP.send('AUTO');
                 },
-                child: const Text('AUTO MODE'),
+                child: const Text('AUTO'),
               ),
-              const SizedBox(height: 12),
               ElevatedButton(
                 onPressed: () {
                   LocalUDP.send('MANUAL');
                 },
-                child: const Text('MANUAL MODE'),
+                child: const Text('MANUAL'),
               ),
             ],
           ),
