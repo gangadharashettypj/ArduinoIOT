@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Dry Run',
+          'FOOD TEST',
         ),
         actions: <Widget>[
           TextButton(
@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 margin: const EdgeInsets.all(16),
                 child: Text(
-                  'Water Flow: ${message.split(',')[0]}',
+                  'Humidity: ${message.split(',')[0]}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 margin: const EdgeInsets.all(16),
                 child: Text(
-                  'Motor: ${message.split(',')[1]}',
+                  'Temperature: ${message.split(',')[1]}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 margin: const EdgeInsets.all(16),
                 child: Text(
-                  'Voltage: ${message.split(',')[2]}',
+                  'pH: ${message.split(',')[2]}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 margin: const EdgeInsets.all(16),
                 child: Text(
-                  'Power: ${message.split(',')[3]}',
+                  'Alcohol: ${message.split(',')[3]}',
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 margin: const EdgeInsets.all(16),
                 child: Text(
-                  'Pressure: ${message.split(',')[4]}',
+                  message.split(',')[4],
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
