@@ -11,7 +11,6 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Server.inst;
     Future.delayed(
       const Duration(seconds: 2),
       () => Navigator.pushReplacementNamed(context, R.routes.home),

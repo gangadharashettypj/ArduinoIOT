@@ -1,12 +1,13 @@
 /*
  * @Author GS
  */
-import 'package:arduino_iot_v2/db/db.dart';
+import 'dart:async';
+
 import 'package:arduino_iot_v2/resources/nestbees_resources.dart';
 import 'package:arduino_iot_v2/service/rest/http_rest.dart';
 import 'package:arduino_iot_v2/service/udp/udp.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,37 +17,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> messages = [];
-
-  VlcPlayerController? _videoPlayerController;
-
-  String url = '192.168.29.122';
-
   final controller = TextEditingController();
+
+  StreamSubscription? subscription;
+
+  List<String> logs = [];
 
   @override
   void initState() {
     startListening();
-    if (dbInstance.containsKey(DBKeys.data)) {
-      messages = dbInstance.get(DBKeys.data);
-    }
-    controller.text = url;
-    // playVideo();
     super.initState();
   }
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
+    subscription?.cancel();
     super.dispose();
-  }
-
-  void playVideo() {
-    _videoPlayerController = VlcPlayerController.network(
-      'http://$url:5001/video_feed',
-      autoPlay: true,
-      options: VlcPlayerOptions(),
-    );
   }
 
   @override
@@ -74,173 +60,98 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      hintText: 'IP Address',
-                      alignLabelWithHint: true,
-                    ),
-                  ),
+      body: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        child: ListView(
+          children: [
+            Container(
+              margin: const EdgeInsets.all(16),
+              child: TextField(
+                controller: controller,
+                decoration: const InputDecoration(
+                  hintText: 'User Id',
+                  labelText: 'User Id',
+                  alignLabelWithHint: true,
                 ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      url = controller.text;
-                      playVideo();
-                    });
-                  },
-                  child: const Text('PLAY'),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _videoPlayerController?.dispose();
-                      _videoPlayerController = null;
-                    });
-                  },
-                  child: const Text('STOP'),
-                ),
-              ],
+                keyboardType: TextInputType.number,
+              ),
             ),
-          ),
-          if (_videoPlayerController == null)
-            SizedBox(
-              height: 200,
-              child: Container(
-                color: Colors.grey,
-                child: const Center(
-                  child: Text(
-                    'LIVE VIDEO',
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                if (controller.text.isEmpty) {
+                  Fluttertoast.showToast(
+                      msg: 'Please enter a valid id and proceed');
+                  return;
+                }
+                LocalUDP.send('setId${controller.text}');
+              },
+              child: const Text('SetId'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                LocalUDP.send('ENROLL');
+              },
+              child: const Text('ENROLL'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                LocalUDP.send('SEARCH');
+              },
+              child: const Text('SEARCH'),
+            ),
+            const SizedBox(height: 40),
+            ElevatedButton(
+              onPressed: () {
+                LocalUDP.send('EMPTY');
+              },
+              child: const Text('CLEAR DATABASE'),
+            ),
+            const SizedBox(height: 20),
+            const Text('LOGS'),
+            Container(
+              height: 300,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                border: Border.all(
+                  color: Colors.grey,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: ListView.separated(
+                reverse: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return Text(
+                    logs[index],
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      color: logs[index].startsWith('ERROR')
+                          ? Colors.red
+                          : Colors.black,
                     ),
-                  ),
-                ),
+                  );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 5);
+                },
+                itemCount: logs.length,
               ),
             ),
-          if (_videoPlayerController != null)
-            SizedBox(
-              height: 200,
-              child: VlcPlayer(
-                aspectRatio: 4 / 3,
-                placeholder: Container(),
-                controller: _videoPlayerController!,
-              ),
-            ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  LocalUDP.send('PLATOON');
-                },
-                child: const Text('PLATOON'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  LocalUDP.send('AUTO');
-                },
-                child: const Text('AUTO'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  LocalUDP.send('MANUAL');
-                },
-                child: const Text('MANUAL'),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              InkWell(
-                onTapDown: (_) {
-                  LocalUDP.send('FRONT');
-                },
-                onTapUp: (_) {
-                  LocalUDP.send('STOP');
-                },
-                child: AbsorbPointer(
-                  absorbing: true,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('FRONT'),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  InkWell(
-                    onTapDown: (_) {
-                      LocalUDP.send('LEFT');
-                    },
-                    onTapUp: (_) {
-                      LocalUDP.send('STOP');
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('LEFT'),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTapDown: (_) {
-                      LocalUDP.send('RIGHT');
-                    },
-                    onTapUp: (_) {
-                      LocalUDP.send('STOP');
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('RIGHT'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              InkWell(
-                onTapDown: (_) {
-                  LocalUDP.send('BACK');
-                },
-                onTapUp: (_) {
-                  LocalUDP.send('STOP');
-                },
-                child: AbsorbPointer(
-                  absorbing: true,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('BACK'),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   void startListening() async {
-    // DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
-    //   setState(() {
-    //     messages.add(response['data']!);
-    //     dbInstance.store(DBKeys.data, messages);
-    //   });
-    // });
+    subscription = await LocalUDP.receive((msg) {
+      // Fluttertoast.showToast(msg: msg);
+      setState(() {
+        logs.insert(0, msg);
+      });
+    });
   }
 }
