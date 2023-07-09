@@ -5,7 +5,6 @@ import 'dart:convert';
 
 import 'package:arduino_iot_v2/local/local_data.dart';
 import 'package:arduino_iot_v2/service/rest/http_rest.dart';
-import 'package:arduino_iot_v2/service/server/server.dart';
 import 'package:arduino_iot_v2/service/udp/udp.dart';
 import 'package:http/http.dart';
 
@@ -38,18 +37,5 @@ class DeviceManager {
     );
     print(res?.body);
     print(res?.toString());
-  }
-
-  void listenForData(String path, Function(Map<String, String>) callback) {
-    switch (LocalData.connectionType) {
-      case ConnectionType.HTTP:
-        Server().registerService(path, callback);
-        break;
-      case ConnectionType.UDP:
-        LocalUDP.receive(path, (msg) {
-          callback(msg);
-        });
-        break;
-    }
   }
 }

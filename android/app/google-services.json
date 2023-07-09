@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "81092688193",
+    "firebase_url": "https://voice-bio0a-default-rtdb.firebaseio.com",
+    "project_id": "voice-bio0a",
+    "storage_bucket": "voice-bio0a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81092688193:android:99f7857b780bdbf15ec9c0",
+        "android_client_info": {
+          "package_name": "com.example.arduino_iot_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81092688193-nikgdpii20g6bm05a7eggm392cr49vhu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3BN7_Ay9NCOSnzNeLlWNckKO8jGJP8xY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81092688193-nikgdpii20g6bm05a7eggm392cr49vhu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
