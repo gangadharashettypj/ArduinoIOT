@@ -6,20 +6,33 @@ import 'package:arduino_iot_v2/service/rest/http_rest.dart';
 import 'package:arduino_iot_v2/service/server/server.dart';
 import 'package:flutter/material.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Future.delayed(
+        const Duration(seconds: 2),
+        () => Navigator.pushReplacementNamed(context, R.routes.home),
+      );
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Server.inst;
-    Future.delayed(
-      const Duration(seconds: 2),
-      () => Navigator.pushReplacementNamed(context, R.routes.home),
-    );
+
     return Scaffold(
       body: Center(
         child: Text(
-          "Arduino IOT",
+          "EDAC Multitech",
           style: TextStyle(
             color: R.color.primary,
             fontWeight: FontWeight.bold,

@@ -1,12 +1,11 @@
 /*
  * @Author GS
  */
-import 'package:arduino_iot_v2/db/db.dart';
 import 'package:arduino_iot_v2/resources/nestbees_resources.dart';
+import 'package:arduino_iot_v2/service/manager/device_manager.dart';
 import 'package:arduino_iot_v2/service/rest/http_rest.dart';
-import 'package:arduino_iot_v2/service/udp/udp.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,37 +15,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> messages = [];
-
-  VlcPlayerController? _videoPlayerController;
-
-  String url = '192.168.29.122';
-
   final controller = TextEditingController();
+
+  String lat = '';
+  String lon = '';
+  String date = '';
+  String time = '';
 
   @override
   void initState() {
     startListening();
-    if (dbInstance.containsKey(DBKeys.data)) {
-      messages = dbInstance.get(DBKeys.data);
-    }
-    controller.text = url;
     // playVideo();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _videoPlayerController?.dispose();
-    super.dispose();
-  }
-
-  void playVideo() {
-    _videoPlayerController = VlcPlayerController.network(
-      'http://$url:5001/video_feed',
-      autoPlay: true,
-      options: VlcPlayerOptions(),
-    );
   }
 
   @override
@@ -54,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Platoon',
+          'GPS',
         ),
         actions: <Widget>[
           TextButton(
@@ -74,173 +54,144 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: controller,
-                    decoration: const InputDecoration(
-                      hintText: 'IP Address',
-                      alignLabelWithHint: true,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      url = controller.text;
-                      playVideo();
-                    });
-                  },
-                  child: const Text('PLAY'),
-                ),
-                const SizedBox(width: 12),
-                ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _videoPlayerController?.dispose();
-                      _videoPlayerController = null;
-                    });
-                  },
-                  child: const Text('STOP'),
-                ),
-              ],
-            ),
-          ),
-          if (_videoPlayerController == null)
-            SizedBox(
-              height: 200,
-              child: Container(
-                color: Colors.grey,
-                child: const Center(
-                  child: Text(
-                    'LIVE VIDEO',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          if (_videoPlayerController != null)
-            SizedBox(
-              height: 200,
-              child: VlcPlayer(
-                aspectRatio: 4 / 3,
-                placeholder: Container(),
-                controller: _videoPlayerController!,
-              ),
-            ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  LocalUDP.send('PLATOON');
-                },
-                child: const Text('PLATOON'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  LocalUDP.send('AUTO');
-                },
-                child: const Text('AUTO'),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  LocalUDP.send('MANUAL');
-                },
-                child: const Text('MANUAL'),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              InkWell(
-                onTapDown: (_) {
-                  LocalUDP.send('FRONT');
-                },
-                onTapUp: (_) {
-                  LocalUDP.send('STOP');
-                },
-                child: AbsorbPointer(
-                  absorbing: true,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('FRONT'),
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              child: Row(
                 children: [
-                  InkWell(
-                    onTapDown: (_) {
-                      LocalUDP.send('LEFT');
-                    },
-                    onTapUp: (_) {
-                      LocalUDP.send('STOP');
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('LEFT'),
+                  const Expanded(
+                    flex: 2,
+                    child: Text(
+                      'Latitude: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
                       ),
                     ),
                   ),
-                  InkWell(
-                    onTapDown: (_) {
-                      LocalUDP.send('RIGHT');
-                    },
-                    onTapUp: (_) {
-                      LocalUDP.send('STOP');
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('RIGHT'),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      lat,
+                      style: const TextStyle(
+                        fontSize: 20,
                       ),
                     ),
                   ),
                 ],
               ),
-              InkWell(
-                onTapDown: (_) {
-                  LocalUDP.send('BACK');
-                },
-                onTapUp: (_) {
-                  LocalUDP.send('STOP');
-                },
-                child: AbsorbPointer(
-                  absorbing: true,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text('BACK'),
+            ),
+            Container(
+              child: Row(
+                children: [
+                  const Expanded(
+                    flex: 2,
+                    child: Text(
+                      'Longitude: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      lon,
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                children: [
+                  const Expanded(
+                    flex: 2,
+                    child: Text(
+                      'Date: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      date,
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              child: Row(
+                children: [
+                  const Expanded(
+                    flex: 2,
+                    child: Text(
+                      'Time: ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Text(
+                      time,
+                      style: const TextStyle(
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                HttpREST().get(R.api.toggle);
+              },
+              child: AbsorbPointer(
+                absorbing: true,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: const Text('LED'),
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
 
   void startListening() async {
-    // DeviceManager().listenForData(R.api.flood, (Map<String, String> response) {
-    //   setState(() {
-    //     messages.add(response['data']!);
-    //     dbInstance.store(DBKeys.data, messages);
-    //   });
-    // });
+    DeviceManager().listenForData(R.api.data, (Map<String, String> response) {
+      setState(() {
+        setState(() {
+          lat = response['lat'] ?? '';
+          lon = response['lon'] ?? '';
+          date = response['date'] ?? '';
+          if (response['time'] != null) {
+            var date = DateFormat('HH:mm:ss').parse(response['time']!);
+            date = date.add(const Duration(minutes: 330));
+            time = DateFormat('hh:mm:ss a').format(date);
+          }
+          // time = response['time'] ?? '';
+        });
+      });
+    });
   }
 }

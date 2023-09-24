@@ -18,6 +18,7 @@ dependencies:
   r_get_ip: 0.1.1
   hive:
   flutter_vlc_player: 7.1.5
+  intl:
 
 
 dev_dependencies:

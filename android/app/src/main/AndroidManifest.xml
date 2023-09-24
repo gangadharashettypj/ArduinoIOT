@@ -6,9 +6,9 @@
 
    <application
         android:name="${applicationName}"
-        android:label="PLATOON"
+        android:label="EDAC Multitech"
         android:usesCleartextTraffic="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logo"
        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
