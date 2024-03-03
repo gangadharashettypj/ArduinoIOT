@@ -8,7 +8,7 @@
 #include <TinyGPS++.h>
 
 
-const int RXPin = 13, TXPin = 12;
+const int RXPin = 17, TXPin = 16;
 const uint32_t GPSBaud = 9600;  //Default baud of NEO-6M is 9600
 
 
