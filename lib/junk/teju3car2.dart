@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'ROBOT A',
+          'ROBOT I',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -63,8 +63,124 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(),
-            Container(),
+            Row(
+              children: [
+                const Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Latitude: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    lat,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Longitude: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    lon,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Distance: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    distance,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Gas Detected: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    metal.replaceAll('Metal', 'Gas'),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color:
+                          metal == 'Metal Detected' ? Colors.red : Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Temperature: ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    temp,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Divider(),
             InkWell(
               onTapDown: (_) {
                 HttpREST().get(
@@ -183,69 +299,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      HttpREST().get(
-                        R.api.toggle,
-                        params: {
-                          'direction': 'LIGHT1',
-                        },
-                      );
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('L 1'),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      HttpREST().get(
-                        R.api.toggle,
-                        params: {
-                          'direction': 'LIGHT2',
-                        },
-                      );
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('L 2'),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      HttpREST().get(
-                        R.api.toggle,
-                        params: {
-                          'direction': 'LIGHT3',
-                        },
-                      );
-                    },
-                    child: AbsorbPointer(
-                      absorbing: true,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        child: const Text('L 3'),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),
@@ -254,7 +307,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void startListening() async {
     DeviceManager().listenForData(R.api.data, (Map<String, String> response) {
-      return;
       setState(() {
         setState(() {
           lat = response['lat'] ?? '';
