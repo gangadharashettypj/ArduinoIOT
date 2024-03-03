@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      title: "NestBees",
+      title: "ROBOT",
       home: const SplashScreen(),
       routes: <String, WidgetBuilder>{
         R.routes.splash: (BuildContext context) => const SplashScreen(),

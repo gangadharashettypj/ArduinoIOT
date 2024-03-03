@@ -6,7 +6,7 @@
 
    <application
         android:name="${applicationName}"
-        android:label="EDAC Multitech"
+        android:label="ROBOT"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/logo"
        android:requestLegacyExternalStorage="true">
