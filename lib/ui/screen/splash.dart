@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Center(
         child: Text(
-          "EDAC Multitech",
+          "ROBOT",
           style: TextStyle(
             color: R.color.primary,
             fontWeight: FontWeight.bold,
