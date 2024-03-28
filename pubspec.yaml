@@ -18,6 +18,8 @@ dependencies:
   r_get_ip: 0.1.1
   hive:
   intl:
+  firebase_database: 10.4.11
+  firebase_core: 2.27.2
 #  flutter_vlc_player:
 
 

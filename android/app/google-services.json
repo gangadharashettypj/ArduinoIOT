@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "148318806456",
+    "firebase_url": "https://vish-7b9b2.firebaseio.com",
+    "project_id": "vish-7b9b2",
+    "storage_bucket": "vish-7b9b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148318806456:android:f5fc67f0081d12a8bbaf4d",
+        "android_client_info": {
+          "package_name": "com.example.arduino_iot_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148318806456-p8arj4dgrc07kb390sm7qcifbqjjf74p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACT02uBKOnSN1dGXSOW0eXjmEnbueUwkE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148318806456-p8arj4dgrc07kb390sm7qcifbqjjf74p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

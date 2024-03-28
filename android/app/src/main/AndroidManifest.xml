@@ -6,7 +6,7 @@
 
    <application
         android:name="${applicationName}"
-        android:label="ROBOT"
+        android:label="Green Spaces"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
        android:requestLegacyExternalStorage="true">

@@ -23,12 +23,13 @@
 //   String lon = '';
 //   String distance = '';
 //   String metal = '';
+//   String gas = '';
 //   String temp = '';
 //
 //   @override
 //   void initState() {
 //     startListening();
-//     // playVideo();
+//     playVideo();
 //     super.initState();
 //   }
 //
@@ -106,7 +107,7 @@
 //               ),
 //               Container(
 //                 margin:
-//                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+//                 const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
 //                 child: Row(
 //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
 //                   children: [
@@ -234,7 +235,7 @@
 //                   const Expanded(
 //                     flex: 2,
 //                     child: Text(
-//                       'Gas Detected: ',
+//                       'Metal Detected: ',
 //                       style: TextStyle(
 //                         fontWeight: FontWeight.bold,
 //                         fontSize: 16,
@@ -244,12 +245,35 @@
 //                   Expanded(
 //                     flex: 3,
 //                     child: Text(
-//                       metal.replaceAll('Metal', 'Gas'),
+//                       metal,
 //                       style: TextStyle(
 //                         fontSize: 16,
 //                         color: metal == 'Metal Detected'
 //                             ? Colors.red
 //                             : Colors.black,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//               Row(
+//                 children: [
+//                   const Expanded(
+//                     flex: 2,
+//                     child: Text(
+//                       'Gas: ',
+//                       style: TextStyle(
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 16,
+//                       ),
+//                     ),
+//                   ),
+//                   Expanded(
+//                     flex: 3,
+//                     child: Text(
+//                       gas,
+//                       style: TextStyle(
+//                         fontSize: 16,
 //                       ),
 //                     ),
 //                   ),
@@ -412,6 +436,7 @@
 //           lon = response['lon'] ?? '';
 //           distance = response['distance'] ?? '';
 //           metal = response['metal'] ?? '';
+//           gas = response['gas'] ?? '';
 //           temp = response['temp'] ?? '';
 //           // if (response['time'] != null) {
 //           //   var date = DateFormat('HH:mm:ss').parse(response['time']!);
